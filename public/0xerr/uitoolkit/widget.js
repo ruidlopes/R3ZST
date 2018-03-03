@@ -4,6 +4,7 @@ class Widget {
     this.rect = rect;
     this.foregroundColor = foregroundColor;
     this.backgroundColor = backgroundColor;
+    this.focused = false;
   }
   
   measure() {}
@@ -13,6 +14,14 @@ class Widget {
   }
   
   render() {}
+  
+  focus() {
+    this.focused = true;
+  }
+  
+  blur() {
+    this.focused = false;
+  }
 }
 
 export {Widget};

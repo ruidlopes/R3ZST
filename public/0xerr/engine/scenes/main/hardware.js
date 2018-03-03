@@ -1,4 +1,4 @@
-import {BLACK, BLUE_FADED2} from '../../common/palette.js';
+import {BLACK, BLUE_BRIGHT, BLUE_FADED2} from '../../common/palette.js';
 import {Widget} from '../../../uitoolkit/widget.js';
 import {Rect} from '../../../renderer/graphics/rect.js';
 import {rect} from '../../../renderer/primitives/drawing.js';
@@ -11,6 +11,16 @@ class HardwareView extends Widget {
   render() {
     rect(this.screen, this.rect.x, this.rect.y, this.rect.width, this.rect.height,
         0xef, this.foregroundColor, this.backgroundColor);
+  }
+  
+  focus() {
+    super.focus();
+    this.foregroundColor = BLUE_BRIGHT;
+  }
+  
+  blur() {
+    super.blur();
+    this.foregroundColor = BLUE_FADED2;
   }
 }
 

@@ -1,4 +1,5 @@
 import {CxelBuffer} from '../renderer/cxel/buffer.js';
+import {Keyboard} from '../observers/keyboard.js';
 import {MainScene} from './scenes/main.js';
 import {Renderer} from '../renderer/renderer.js';
 import {Viewport} from '../observers/viewport.js';
@@ -6,10 +7,11 @@ import {Viewport} from '../observers/viewport.js';
 class Engine {
   constructor() {
     this.viewport = new Viewport();
+    this.keyboard = new Keyboard();
     this.screen = new CxelBuffer();
     
     this.renderer = new Renderer();
-    this.scene = new MainScene(this.screen);
+    this.scene = new MainScene(this.screen, this.keyboard);
     
     this.running = false;
     
@@ -21,6 +23,7 @@ class Engine {
     this.renderer.attach();
     await this.renderer.init();
     
+    this.keyboard.observe();
     this.viewport.observe();
     this.resize();
     
@@ -31,6 +34,7 @@ class Engine {
   }
   
   stop() {
+    this.keyboard.stop();
     this.viewport.stop();
     this.running = false;
   }
@@ -41,6 +45,7 @@ class Engine {
     }
     this.update(timestamp);
     this.render(timestamp);
+    this.keyboard.reset();
 
     requestAnimationFrame(() => this.loop(performance.now()));
   }

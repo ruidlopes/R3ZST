@@ -1,7 +1,9 @@
 import {CHAR_SIZE} from '../renderer/font/constants.js';
+import {Observer} from './observer.js';
 
-class Viewport {
+class Viewport extends Observer {
   constructor() {
+    super();
     this.width = document.documentElement.clientWidth;
     this.height = document.documentElement.clientHeight;
     
