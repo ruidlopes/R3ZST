@@ -1,9 +1,8 @@
-import {BLACK, BLUE_BRIGHT, BLUE_FADED} from '../common/palette.js';
 import {HardwareView} from './main/hardware.js';
 import {Rect} from '../../renderer/graphics/rect.js';
-import {TerminalView} from './main/terminal.js';
 import {Scene} from '../scene.js';
 import {StatusView} from './main/status.js';
+import {TerminalView} from './main/terminal.js';
 import {mapOf} from '../../stdlib/collections.js';
 
 const States = {
@@ -22,13 +21,13 @@ class MainScene extends Scene {
     
     this.views = mapOf(
         ViewEnum.HARDWARE, new HardwareView(this.screen),
-        ViewEnum.STATUS, new StatusView(this.screen),
         ViewEnum.TERMINAL, new TerminalView(this.screen),
+        ViewEnum.STATUS, new StatusView(this.screen),
     );
     this.selectedView = ViewEnum.TERMINAL;
     this.views.get(this.selectedView).focus();
     
-    this.shortcuts = mapOf(
+    this.globalShortcuts = mapOf(
         'TAB', () => this.nextView(),
     );
     
@@ -62,11 +61,8 @@ class MainScene extends Scene {
   }
   
   processKeyEvents() {
-    for (const [shortcut, handler] of this.shortcuts.entries()) {
-      if (this.keyboard.capturingUp(shortcut)) {
-        handler();
-      }
-    }
+    this.keyboard.processShortcuts(this.globalShortcuts);
+    this.keyboard.processShortcuts(this.views.get(this.selectedView).shortcuts);
   }
   
   mainLoop() {
@@ -74,9 +70,10 @@ class MainScene extends Scene {
     
     // update game state
     // if layout invalidated, measure() & layout()
-    for (const view of this.views.values()) {
-      view.render();
-    }
+    
+    this.views.get(ViewEnum.HARDWARE).render();
+    this.views.get(ViewEnum.STATUS).render();
+    this.views.get(ViewEnum.TERMINAL).render();
   }
 }
 

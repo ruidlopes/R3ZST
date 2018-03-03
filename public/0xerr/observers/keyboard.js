@@ -73,6 +73,14 @@ class Keyboard extends Observer {
   capturingUp(key) {
     return this.keys.has(key) && this.keys.get(key) == KeyState.RELEASED;
   }
+  
+  processShortcuts(shortcuts) {
+    for (const [shortcut, handler] of shortcuts.entries()) {
+      if (this.capturingUp(shortcut)) {
+        handler();
+      }
+    }
+  }
 }
 
 export {

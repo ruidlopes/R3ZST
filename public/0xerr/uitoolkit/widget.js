@@ -1,3 +1,5 @@
+import {mapOf} from '../stdlib/collections.js';
+
 class Widget {
   constructor(scr, rect, foregroundColor, backgroundColor) {
     this.screen = scr;
@@ -5,6 +7,7 @@ class Widget {
     this.foregroundColor = foregroundColor;
     this.backgroundColor = backgroundColor;
     this.focused = false;
+    this.shortcuts = mapOf();
   }
   
   measure() {}
