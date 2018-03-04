@@ -1,4 +1,6 @@
 import {HardwareView} from './main/hardware.js';
+import {KeyModifiers} from '../../observers/keyboard/modifiers.js';
+import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
 import {Rect} from '../../renderer/graphics/rect.js';
 import {Scene} from '../scene.js';
 import {StatusView} from './main/status.js';
@@ -28,7 +30,8 @@ class MainScene extends Scene {
     this.views.get(this.selectedView).focus();
     
     this.globalShortcuts = mapOf(
-        'TAB', () => this.nextView(),
+        new KeyShortcut('TAB'), () => this.nextView(),
+        new KeyShortcut('TAB', KeyModifiers.SHIFT), () => this.previousView(),
     );
     
     this.sm.fixed(States.LOOP, () => this.mainLoop());
@@ -54,6 +57,24 @@ class MainScene extends Scene {
         break;
       case ViewEnum.STATUS:
         this.selectedView = ViewEnum.HARDWARE;
+        break;
+    }
+    
+    this.views.get(this.selectedView).focus();
+  }
+  
+  previousView() {
+    this.views.get(this.selectedView).blur();
+    
+    switch (this.selectedView) {
+      case ViewEnum.HARDWARE:
+        this.selectedView = ViewEnum.STATUS;
+        break;
+      case ViewEnum.TERMINAL:
+        this.selectedView = ViewEnum.HARDWARE;
+        break;
+      case ViewEnum.STATUS:
+        this.selectedView = ViewEnum.TERMINAL;
         break;
     }
     

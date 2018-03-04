@@ -1,4 +1,6 @@
+import {KeyModifiers} from './keyboard/modifiers.js';
 import {Observer} from './observer.js';
+import {xnor} from '../stdlib/math.js';
 
 const KeyState = {
   NONE: 0,
@@ -29,10 +31,26 @@ class Keyboard extends Observer {
   
   reset() {
     for (const key of this.keys.keys()) {
-      if (this.keys.get(key) == KeyState.RELEASED) {
+      if (this.released(key)) {
         this.keys.set(key, KeyState.NONE);
       }
     }
+  }
+  
+  none(key) {
+    return this.keys.has(key) && this.keys.get(key) == KeyState.NONE;
+  }
+  
+  pressed(key) {
+    return this.keys.has(key) && this.keys.get(key) == KeyState.PRESSED;
+  }
+  
+  held(key) {
+    return this.keys.has(key) && this.keys.get(key) == KeyState.HELD;
+  }
+  
+  released(key) {
+    return this.keys.has(key) && this.keys.get(key) == KeyState.RELEASED;
   }
   
   keydown(e) {
@@ -41,9 +59,9 @@ class Keyboard extends Observer {
       this.keys.set(key, KeyState.NONE);
     }
     
-    if (this.keys.get(key) == KeyState.NONE) {
+    if (this.none(key)) {
       this.keys.set(key, KeyState.PRESSED);
-    } else if (this.keys.get(key) == KeyState.PRESSED) {
+    } else if (this.pressed(key)) {
       this.keys.set(key, KeyState.HELD);
     }
     e.preventDefault();
@@ -56,22 +74,31 @@ class Keyboard extends Observer {
       this.keys.set(key, KeyState.HELD);
     }
     
-    if (this.keys.get(key) == KeyState.PRESSED ||
-        this.keys.get(key) == KeyState.HELD) {
+    if (this.pressed(key) || this.held(key)) {
       this.keys.set(key, KeyState.RELEASED);
     }
     e.preventDefault();
     e.stopPropagation();
   }
   
-  capturingDown(key) {
-    return this.keys.has(key) &&
-        (this.keys.get(key) == KeyState.PRESSED ||
-         this.keys.get(key) == KeyState.HELD);
+  capturingDown(shortcut) {
+    return (this.pressed(shortcut.key) || this.held(shortcut.key)) &&
+        xnor(shortcut.modifiers.has(KeyModifiers.ALT),
+             this.pressed('ALT') || this.held('ALT')) &&
+        xnor(shortcut.modifiers.has(KeyModifiers.SHIFT),
+             this.pressed('SHIFT') || this.held('SHIFT')) &&
+        xnor(shortcut.modifiers.has(KeyModifiers.CTRL),
+             this.pressed('CONTROL') || this.held('CONTROL'));
   }
   
-  capturingUp(key) {
-    return this.keys.has(key) && this.keys.get(key) == KeyState.RELEASED;
+  capturingUp(shortcut) {
+    return this.released(shortcut.key) &&
+        xnor(shortcut.modifiers.has(KeyModifiers.ALT),
+             this.pressed('ALT') || this.held('ALT') || this.released('ALT')) &&
+        xnor(shortcut.modifiers.has(KeyModifiers.SHIFT),
+             this.pressed('SHIFT') || this.held('SHIFT') || this.released('SHIFT')) &&
+        xnor(shortcut.modifiers.has(KeyModifiers.CTRL),
+             this.pressed('CONTROL') || this.held('CONTROL') || this.released('CONTROL'));
   }
   
   processShortcuts(shortcuts) {
@@ -83,7 +110,4 @@ class Keyboard extends Observer {
   }
 }
 
-export {
-  KeyState,
-  Keyboard,
-};
+export {Keyboard};
