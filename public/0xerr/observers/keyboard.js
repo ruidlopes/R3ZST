@@ -1,20 +1,10 @@
-import {KeyModifiers} from './keyboard/modifiers.js';
+import {KeyView} from './keyboard/view.js';
 import {Observer} from './observer.js';
-import {xnor} from '../stdlib/math.js';
-
-const KeyState = {
-  NONE: 0,
-  PRESSED: 1,
-  HELD: 2,
-  RELEASED: 3,
-};
 
 class Keyboard extends Observer {
   constructor() {
     super();
-    
-    this.keys = new Map();
-    
+    this.keys = new KeyView();
     this.keydownHandler = (e) => this.keydown(e);
     this.keyupHandler = (e) => this.keyup(e);
   }
@@ -30,39 +20,15 @@ class Keyboard extends Observer {
   }
   
   reset() {
-    for (const key of this.keys.keys()) {
-      if (this.released(key)) {
-        this.keys.set(key, KeyState.NONE);
-      }
-    }
-  }
-  
-  none(key) {
-    return this.keys.has(key) && this.keys.get(key) == KeyState.NONE;
-  }
-  
-  pressed(key) {
-    return this.keys.has(key) && this.keys.get(key) == KeyState.PRESSED;
-  }
-  
-  held(key) {
-    return this.keys.has(key) && this.keys.get(key) == KeyState.HELD;
-  }
-  
-  released(key) {
-    return this.keys.has(key) && this.keys.get(key) == KeyState.RELEASED;
+    this.keys.clear();
   }
   
   keydown(e) {
     const key = e.key.toUpperCase();
-    if (!this.keys.has(key)) {
-      this.keys.set(key, KeyState.NONE);
-    }
-    
-    if (this.none(key)) {
-      this.keys.set(key, KeyState.PRESSED);
-    } else if (this.pressed(key)) {
-      this.keys.set(key, KeyState.HELD);
+    if (this.keys.missing(key)) {
+      this.keys.press(key);
+    } else if (this.keys.pressed(key)) {
+      this.keys.hold(key);
     }
     e.preventDefault();
     e.stopPropagation();
@@ -70,41 +36,20 @@ class Keyboard extends Observer {
   
   keyup(e) {
     const key = e.key.toUpperCase();
-    if (!this.keys.has(key)) {
-      this.keys.set(key, KeyState.HELD);
+    if (this.keys.missing(key)) {
+      this.keys.hold(key);
     }
-    
-    if (this.pressed(key) || this.held(key)) {
-      this.keys.set(key, KeyState.RELEASED);
+    if (this.keys.pressed(key) || this.keys.held(key)) {
+      this.keys.release(key);
     }
     e.preventDefault();
     e.stopPropagation();
   }
   
-  capturingDown(shortcut) {
-    return (this.pressed(shortcut.key) || this.held(shortcut.key)) &&
-        xnor(shortcut.modifiers.has(KeyModifiers.ALT),
-             this.pressed('ALT') || this.held('ALT')) &&
-        xnor(shortcut.modifiers.has(KeyModifiers.SHIFT),
-             this.pressed('SHIFT') || this.held('SHIFT')) &&
-        xnor(shortcut.modifiers.has(KeyModifiers.CTRL),
-             this.pressed('CONTROL') || this.held('CONTROL'));
-  }
-  
-  capturingUp(shortcut) {
-    return this.released(shortcut.key) &&
-        xnor(shortcut.modifiers.has(KeyModifiers.ALT),
-             this.pressed('ALT') || this.held('ALT') || this.released('ALT')) &&
-        xnor(shortcut.modifiers.has(KeyModifiers.SHIFT),
-             this.pressed('SHIFT') || this.held('SHIFT') || this.released('SHIFT')) &&
-        xnor(shortcut.modifiers.has(KeyModifiers.CTRL),
-             this.pressed('CONTROL') || this.held('CONTROL') || this.released('CONTROL'));
-  }
-  
   processShortcuts(shortcuts) {
     for (const [shortcut, handler] of shortcuts.entries()) {
-      if (this.capturingUp(shortcut)) {
-        handler();
+      for (const code of shortcut.released(this.keys)) {
+        handler(code);
       }
     }
   }
