@@ -1,5 +1,4 @@
 import {KeyModifiers} from './modifiers.js';
-import {KeyState} from './state.js';
 import {xnor} from '../../stdlib/math.js';
 
 class KeyShortcutBase {

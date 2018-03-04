@@ -1,4 +1,8 @@
-import {KeyState} from './state.js';
+const KeyState = {
+  PRESSED: 0,
+  HELD: 1,
+  RELEASED: 2,
+};
 
 class KeyView {
   constructor() {

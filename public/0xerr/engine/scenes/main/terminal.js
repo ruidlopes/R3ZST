@@ -1,6 +1,6 @@
 import {BLACK, BLUE_BRIGHT, BLUE_FADED} from '../../common/palette.js';
-import {KeyShortcutRE} from '../../../observers/keyboard/shortcut.js';
 import {KeyModifiers} from '../../../observers/keyboard/modifiers.js';
+import {KeyShortcutRE} from '../../../observers/keyboard/shortcut.js';
 import {Label} from '../../../uitoolkit/label.js';
 import {Panel} from '../../../uitoolkit/panel.js';
 import {Rect} from '../../../renderer/graphics/rect.js';
