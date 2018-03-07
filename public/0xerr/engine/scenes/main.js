@@ -4,7 +4,10 @@ import {NodeComponent, NodeType} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
 
+import {SCREEN} from '../qualifiers.js';
+import {CxelBuffer} from '../../renderer/cxel/buffer.js';
 import {HardwareView} from './main/hardware.js';
+import {Keyboard} from '../../observers/keyboard.js';
 import {KeyModifiers} from '../../observers/keyboard/modifiers.js';
 import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
 import {Rect} from '../../renderer/graphics/rect.js';
@@ -12,6 +15,7 @@ import {Scene} from '../scene.js';
 import {StatusView} from './main/status.js';
 import {TerminalView} from './main/terminal.js';
 import {enumOf, mapOf} from '../../stdlib/collections.js';
+import {ij} from '../../injection/api.js';
 
 const States = enumOf(
   'LOOP',
@@ -24,8 +28,8 @@ const ViewEnum = enumOf(
 );
 
 class MainScene extends Scene {
-  constructor(scr, keyboard) {
-    super(scr, keyboard);
+  constructor(screen = ij(CxelBuffer, SCREEN), keyboard = ij(Keyboard)) {
+    super(screen, keyboard);
     
     this.manager = new EntityManager();
     this.manager.add(1, new ActiveComponent(true));

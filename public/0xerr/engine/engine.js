@@ -1,17 +1,23 @@
+import {SCREEN} from './qualifiers.js';
 import {CxelBuffer} from '../renderer/cxel/buffer.js';
 import {Keyboard} from '../observers/keyboard.js';
 import {MainScene} from './scenes/main.js';
 import {Renderer} from '../renderer/renderer.js';
 import {Viewport} from '../observers/viewport.js';
+import {ij} from '../injection/api.js';
 
 class Engine {
-  constructor() {
-    this.viewport = new Viewport();
-    this.keyboard = new Keyboard();
-    this.screen = new CxelBuffer();
-    
+  constructor(
+      viewport = ij(Viewport),
+      screen = ij(CxelBuffer, SCREEN),
+      keyboard = ij(Keyboard),
+      scene = ij(MainScene)) {
+    this.viewport = viewport;
+    this.keyboard = keyboard;
+    this.screen = screen;
+    this.scene = scene;
+
     this.renderer = new Renderer();
-    this.scene = new MainScene(this.screen, this.keyboard);
     
     this.running = false;
     
