@@ -1,3 +1,11 @@
+function enumOf(...labels) {
+  const entries = {};
+  for (const label of labels) {
+    entries[label] = Symbol(label);
+  }
+  return entries;
+}
+
 function mapOf(...params) {
   const pairs = [];
   for (let i = 0; i < params.length - 1; i += 2) {
@@ -6,4 +14,7 @@ function mapOf(...params) {
   return new Map(pairs);
 }
 
-export {mapOf};
+export {
+  enumOf,
+  mapOf,
+};

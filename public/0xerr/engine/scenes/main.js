@@ -1,3 +1,9 @@
+import {EntityManager} from '../entity/manager.js';
+import {ActiveComponent} from '../components/active.js';
+import {NodeComponent, NodeType} from '../components/node.js';
+import {SpatialComponent} from '../components/spatial.js';
+import {StyleComponent} from '../components/style.js';
+
 import {HardwareView} from './main/hardware.js';
 import {KeyModifiers} from '../../observers/keyboard/modifiers.js';
 import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
@@ -5,24 +11,30 @@ import {Rect} from '../../renderer/graphics/rect.js';
 import {Scene} from '../scene.js';
 import {StatusView} from './main/status.js';
 import {TerminalView} from './main/terminal.js';
-import {mapOf} from '../../stdlib/collections.js';
+import {enumOf, mapOf} from '../../stdlib/collections.js';
 
-const States = {
-  LOOP: Symbol(),
-};
+const States = enumOf(
+  'LOOP',
+);
 
-const ViewEnum = {
-  HARDWARE: Symbol(),
-  TERMINAL: Symbol(),
-  STATUS: Symbol(),
-};
+const ViewEnum = enumOf(
+  'HARDWARE',
+  'TERMINAL',
+  'STATUS',
+);
 
 class MainScene extends Scene {
   constructor(scr, keyboard) {
     super(scr, keyboard);
     
+    this.manager = new EntityManager();
+    this.manager.add(1, new ActiveComponent(true));
+    this.manager.add(1, new NodeComponent(NodeType.HVAC));
+    this.manager.add(1, new SpatialComponent(0, 0, 20, 20));
+    this.manager.add(1, new StyleComponent());
+    
     this.views = mapOf(
-        ViewEnum.HARDWARE, new HardwareView(this.screen),
+        ViewEnum.HARDWARE, new HardwareView(this.screen, this.manager),
         ViewEnum.TERMINAL, new TerminalView(this.screen),
         ViewEnum.STATUS, new StatusView(this.screen),
     );
