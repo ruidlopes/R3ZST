@@ -1,8 +1,11 @@
 class Module {
   constructor() {
-    this.injector = undefined;
     this.classes = new Set();
     this.instances = new Set();
+    
+    this.classesSets = new Set();
+    this.instancesSets = new Set();
+    
     this.modules = new Set();
   }
   
@@ -17,6 +20,12 @@ class Module {
     for (const params of this.instances) {
       injector.provideInstance(...params);
     }
+    for (const params of this.classesSets) {
+      injector.provideIntoSet(...params);
+    }
+    for (const params of this.instancesSets) {
+      injector.provideInstanceIntoSet(...params);
+    }
     
     injector.install(...this.modules);
   }
@@ -25,8 +34,16 @@ class Module {
     this.classes.add(params);
   }
   
+  bindClassIntoSet(...params) {
+    this.classesSets.add(params);
+  }
+  
   bindInstance(...params) {
     this.instances.add(params);
+  }
+  
+  bindInstanceIntoSet(...params) {
+    this.instancesSets.add(params);
   }
   
   install(...modules) {

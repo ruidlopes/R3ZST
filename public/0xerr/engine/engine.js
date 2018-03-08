@@ -3,8 +3,10 @@ import {CxelBuffer} from '../renderer/cxel/buffer.js';
 import {Keyboard} from '../observers/keyboard.js';
 import {MainScene} from './scenes/main.js';
 import {Renderer} from '../renderer/renderer.js';
+import {Scene} from './scene.js';
 import {Viewport} from '../observers/viewport.js';
-import {ij} from '../injection/api.js';
+import {firstOf} from '../stdlib/collections.js';
+import {ij, ijset} from '../injection/api.js';
 
 class Engine {
   constructor(
@@ -12,12 +14,14 @@ class Engine {
       renderer = ij(Renderer),
       screen = ij(CxelBuffer, SCREEN),
       keyboard = ij(Keyboard),
-      scene = ij(MainScene)) {
+      scenes = ijset(Scene)) {
     this.viewport = viewport;
     this.renderer = renderer;
     this.keyboard = keyboard;
     this.screen = screen;
-    this.scene = scene;
+        
+    // Temporary, while we only have one scene.
+    this.scene = firstOf(scenes);
     
     this.running = false;
     

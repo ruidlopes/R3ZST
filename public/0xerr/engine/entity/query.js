@@ -1,5 +1,6 @@
 import {EntityView} from './view.js';
 import {ALWAYS_TRUE} from '../../stdlib/functions.js';
+import {firstOf} from '../../stdlib/collections.js';
 
 class EntityQuery {
   constructor(components, ids) {
@@ -19,7 +20,7 @@ class EntityQuery {
   }
   
   first() {
-    this.ids = new Set(this.ids[Symbol.iterator]().next().value);
+    this.ids = new Set(firstOf(this.ids));
     return this;
   }
   

@@ -5,6 +5,7 @@ import {EntityModule} from './entity/module.js';
 import {FactoryModule} from './factory/module.js';
 import {Module} from '../injection/module.js';
 import {ScenesModule} from './scenes/module.js';
+import {SystemsModule} from './systems/module.js';
 
 class EngineModule extends Module {
   configure() {
@@ -12,6 +13,7 @@ class EngineModule extends Module {
         new EntityModule(),
         new FactoryModule(),
         new ScenesModule(),
+        new SystemsModule(),
     );
     this.bindClass(CxelBuffer, SCREEN);
     this.bindClass(Engine);
