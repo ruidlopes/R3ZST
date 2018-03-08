@@ -24,6 +24,11 @@ class EntityQuery {
     return this;
   }
   
+  none() {
+    this.ids = new Set();
+    return this;
+  }
+  
   *collect(...types) {
     for (const id of this.ids.values()) {
       yield new EntityView(id, ...this.entityView(id, ...types));

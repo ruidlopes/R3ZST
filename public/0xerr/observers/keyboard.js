@@ -46,6 +46,22 @@ class Keyboard extends Observer {
     e.stopPropagation();
   }
   
+  down(shortcut) {
+    return shortcut.down(this.keys);
+  }
+  
+  downAny(shortcut) {
+    return this.down(shortcut).length > 0;
+  }
+  
+  released(shortcut) {
+    return shortcut.released(this.keys);
+  }
+  
+  releasedAny(shortcut) {
+    return this.released(shortcut).length > 0;
+  }
+  
   processShortcuts(shortcuts) {
     for (const [shortcut, handler] of shortcuts.entries()) {
       for (const code of shortcut.released(this.keys)) {

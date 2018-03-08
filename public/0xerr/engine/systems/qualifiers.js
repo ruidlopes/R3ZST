@@ -1,3 +1,3 @@
-const MAIN_SCENE = Symbol('MAIN_SCENE');
+const MAIN_SCENE_UPDATE = Symbol('MAIN_SCENE');
 
-export {MAIN_SCENE};
+export {MAIN_SCENE_UPDATE};

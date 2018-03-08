@@ -1,3 +1,4 @@
+import {MAIN_SCENE_UPDATE} from '../systems/qualifiers.js';
 import {SCREEN} from '../qualifiers.js';
 import {CxelBuffer} from '../../renderer/cxel/buffer.js';
 import {EntityManager} from '../entity/manager.js';
@@ -9,9 +10,10 @@ import {NodeFactory} from '../factory/node.js';
 import {Rect} from '../../renderer/graphics/rect.js';
 import {Scene} from '../scene.js';
 import {StatusView} from './main/status.js';
+import {System} from '../system.js';
 import {TerminalView} from './main/terminal.js';
 import {enumOf, mapOf} from '../../stdlib/collections.js';
-import {ij} from '../../injection/api.js';
+import {ij, ijset} from '../../injection/api.js';
 
 const States = enumOf(
   'LOOP',
@@ -28,11 +30,14 @@ class MainScene extends Scene {
       screen = ij(CxelBuffer, SCREEN),
       keyboard = ij(Keyboard),
       manager = ij(EntityManager),
-      nodeFactory = ij(NodeFactory)) {
+      nodeFactory = ij(NodeFactory),
+      updateSystems = ijset(System, MAIN_SCENE_UPDATE)) {
     super(screen, keyboard);
     
     this.manager = manager;
     nodeFactory.make();
+        
+    this.updateSystems = updateSystems;
     
     this.views = mapOf(
         ViewEnum.HARDWARE, new HardwareView(this.screen, this.manager),
@@ -47,7 +52,7 @@ class MainScene extends Scene {
         new KeyShortcut('TAB', KeyModifiers.SHIFT), () => this.previousView(),
     );
     
-    this.sm.fixed(States.LOOP, () => this.mainLoop());
+    this.sm.fixed(States.LOOP, (delta) => this.mainLoop(delta));
     this.sm.jump(States.LOOP);
   }
   
@@ -99,11 +104,12 @@ class MainScene extends Scene {
     this.keyboard.processShortcuts(this.views.get(this.selectedView).shortcuts);
   }
   
-  mainLoop() {
+  mainLoop(delta) {
     this.processKeyEvents();
     
-    // update game state
-    // if layout invalidated, measure() & layout()
+    for (const system of this.updateSystems) {
+      system.frame(delta);
+    }
     
     this.views.get(ViewEnum.HARDWARE).render();
     this.views.get(ViewEnum.STATUS).render();
