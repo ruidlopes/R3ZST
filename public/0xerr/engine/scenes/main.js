@@ -28,10 +28,13 @@ const ViewEnum = enumOf(
 );
 
 class MainScene extends Scene {
-  constructor(screen = ij(CxelBuffer, SCREEN), keyboard = ij(Keyboard)) {
+  constructor(
+      screen = ij(CxelBuffer, SCREEN),
+      keyboard = ij(Keyboard),
+      manager = ij(EntityManager)) {
     super(screen, keyboard);
     
-    this.manager = new EntityManager();
+    this.manager = manager;
     this.manager.add(1, new ActiveComponent(true));
     this.manager.add(1, new NodeComponent(NodeType.HVAC));
     this.manager.add(1, new SpatialComponent(0, 0, 20, 20));

@@ -1,7 +1,8 @@
 import {Shader} from './shader.js';
+import {ij} from '../../injection/api.js';
 
 class Program {
-  constructor(gl) {
+  constructor(gl = ij(WebGLRenderingContext)) {
     this.gl = gl;
     this.instance = null;
     this.shaders = [];

@@ -4,14 +4,17 @@ import {Mesh} from './graphics/mesh.js';
 import {Program} from './graphics/program.js';
 import {Texture} from './graphics/texture.js';
 import {loadFontRaw} from './font/loader.js';
+import {ij} from '../injection/api.js';
 import {mat3} from './graphics/mat3.js';
 
 class Renderer {
-  constructor() {
-    this.dom = Canvas3D.fromContainer();
-    
-    this.gl = this.dom.gl;
-    this.program = new Program(this.gl);
+  constructor(
+      canvas = ij(Canvas3D),
+      gl = ij(WebGLRenderingContext),
+      program = ij(Program)) {
+    this.dom = canvas;
+    this.gl = gl;
+    this.program = program;
     
     this.mesh = new Mesh();
     

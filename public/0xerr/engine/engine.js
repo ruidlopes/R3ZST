@@ -9,15 +9,15 @@ import {ij} from '../injection/api.js';
 class Engine {
   constructor(
       viewport = ij(Viewport),
+      renderer = ij(Renderer),
       screen = ij(CxelBuffer, SCREEN),
       keyboard = ij(Keyboard),
       scene = ij(MainScene)) {
     this.viewport = viewport;
+    this.renderer = renderer;
     this.keyboard = keyboard;
     this.screen = screen;
     this.scene = scene;
-
-    this.renderer = new Renderer();
     
     this.running = false;
     
