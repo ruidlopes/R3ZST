@@ -1,15 +1,11 @@
-import {EntityManager} from '../entity/manager.js';
-import {ActiveComponent} from '../components/active.js';
-import {NodeComponent, NodeType} from '../components/node.js';
-import {SpatialComponent} from '../components/spatial.js';
-import {StyleComponent} from '../components/style.js';
-
 import {SCREEN} from '../qualifiers.js';
 import {CxelBuffer} from '../../renderer/cxel/buffer.js';
+import {EntityManager} from '../entity/manager.js';
 import {HardwareView} from './main/hardware.js';
 import {Keyboard} from '../../observers/keyboard.js';
 import {KeyModifiers} from '../../observers/keyboard/modifiers.js';
 import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
+import {NodeFactory} from '../factory/node.js';
 import {Rect} from '../../renderer/graphics/rect.js';
 import {Scene} from '../scene.js';
 import {StatusView} from './main/status.js';
@@ -31,14 +27,12 @@ class MainScene extends Scene {
   constructor(
       screen = ij(CxelBuffer, SCREEN),
       keyboard = ij(Keyboard),
-      manager = ij(EntityManager)) {
+      manager = ij(EntityManager),
+      nodeFactory = ij(NodeFactory)) {
     super(screen, keyboard);
     
     this.manager = manager;
-    this.manager.add(1, new ActiveComponent(true));
-    this.manager.add(1, new NodeComponent(NodeType.HVAC));
-    this.manager.add(1, new SpatialComponent(0, 0, 20, 20));
-    this.manager.add(1, new StyleComponent());
+    nodeFactory.make();
     
     this.views = mapOf(
         ViewEnum.HARDWARE, new HardwareView(this.screen, this.manager),

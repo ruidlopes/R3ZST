@@ -4,6 +4,11 @@ class EntityManager {
   constructor() {
     this.components = new Map();
     this.ids = new Set();
+    this.idCounter = 0;
+  }
+  
+  nextId() {
+    return this.idCounter++;
   }
   
   add(id, component) {

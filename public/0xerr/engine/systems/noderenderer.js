@@ -12,6 +12,7 @@ class NodeRendererSystem {
   
   entities() {
     return this.manager.query()
+        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
         .collect(NodeComponent, SpatialComponent, StyleComponent);
   }
