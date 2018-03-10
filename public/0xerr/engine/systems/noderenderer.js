@@ -17,7 +17,7 @@ class NodeRendererSystem extends System {
     return this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
-        .collect(NodeComponent, SpatialComponent, StyleComponent);
+        .iterate(NodeComponent, SpatialComponent, StyleComponent);
   }
   
   frameEntity(entity, delta) {

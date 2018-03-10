@@ -11,11 +11,14 @@ class EntityManager {
     return this.idCounter++;
   }
   
-  add(id, component) {
-    if (!this.components.has(component.constructor)) {
-      this.components.set(component.constructor, new Map());
+  add(id, ...components) {
+    for (const component of components) {
+      if (!this.components.has(component.constructor)) {
+        this.components.set(component.constructor, new Map());
+      }
+      this.components.get(component.constructor).set(id, component);
     }
-    this.components.get(component.constructor).set(id, component);
+    
     if (!this.ids.has(id)) {
       this.ids.add(id);
     }

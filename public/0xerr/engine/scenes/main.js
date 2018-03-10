@@ -12,17 +12,13 @@ import {Scene} from '../scene.js';
 import {StatusView} from './main/status.js';
 import {System} from '../system.js';
 import {TerminalView} from './main/terminal.js';
+import {ViewFactory} from '../factory/view.js';
+import {ViewType} from '../components/view.js';
 import {enumOf, mapOf} from '../../stdlib/collections.js';
 import {ij, ijset} from '../../injection/api.js';
 
 const States = enumOf(
   'LOOP',
-);
-
-const ViewEnum = enumOf(
-  'HARDWARE',
-  'TERMINAL',
-  'STATUS',
 );
 
 class MainScene extends Scene {
@@ -31,20 +27,22 @@ class MainScene extends Scene {
       keyboard = ij(Keyboard),
       manager = ij(EntityManager),
       nodeFactory = ij(NodeFactory),
+      viewFactory = ij(ViewFactory),
       updateSystems = ijset(System, MAIN_SCENE_UPDATE)) {
     super(screen, keyboard);
     
     this.manager = manager;
     nodeFactory.make();
+    viewFactory.make();
         
     this.updateSystems = updateSystems;
     
     this.views = mapOf(
-        ViewEnum.HARDWARE, new HardwareView(this.screen, this.manager),
-        ViewEnum.TERMINAL, new TerminalView(this.screen),
-        ViewEnum.STATUS, new StatusView(this.screen),
+        ViewType.HARDWARE, new HardwareView(this.screen, this.manager),
+        ViewType.TERMINAL, new TerminalView(this.screen),
+        ViewType.STATUS, new StatusView(this.screen),
     );
-    this.selectedView = ViewEnum.TERMINAL;
+    this.selectedView = ViewType.TERMINAL;
     this.views.get(this.selectedView).focus();
     
     this.globalShortcuts = mapOf(
@@ -58,23 +56,23 @@ class MainScene extends Scene {
   
   resize(width, height) {
     super.resize(width, height);
-    this.views.get(ViewEnum.HARDWARE).layout(new Rect(0, 0, width - 25, height - 20));
-    this.views.get(ViewEnum.STATUS).layout(new Rect(width - 25, 0, 25, height));
-    this.views.get(ViewEnum.TERMINAL).layout(new Rect(0, height - 20, width - 24, 20));
+    this.views.get(ViewType.HARDWARE).layout(new Rect(0, 0, width - 25, height - 20));
+    this.views.get(ViewType.STATUS).layout(new Rect(width - 25, 0, 25, height));
+    this.views.get(ViewType.TERMINAL).layout(new Rect(0, height - 20, width - 24, 20));
   }
   
   nextView() {
     this.views.get(this.selectedView).blur();
     
     switch (this.selectedView) {
-      case ViewEnum.HARDWARE:
-        this.selectedView = ViewEnum.TERMINAL;
+      case ViewType.HARDWARE:
+        this.selectedView = ViewType.TERMINAL;
         break;
-      case ViewEnum.TERMINAL:
-        this.selectedView = ViewEnum.STATUS;
+      case ViewType.TERMINAL:
+        this.selectedView = ViewType.STATUS;
         break;
-      case ViewEnum.STATUS:
-        this.selectedView = ViewEnum.HARDWARE;
+      case ViewType.STATUS:
+        this.selectedView = ViewType.HARDWARE;
         break;
     }
     
@@ -85,14 +83,14 @@ class MainScene extends Scene {
     this.views.get(this.selectedView).blur();
     
     switch (this.selectedView) {
-      case ViewEnum.HARDWARE:
-        this.selectedView = ViewEnum.STATUS;
+      case ViewType.HARDWARE:
+        this.selectedView = ViewType.STATUS;
         break;
-      case ViewEnum.TERMINAL:
-        this.selectedView = ViewEnum.HARDWARE;
+      case ViewType.TERMINAL:
+        this.selectedView = ViewType.HARDWARE;
         break;
-      case ViewEnum.STATUS:
-        this.selectedView = ViewEnum.TERMINAL;
+      case ViewType.STATUS:
+        this.selectedView = ViewType.TERMINAL;
         break;
     }
     
@@ -111,9 +109,9 @@ class MainScene extends Scene {
       system.frame(delta);
     }
     
-    this.views.get(ViewEnum.HARDWARE).render();
-    this.views.get(ViewEnum.STATUS).render();
-    this.views.get(ViewEnum.TERMINAL).render();
+    this.views.get(ViewType.HARDWARE).render();
+    this.views.get(ViewType.STATUS).render();
+    this.views.get(ViewType.TERMINAL).render();
   }
 }
 

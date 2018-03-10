@@ -29,10 +29,14 @@ class EntityQuery {
     return this;
   }
   
-  *collect(...types) {
+  *iterate(...types) {
     for (const id of this.ids.values()) {
       yield new EntityView(id, ...this.entityView(id, ...types));
     }
+  }
+  
+  collect(...types) {
+    return [...this.iterate(...types)];
   }
   
   *entityView(id, ...types) {

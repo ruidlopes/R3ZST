@@ -12,11 +12,12 @@ class NodeFactory {
   }
   
   make() {
-    const id = this.manager.nextId();
-    this.manager.add(id, new ActiveComponent(true));
-    this.manager.add(id, new NodeComponent(NodeType.HVAC));
-    this.manager.add(id, new SpatialComponent(10, 10, 40, 20));
-    this.manager.add(id, new StyleComponent(BLUE_BRIGHT, BLACK));
+    this.manager.add(
+        this.manager.nextId(),
+        new ActiveComponent(true),
+        new NodeComponent(NodeType.HVAC),
+        new SpatialComponent(10, 10, 40, 20),
+        new StyleComponent(BLUE_BRIGHT, BLACK));
   }
 }
 
