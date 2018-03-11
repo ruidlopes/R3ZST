@@ -1,7 +1,6 @@
 import {SCREEN} from './qualifiers.js';
 import {CxelBuffer} from '../renderer/cxel/buffer.js';
 import {Keyboard} from '../observers/keyboard.js';
-import {MainScene} from './scenes/main.js';
 import {Renderer} from '../renderer/renderer.js';
 import {Scene} from './scene.js';
 import {Viewport} from '../observers/viewport.js';
