@@ -23,6 +23,14 @@ class Viewport extends Observer {
     this.height = document.documentElement.clientHeight;
   }
   
+  screenWidth() {
+    return Math.floor(this.width / CHAR_SIZE);
+  }
+  
+  screenHeight() {
+    return Math.floor(this.height / CHAR_SIZE);
+  }
+  
   needsLayout(client) {
     return this.width != client.width || this.height != client.height;
   }
@@ -35,8 +43,8 @@ class Viewport extends Observer {
   }
   
   resizeScene(scene) {
-    const sw = Math.floor(this.width / CHAR_SIZE);
-    const sh = Math.floor(this.height / CHAR_SIZE);
+    const sw = this.screenWidth();
+    const sh = this.screenHeight();
     
     if (scene.width != sw || scene.height != sh) {
       scene.resize(sw, sh);
