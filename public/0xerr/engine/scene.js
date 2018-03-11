@@ -1,9 +1,7 @@
 import {StateMachine} from '../stdlib/statemachine.js';
 
 class Scene {
-  constructor(scr, keyboard) {
-    this.screen = scr;
-    this.keyboard = keyboard;
+  constructor() {
     this.width = 0;
     this.height = 0;
     

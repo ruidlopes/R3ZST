@@ -33,7 +33,7 @@ class ViewSpatialSystem extends System {
         case ViewType.TERMINAL:
           spatial.x = 0;
           spatial.y = this.viewport.screenHeight() - 20;
-          spatial.width = this.viewport.screenWidth() - 24;
+          spatial.width = this.viewport.screenWidth() - 25;
           spatial.height = 20;
           break;
         case ViewType.STATUS:

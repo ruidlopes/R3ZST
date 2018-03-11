@@ -1,13 +1,19 @@
+import {SCREEN} from '../qualifiers.js';
 import {ActiveComponent} from '../components/active.js';
+import {CxelBuffer} from '../../renderer/cxel/buffer.js';
+import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
 import {System} from '../system.js';
 import {box, BoxType} from '../../renderer/primitives/boxes.js';
 import {rect} from '../../renderer/primitives/drawing.js';
+import {ij} from '../../injection/api.js';
 
 class NodeRendererSystem extends System {
-  constructor(manager, screen) {
+  constructor(
+      manager = ij(EntityManager),
+      screen = ij(CxelBuffer, SCREEN)) {
     super();
     this.manager = manager;
     this.screen = screen;
