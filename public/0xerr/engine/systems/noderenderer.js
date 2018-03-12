@@ -7,8 +7,9 @@ import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
 import {System} from '../system.js';
 import {box, BoxType} from '../../renderer/primitives/boxes.js';
-import {rect} from '../../renderer/primitives/drawing.js';
+import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
+import {rect} from '../../renderer/primitives/drawing.js';
 
 class NodeRendererSystem extends System {
   constructor(
@@ -23,10 +24,12 @@ class NodeRendererSystem extends System {
     return this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .first()
         .iterate(NodeComponent, SpatialComponent, StyleComponent);
   }
   
-  frameEntity(entity, delta) {
+  frame(delta) {
+    const entity = firstOf(this.entities());
     const node = entity.get(NodeComponent);
     const spatial = entity.get(SpatialComponent);
     const style = entity.get(StyleComponent);

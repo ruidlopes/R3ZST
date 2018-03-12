@@ -20,7 +20,7 @@ class EntityQuery {
   }
   
   first() {
-    this.ids = new Set(firstOf(this.ids));
+    this.ids = new Set([firstOf(this.ids)]);
     return this;
   }
   

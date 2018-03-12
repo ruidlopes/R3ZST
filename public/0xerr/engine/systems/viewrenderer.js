@@ -7,9 +7,9 @@ import {SpatialComponent} from '../components/spatial.js';
 import {System} from '../system.js';
 import {ViewComponent, ViewType} from '../components/view.js';
 import {box, BoxType} from '../../renderer/primitives/boxes.js';
+import {ij} from '../../injection/api.js';
 import {rect} from '../../renderer/primitives/drawing.js';
 import {sprint} from '../../renderer/primitives/print.js';
-import {ij} from '../../injection/api.js';
 
 class ViewRendererSystem extends System {
   constructor(
