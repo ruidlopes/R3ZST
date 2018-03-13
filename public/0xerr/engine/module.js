@@ -2,7 +2,7 @@ import {SCREEN} from './qualifiers.js';
 import {CxelBuffer} from '../renderer/cxel/buffer.js';
 import {Engine} from './engine.js';
 import {EntityModule} from './entity/module.js';
-import {FactoryModule} from './factory/module.js';
+import {FactoryModule} from './factories/module.js';
 import {MainScene} from './mainscene.js';
 import {Module} from '../injection/module.js';
 import {Scene} from './scene.js';

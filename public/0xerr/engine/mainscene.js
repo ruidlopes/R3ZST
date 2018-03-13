@@ -6,11 +6,11 @@ import {
 } from './systems/qualifiers.js';
 
 import {EntityManager} from './entity/manager.js';
-import {NodeFactory} from './factory/node.js';
-import {PlayerFactory} from './factory/player.js';
+import {NodeFactory} from './factories/node.js';
+import {PlayerFactory} from './factories/player.js';
 import {Scene} from './scene.js';
 import {System} from './system.js';
-import {ViewFactory} from './factory/view.js';
+import {ViewFactory} from './factories/view.js';
 import {enumOf} from '../stdlib/collections.js';
 import {ij, ijset} from '../injection/api.js';
 
