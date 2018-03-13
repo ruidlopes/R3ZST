@@ -1,4 +1,5 @@
 import {SCREEN} from './qualifiers.js';
+import {CommonModule} from './common/module.js';
 import {CxelBuffer} from '../renderer/cxel/buffer.js';
 import {Engine} from './engine.js';
 import {EntityModule} from './entity/module.js';
@@ -11,6 +12,7 @@ import {SystemsModule} from './systems/module.js';
 class EngineModule extends Module {
   configure() {
     this.install(
+        new CommonModule(),
         new EntityModule(),
         new FactoryModule(),
         new SystemsModule(),

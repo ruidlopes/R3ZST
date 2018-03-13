@@ -1,6 +1,5 @@
 import {BLACK, BLUE_BRIGHT, ORANGE_BRIGHT} from '../common/palette.js';
-import {SCREEN} from '../qualifiers.js';
-import {CxelBuffer} from '../../renderer/cxel/buffer.js';
+import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
@@ -8,15 +7,14 @@ import {System} from '../system.js';
 import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
-import {sprint} from '../../renderer/primitives/print.js';
 
 class GameStatsRendererSystem extends System {
   constructor(
       manager = ij(EntityManager),
-      screen = ij(CxelBuffer, SCREEN)) {
+      drawing = ij(Drawing)) {
     super();
     this.manager = manager;
-    this.screen = screen;
+    this.drawing = drawing;
   }
   
   statusViewSpatial() {
@@ -41,10 +39,10 @@ class GameStatsRendererSystem extends System {
     const dx = statusViewSpatial.x + 2;
     const dy = statusViewSpatial.y + 2;
     
-    const stealth = this.stealth();
-    sprint('STEALTH', this.screen, dx, dy, BLUE_BRIGHT, BLACK);
-    sprint('[          ]', this.screen, dx, dy + 1, BLUE_BRIGHT, BLACK);
-    sprint('\xfe'.repeat(stealth), this.screen, dx + 1, dy + 1, ORANGE_BRIGHT, BLACK);
+    this.drawing.absolute()
+        .sprint('STEALTH', dx, dy, BLUE_BRIGHT, BLACK)
+        .sprint('[          ]', dx, dy + 1, BLUE_BRIGHT, BLACK)
+        .sprint('\xfe'.repeat(this.stealth()), dx + 1, dy + 1, ORANGE_BRIGHT, BLACK);
   }
 }
 
