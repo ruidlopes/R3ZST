@@ -64,7 +64,6 @@ class Engine {
       this.viewport.resizeClient(this);
       this.viewport.resizeRenderer(this.renderer);
       this.viewport.resizeScreen(this.screen);
-      this.viewport.resizeScene(this.scene);
     }
   }
   

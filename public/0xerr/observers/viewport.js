@@ -42,18 +42,9 @@ class Viewport extends Observer {
     }
   }
   
-  resizeScene(scene) {
+  resizeScreen(screen) {
     const sw = this.screenWidth();
     const sh = this.screenHeight();
-    
-    if (scene.width != sw || scene.height != sh) {
-      scene.resize(sw, sh);
-    }
-  }
-  
-  resizeScreen(screen) {
-    const sw = Math.floor(this.width / CHAR_SIZE);
-    const sh = Math.floor(this.height / CHAR_SIZE);
     
     if (screen.width != sw || screen.height != sh) {
       screen.resize(sw, sh);

@@ -1,71 +1,115 @@
-function rect(buffer, x, y, width, height, charByte, foregroundColor, backgroundColor) {
-  for (let dy = 0; dy < height; ++dy) {
+function rect(buffer, x, y, width, height, charByte, foregroundColor, backgroundColor, clipping = undefined) {
+  const clipX = clipping ? clipping.x : 0;
+  const clipY = clipping ? clipping.y : 0;
+  const clipEndX = clipping ? clipping.x + clipping.width : buffer.width;
+  const clipEndY = clipping ? clipping.y + clipping.height : buffer.height;
+  
+  const startX = Math.max(x, clipX);
+  const startY = Math.max(y, clipY);
+  const endX = Math.min(clipEndX, x + width);
+  const endY = Math.min(clipEndY, y + height);
+  
+  for (let yy = startY; yy < endY; ++yy) {
     buffer.chars.data.fill(
         charByte,
-        buffer.chars.offset(x, y + dy),
-        buffer.chars.offset(x + width, y + dy));
+        buffer.chars.offset(startX, yy),
+        buffer.chars.offset(endX, yy));
     
-    for (let dx = 0; dx < width; ++dx) {
+    for (let xx = startX; xx < endX; ++xx) {
       buffer.foreground.data.set(
           foregroundColor.data,
-          buffer.foreground.offset(x + dx, y + dy));
+          buffer.foreground.offset(xx, yy));
       buffer.background.data.set(
           backgroundColor.data,
-          buffer.background.offset(x + dx, y + dy));
+          buffer.background.offset(xx, yy));
     }
   }
 }
 
-function rectPtr(ptr, width, height, charByte, foregroundColor, backgroundColor) {
-  rect(ptr.buffer, ptr.x, ptr.y, width, height, charByte, foregroundColor, backgroundColor);
+function rectPtr(ptr, width, height, charByte, foregroundColor, backgroundColor, clipping) {
+  rect(ptr.buffer, ptr.x, ptr.y, width, height, charByte, foregroundColor, backgroundColor, clipping);
 }
 
-function vline(buffer, x, y, height, charByte, foregroundColor, backgroundColor) {
-  for (let dy = 0; dy < height; ++dy) {
-    buffer.chars.data[buffer.chars.offset(x, y + dy)] = charByte;
+function vline(buffer, x, y, height, charByte, foregroundColor, backgroundColor, clipping = undefined) {
+  const clipX = clipping ? clipping.x : 0;
+  const clipY = clipping ? clipping.y : 0;
+  const clipEndX = clipping ? clipping.x + clipping.width : buffer.width;
+  const clipEndY = clipping ? clipping.y + clipping.height : buffer.height;
+  
+  if (x < clipX || x >= clipEndX) {
+    return;
+  }
+  
+  const startY = Math.max(y, clipY);
+  const endY = Math.min(clipEndY, y + height);
+  
+  for (let yy = startY; yy < endY; ++yy) {
+    buffer.chars.data[buffer.chars.offset(x, yy)] = charByte;
     buffer.foreground.data.set(
         foregroundColor.data,
-        buffer.foreground.offset(x, y + dy));
+        buffer.foreground.offset(x, yy));
     buffer.background.data.set(
         backgroundColor.data,
-        buffer.background.offset(x, y + dy));
+        buffer.background.offset(x, yy));
   }
 }
 
-function vlinePtr(ptr, height, charByte, foregroundColor, backgroundColor) {
-  vline(ptr.buffer, ptr.x, ptr.y, height, charByte, foregroundColor, backgroundColor);
+function vlinePtr(ptr, height, charByte, foregroundColor, backgroundColor, clipping) {
+  vline(ptr.buffer, ptr.x, ptr.y, height, charByte, foregroundColor, backgroundColor, clipping);
 }
 
-function hline(buffer, x, y, width, charByte, foregroundColor, backgroundColor) {
+function hline(buffer, x, y, width, charByte, foregroundColor, backgroundColor, clipping = undefined) {
+  const clipX = clipping ? clipping.x : 0;
+  const clipY = clipping ? clipping.y : 0;
+  const clipEndX = clipping ? clipping.x + clipping.width : buffer.width;
+  const clipEndY = clipping ? clipping.y + clipping.height : buffer.height;
+  
+  if (y < clipY || y >= clipEndY) {
+    return;
+  }
+  
+  const startX = Math.max(x, clipX);
+  const endX = Math.min(clipEndX, x + width);
+  
   buffer.chars.data.fill(
       charByte,
-      buffer.chars.offset(x, y),
-      buffer.chars.offset(x + width, y));
+      buffer.chars.offset(startX, y),
+      buffer.chars.offset(endX, y));
   
-  for (let dx = 0; dx < width; ++dx) {
+  for (let xx = startX; xx < endX; ++xx) {
     buffer.foreground.data.set(
         foregroundColor.data,
-        buffer.foreground.offset(x + dx, y));
+        buffer.foreground.offset(xx, y));
     buffer.background.data.set(
-          backgroundColor.data,
-          buffer.background.offset(x + dx, y));
+        backgroundColor.data,
+        buffer.background.offset(xx, y));
   }
 }
 
-function hlinePtr(ptr, width, charByte, foregroundColor, backgroundColor) {
-  hline(ptr.buffer, ptr.x, ptr.y, width, charByte, foregroundColor, backgroundColor);
+function hlinePtr(ptr, width, charByte, foregroundColor, backgroundColor, clipping = undefined) {
+  hline(ptr.buffer, ptr.x, ptr.y, width, charByte, foregroundColor, backgroundColor, clipping);
 }
 
-function putCxel(buffer, x, y, charByte, foregroundColor, backgroundColor) {
-  buffer.chars.data[buffer.chars.offset(x, y)] = charByte;
-  buffer.foreground.data.set(foregroundColor.data, buffer.foreground.offset(x, y));
-  buffer.background.data.set(backgroundColor.data, buffer.background.offset(x, y));
+function putCxel(buffer, x, y, charByte, foregroundColor, backgroundColor, clipping = undefined) {
+  const clipX = clipping ? clipping.x : 0;
+  const clipY = clipping ? clipping.y : 0;
+  const clipEndX = clipping ? clipping.x + clipping.width : buffer.width;
+  const clipEndY = clipping ? clipping.y + clipping.height : buffer.height;
+  
+  const startX = Math.max(x, clipX);
+  const startY = Math.max(y, clipY);
+  const endX = Math.min(clipEndX, x + 1);
+  const endY = Math.min(clipEndY, y + 1);
+  
+  if (x >= startX && x < endX && y >= startY && y < endY) {
+    buffer.chars.data[buffer.chars.offset(x, y)] = charByte;
+    buffer.foreground.data.set(foregroundColor.data, buffer.foreground.offset(x, y));
+    buffer.background.data.set(backgroundColor.data, buffer.background.offset(x, y));
+  }
 }
 
-function putCxelPtr(ptr, charByte, foregroundColor, backgroundColor) {
-  ptr.buffer.chars.data[ptr.charAddr] = charByte;
-  ptr.buffer.foreground.data.set(foregroundColor.data, ptr.foregroundAddr);
-  ptr.buffer.background.data.set(backgroundColor.data, ptr.backgroundAddr);
+function putCxelPtr(ptr, charByte, foregroundColor, backgroundColor, clipping) {
+  putCxel(ptr.buffer, ptr.x, ptr.y, charByte, foregroundColor, backgroundColor, clipping);
 }
 
 export {
