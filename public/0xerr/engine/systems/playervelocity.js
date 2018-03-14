@@ -9,7 +9,7 @@ import {System} from '../system.js';
 import {firstOf, isEmpty} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
-const SPEED = 10 / 1000;
+const SPEED = 20 / 1000;
 
 class PlayerVelocitySystem extends System {
   constructor(

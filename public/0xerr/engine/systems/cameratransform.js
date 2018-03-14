@@ -44,8 +44,8 @@ class CameraTransformSystem extends System {
     const playerSpatial = this.playerSpatial();
     const hardwareViewSpatial = this.hardwareViewSpatial();
     
-    activeNodeSpatial.x = (hardwareViewSpatial.width >> 1) - Math.round(playerSpatial.x);
-    activeNodeSpatial.y = (hardwareViewSpatial.height >> 1) - Math.round(playerSpatial.y);
+    activeNodeSpatial.x = (hardwareViewSpatial.width >> 1) - playerSpatial.x;
+    activeNodeSpatial.y = (hardwareViewSpatial.height >> 1) - playerSpatial.y;
   }
 }
 

@@ -42,9 +42,11 @@ class NodeRendererSystem extends System {
     const style = entity.get(StyleComponent);
 
     this.drawing.clipping(this.hardwareViewSpatial())
-        .box(spatial.x, spatial.y, spatial.width, spatial.height,
+        .box(Math.round(spatial.x), Math.round(spatial.y),
+            spatial.width, spatial.height,
             BoxType.OUTER, style.foregroundColor, style.backgroundColor)
-        .rect(spatial.x + 1, spatial.y + 1, spatial.width - 2, spatial.height - 2,
+        .rect(Math.round(spatial.x + 1), Math.round(spatial.y + 1),
+            spatial.width - 2, spatial.height - 2,
             0x00, style.foregroundColor, style.backgroundColor);
   }
 }
