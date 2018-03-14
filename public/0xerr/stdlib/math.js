@@ -1,3 +1,7 @@
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
 // value -> [0,1]
 function lerp(value, min, max) {
   return min + value * (max - min);
@@ -12,6 +16,7 @@ function xnor(value1, value2) {
 }
 
 export {
+  clamp,
   lerp,
   nextPow2,
   xnor,

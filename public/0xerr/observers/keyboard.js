@@ -61,14 +61,6 @@ class Keyboard extends Observer {
   releasedAny(shortcut) {
     return this.released(shortcut).length > 0;
   }
-  
-  processShortcuts(shortcuts) {
-    for (const [shortcut, handler] of shortcuts.entries()) {
-      for (const code of shortcut.released(this.keys)) {
-        handler(code);
-      }
-    }
-  }
 }
 
 export {Keyboard};

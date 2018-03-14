@@ -10,6 +10,10 @@ function firstOf(iterable) {
   return iterable[Symbol.iterator]().next().value;
 }
 
+function isEmpty(iterable) {
+  return iterable[Symbol.iterator]().next().done;
+}
+
 function mapOf(...params) {
   const pairs = [];
   for (let i = 0; i < params.length - 1; i += 2) {
@@ -21,5 +25,6 @@ function mapOf(...params) {
 export {
   enumOf,
   firstOf,
+  isEmpty,
   mapOf,
 };

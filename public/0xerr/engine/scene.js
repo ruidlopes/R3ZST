@@ -14,7 +14,8 @@ class Scene {
   
   tick(timestamp) {
     this.delta = timestamp - this.timestamp;
-    this.sm.state();
+    this.timestamp = timestamp;
+    this.sm.state(this.delta);
   }
 }
 

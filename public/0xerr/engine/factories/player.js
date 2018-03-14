@@ -1,6 +1,7 @@
 import {EntityManager} from '../entity/manager.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
+import {VelocityComponent} from '../components/velocity.js';
 import {ij} from '../../injection/api.js';
 
 class PlayerFactory {
@@ -12,7 +13,8 @@ class PlayerFactory {
     this.manager.add(
         this.manager.nextId(),
         new SpatialComponent(0, 0, 0, 0),
-        new StealthComponent(8));
+        new StealthComponent(8),
+        new VelocityComponent(0, 0));
   }
 }
 

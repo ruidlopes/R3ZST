@@ -50,7 +50,7 @@ class StateMachine {
     this.current = label;
   }
   
-  state() {
+  state(...params) {
     const cond = this.condKeys.find(cond => cond());
     if (!cond) {
       throw new Error('Invalid state');
@@ -60,7 +60,7 @@ class StateMachine {
       this.listeners.forEach(listener => listener(this.current, label));
       this.current = label;
     }
-    return this.states.get(label)();
+    return this.states.get(label)(...params);
   }
 }
 

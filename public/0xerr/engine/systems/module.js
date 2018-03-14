@@ -10,7 +10,9 @@ import {CameraTransformSystem} from './cameratransform.js';
 import {GameStatsRendererSystem} from './gamestatsrenderer.js';
 import {Module} from '../../injection/module.js';
 import {NodeRendererSystem} from './noderenderer.js';
+import {PlayerPositionSystem} from './playerposition.js';
 import {PlayerRendererSystem} from './playerrenderer.js';
+import {PlayerVelocitySystem} from './playervelocity.js';
 import {System} from '../system.js';
 import {ViewFocusSystem} from './viewfocus.js';
 import {ViewSpatialSystem} from './viewspatial.js';
@@ -19,6 +21,8 @@ import {ViewRendererSystem} from './viewrenderer.js';
 class SystemsModule extends Module {
   configure() {
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, CameraTransformSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerVelocitySystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerPositionSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewFocusSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewSpatialSystem);
     
