@@ -1,4 +1,5 @@
 import {ActiveComponent} from '../components/active.js';
+import {BoxType} from '../../renderer/primitives/boxes.js';
 import {ChipComponent} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
@@ -58,7 +59,9 @@ class ChipRendererSystem extends System {
     
     this.drawing.clipping(nodeSpatial)
         .boxWithChars(dx, dy, spatial.width, spatial.height,
-            CHIP_SMALL_CHARS, style.foregroundColor, style.backgroundColor);
+            CHIP_SMALL_CHARS, style.foregroundColor, style.backgroundColor)
+        .box(dx + 1, dy + 1, spatial.width - 2, spatial.height - 2,
+            BoxType.OUTER, style.foregroundColor, style.backgroundColor);
   }
 }
 
