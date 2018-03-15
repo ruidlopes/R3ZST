@@ -1,7 +1,7 @@
-class Composite {
-  constructor(childIds) {
-    this.childIds = childIds;
+class CompositeComponent {
+  constructor(ids) {
+    this.ids = ids;
   }
 }
 
-export {Composite};
+export {CompositeComponent};

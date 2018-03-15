@@ -1,7 +1,6 @@
 import {enumOf} from '../../stdlib/collections.js';
 
 const NodeType = enumOf(
-  'HVAC',
   'POWER_SUPPLY',
   'WORKSTATION',
   'ROUTER',

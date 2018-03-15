@@ -41,8 +41,8 @@ class EntityManager {
     }
   }
   
-  query() {
-    return new EntityQuery(this.components, new Set(this.ids));
+  query(ids) {
+    return new EntityQuery(this.components, new Set(ids || this.ids));
   }
 }
 

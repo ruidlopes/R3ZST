@@ -1,3 +1,5 @@
-class System {}
+class System {
+  frame(delta) {}
+}
 
 export {System};

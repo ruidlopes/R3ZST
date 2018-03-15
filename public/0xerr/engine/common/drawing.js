@@ -1,6 +1,6 @@
 import {SCREEN} from '../qualifiers.js';
 import {CxelBuffer} from '../../renderer/cxel/buffer.js';
-import {box} from '../../renderer/primitives/boxes.js';
+import {box, boxWithChars} from '../../renderer/primitives/boxes.js';
 import {ij} from '../../injection/api.js';
 import {rect, vline, hline, putCxel} from '../../renderer/primitives/drawing.js';
 import {sprint} from '../../renderer/primitives/print.js';
@@ -14,6 +14,13 @@ class DrawingApi {
   box(x, y, width, height, type, foregroundColor, backgroundColor) {
     box(this.screen,
         x, y, width, height, type,
+        foregroundColor, backgroundColor, this.clipping);
+    return this;
+  }
+  
+  boxWithChars(x, y, width, height, chars, foregroundColor, backgroundColor) {
+    boxWithChars(this.screen,
+        x, y, width, height, chars,
         foregroundColor, backgroundColor, this.clipping);
     return this;
   }

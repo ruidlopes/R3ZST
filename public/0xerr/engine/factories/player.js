@@ -12,7 +12,7 @@ class PlayerFactory {
   make() {
     this.manager.add(
         this.manager.nextId(),
-        new SpatialComponent(0, 0, 0, 0),
+        new SpatialComponent(1, 1, 0, 0),
         new StealthComponent(8),
         new VelocityComponent(0, 0));
   }

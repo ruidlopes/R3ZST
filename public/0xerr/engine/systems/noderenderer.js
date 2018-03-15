@@ -19,7 +19,7 @@ class NodeRendererSystem extends System {
     this.drawing = drawing;
   }
   
-  entity() {
+  activeNode() {
     return firstOf(this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
@@ -36,10 +36,10 @@ class NodeRendererSystem extends System {
   }
   
   frame(delta) {
-    const entity = this.entity();
-    const node = entity.get(NodeComponent);
-    const spatial = entity.get(SpatialComponent);
-    const style = entity.get(StyleComponent);
+    const activeNode = this.activeNode();
+    const node = activeNode.get(NodeComponent);
+    const spatial = activeNode.get(SpatialComponent);
+    const style = activeNode.get(StyleComponent);
 
     this.drawing.clipping(this.hardwareViewSpatial())
         .box(Math.round(spatial.x), Math.round(spatial.y),

@@ -38,8 +38,8 @@ class PlayerRendererSystem extends System {
   frame(delta) {
     const nodeSpatial = this.activeNodeSpatial();
     const playerSpatial = this.playerSpatial();
-    const dx = Math.round(nodeSpatial.x + playerSpatial.x) + 1;
-    const dy = Math.round(nodeSpatial.y + playerSpatial.y) + 1;
+    const dx = Math.round(nodeSpatial.x + playerSpatial.x);
+    const dy = Math.round(nodeSpatial.y + playerSpatial.y);
     
     this.drawing.clipping(nodeSpatial)
         .putCxel(dx, dy, 0x40, ORANGE_BRIGHT, BLACK);
