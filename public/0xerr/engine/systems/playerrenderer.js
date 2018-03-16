@@ -6,6 +6,7 @@ import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
+import {VelocityComponent} from '../components/velocity.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
@@ -27,19 +28,24 @@ class PlayerRendererSystem extends System {
         .get(SpatialComponent);
   }
   
-  playerSpatial() {
+  player() {
     return firstOf(this.manager.query()
         .filter(StealthComponent)
         .first()
-        .iterate(SpatialComponent))
-        .get(SpatialComponent);
+        .iterate(SpatialComponent, VelocityComponent));
   }
   
   frame(delta) {
     const nodeSpatial = this.activeNodeSpatial();
-    const playerSpatial = this.playerSpatial();
-    const dx = Math.round(nodeSpatial.x + playerSpatial.x);
-    const dy = Math.round(nodeSpatial.y + playerSpatial.y);
+    const player = this.player();
+    const playerSpatial = player.get(SpatialComponent);
+    const velocity = player.get(VelocityComponent);
+    
+    const fn_x = velocity.vx > 0 ? Math.floor : Math.ceil;
+    const fn_y = velocity.vy > 0 ? Math.floor : Math.ceil;
+    
+    const dx = fn_x(nodeSpatial.x + playerSpatial.x);
+    const dy = fn_y(nodeSpatial.y + playerSpatial.y);
     
     this.drawing.clipping(nodeSpatial)
         .putCxel(dx, dy, 0x40, ORANGE_BRIGHT, BLACK);
