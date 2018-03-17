@@ -7,8 +7,9 @@ const ChipType = enumOf(
 );
 
 class ChipComponent {
-  constructor(type) {
+  constructor(type, version) {
     this.type = type;
+    this.version = version;
   }
 }
 

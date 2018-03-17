@@ -1,3 +1,4 @@
+import {CyclesComponent} from '../components/cycles.js';
 import {EntityManager} from '../entity/manager.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
@@ -12,6 +13,7 @@ class PlayerFactory {
   make() {
     this.manager.add(
         this.manager.nextId(),
+        new CyclesComponent(10),
         new SpatialComponent(1, 1, 0, 0),
         new StealthComponent(8),
         new VelocityComponent(0, 0));

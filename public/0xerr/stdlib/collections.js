@@ -6,6 +6,15 @@ function enumOf(...labels) {
   return entries;
 }
 
+function enumLabel(enumType, value) {
+  for (const label of Object.getOwnPropertyNames(enumType)) {
+    if (enumType[label] == value) {
+      return label;
+    }
+  }
+  return undefined;
+}
+
 function firstOf(iterable) {
   return iterable[Symbol.iterator]().next().value;
 }
@@ -24,6 +33,7 @@ function mapOf(...params) {
 
 export {
   enumOf,
+  enumLabel,
   firstOf,
   isEmpty,
   mapOf,

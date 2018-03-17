@@ -1,6 +1,6 @@
 import {ActiveComponent} from '../components/active.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
-import {ChipComponent} from '../components/chip.js';
+import {ChipComponent, ChipType} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
@@ -12,7 +12,7 @@ import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
-const CHIP_SMALL_CHARS = [0x00, 0x00, 0x00, 0x00, 0x8c, 0x8e, 0x8d, 0x8f];
+const CPU_SMALL_CHARS = [0x00, 0x00, 0x00, 0x00, 0x8c, 0x8e, 0x8d, 0x8f];
 
 class ChipRendererSystem extends System {
   constructor(
@@ -49,7 +49,7 @@ class ChipRendererSystem extends System {
   
   chipFrame(chip, delta) {
     const nodeSpatial = this.activeNode().get(SpatialComponent);
-    
+
     const type = chip.get(ChipComponent).type;
     const spatial = chip.get(SpatialComponent);
     const style = chip.get(StyleComponent);
@@ -57,11 +57,23 @@ class ChipRendererSystem extends System {
     const dx = Math.round(nodeSpatial.x + spatial.x);
     const dy = Math.round(nodeSpatial.y + spatial.y);
     
-    this.drawing.clipping(nodeSpatial)
-        .boxWithChars(dx, dy, spatial.width, spatial.height,
-            CHIP_SMALL_CHARS, style.foregroundColor, style.backgroundColor)
-        .box(dx + 1, dy + 1, spatial.width - 2, spatial.height - 2,
-            BoxType.OUTER, style.foregroundColor, style.backgroundColor);
+    const draw = this.drawing.clipping(nodeSpatial);
+    
+    switch (type) {
+      case ChipType.BIOS:
+        draw.boxWithChars(dx, dy, spatial.width, spatial.height,
+                CPU_SMALL_CHARS, style.foregroundColor, style.backgroundColor)
+            .box(dx + 1, dy + 1, spatial.width - 2, spatial.height - 2,
+                BoxType.OUTER, style.foregroundColor, style.backgroundColor);
+        break;
+        
+      case ChipType.CPU:
+        draw.boxWithChars(dx, dy, spatial.width, spatial.height,
+                CPU_SMALL_CHARS, style.foregroundColor, style.backgroundColor)
+            .box(dx + 1, dy + 1, spatial.width - 2, spatial.height - 2,
+                BoxType.OUTER, style.foregroundColor, style.backgroundColor);
+        break;
+    }
   }
 }
 

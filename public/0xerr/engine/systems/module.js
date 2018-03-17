@@ -10,6 +10,7 @@ import {CameraTransformSystem} from './cameratransform.js';
 import {ChipRendererSystem} from './chiprenderer.js';
 import {GameStatsRendererSystem} from './gamestatsrenderer.js';
 import {Module} from '../../injection/module.js';
+import {NodeStatsRendererSystem} from './nodestatsrenderer.js';
 import {NodeRendererSystem} from './noderenderer.js';
 import {PlayerPositionSystem} from './playerposition.js';
 import {PlayerRendererSystem} from './playerrenderer.js';
@@ -29,12 +30,12 @@ class SystemsModule extends Module {
     
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER_BACKGROUND, ViewRendererSystem);
     
-    
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_1, NodeRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_1, ChipRendererSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_3, PlayerRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_3, GameStatsRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_3, NodeStatsRendererSystem);
   }
 }
 
