@@ -25,6 +25,7 @@ class TerminalInputSystem extends System {
     this.shortcutChars = new KeyShortcutRE(/^.$/);
     this.shortcutCharsShift = new KeyShortcutRE(/^.$/, KeyModifiers.SHIFT);
     this.shortcutBackspace = new KeyShortcut('BACKSPACE');
+    this.shortcutEscape = new KeyShortcut('ESCAPE');
     this.shortcutEnter = new KeyShortcut('ENTER');
     this.shortcutLeft = new KeyShortcut('ARROWLEFT');
     this.shortcutRight = new KeyShortcut('ARROWRIGHT');
@@ -64,6 +65,8 @@ class TerminalInputSystem extends System {
     this.updateChars(textInput, this.keyboard.released(this.shortcutCharsShift));
     if (this.keyboard.releasedAny(this.shortcutBackspace)) {
       this.backspace(textInput);
+    } else if (this.keyboard.releasedAny(this.shortcutEscape)) {
+      this.escape(textInput);
     } else if (this.keyboard.releasedAny(this.shortcutEnter)) {
       this.events.emit(EventType.TEXT_INPUT, textInputEntity.id);
     } else if (this.keyboard.releasedAny(this.shortcutLeft)) {
@@ -91,6 +94,11 @@ class TerminalInputSystem extends System {
     const post = textInput.text.substr(textInput.cursor);
     textInput.text = pre + post;
     textInput.cursor--;
+  }
+  
+  escape(textInput) {
+    textInput.text = '';
+    textInput.cursor = 0;
   }
   
   cursor(textInput, delta) {
