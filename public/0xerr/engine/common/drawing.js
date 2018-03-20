@@ -2,7 +2,7 @@ import {SCREEN} from '../qualifiers.js';
 import {CxelBuffer} from '../../renderer/cxel/buffer.js';
 import {box, boxWithChars} from '../../renderer/primitives/boxes.js';
 import {ij} from '../../injection/api.js';
-import {rect, vline, hline, putCxel} from '../../renderer/primitives/drawing.js';
+import {rect, vline, hline, putCxel, getCxelChar} from '../../renderer/primitives/drawing.js';
 import {sprint} from '../../renderer/primitives/print.js';
 
 class DrawingApi {
@@ -51,6 +51,10 @@ class DrawingApi {
         x, y, charByte,
         foregroundColor, backgroundColor, this.clipping);
     return this;
+  }
+  
+  getCxelChar(x, y) {
+    return getCxelChar(this.screen, x, y);
   }
   
   sprint(str, x, y, foregroundColor, backgroundColor) {

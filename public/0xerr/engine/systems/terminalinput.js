@@ -26,6 +26,8 @@ class TerminalInputSystem extends System {
     this.shortcutCharsShift = new KeyShortcutRE(/^.$/, KeyModifiers.SHIFT);
     this.shortcutBackspace = new KeyShortcut('BACKSPACE');
     this.shortcutEnter = new KeyShortcut('ENTER');
+    this.shortcutLeft = new KeyShortcut('ARROWLEFT');
+    this.shortcutRight = new KeyShortcut('ARROWRIGHT');
   }
   
   isTerminalViewActive() {
@@ -64,13 +66,17 @@ class TerminalInputSystem extends System {
       this.backspace(textInput);
     } else if (this.keyboard.releasedAny(this.shortcutEnter)) {
       this.events.emit(EventType.TEXT_INPUT, textInputEntity.id);
+    } else if (this.keyboard.releasedAny(this.shortcutLeft)) {
+      this.cursor(textInput, -1);
+    } else if (this.keyboard.releasedAny(this.shortcutRight)) {
+      this.cursor(textInput, 1);
     }
   }
   
   updateChars(textInput, chars) {
     for (const char of chars) {
       const pre = textInput.text.substr(0, textInput.cursor);
-      const post = textInput.text.substr(textInput.cursor + 1);
+      const post = textInput.text.substr(textInput.cursor);
       textInput.text = pre + char + post;
       textInput.cursor++;
     }
@@ -85,6 +91,11 @@ class TerminalInputSystem extends System {
     const post = textInput.text.substr(textInput.cursor);
     textInput.text = pre + post;
     textInput.cursor--;
+  }
+  
+  cursor(textInput, delta) {
+    textInput.cursor += delta;
+    textInput.cursor = Math.max(Math.min(textInput.cursor, textInput.text.length), 0);
   }
 }
 

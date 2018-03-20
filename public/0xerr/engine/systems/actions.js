@@ -83,7 +83,7 @@ class ActionsSystem extends System {
               'INSUFFICIENT CYCLES THIS TURN.');
         }
       } else {
-        this.events.emit(EventType.LOG, 'UNKNOWN ACTION.');
+        this.events.emit(EventType.LOG, `UNKNOWN ACTION '${command}'`);
       }
     }
     

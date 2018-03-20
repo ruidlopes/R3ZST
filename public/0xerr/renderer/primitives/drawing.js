@@ -112,6 +112,14 @@ function putCxelPtr(ptr, charByte, foregroundColor, backgroundColor, clipping) {
   putCxel(ptr.buffer, ptr.x, ptr.y, charByte, foregroundColor, backgroundColor, clipping);
 }
 
+function getCxelChar(buffer, x, y) {
+  return buffer.chars.data[buffer.chars.offset(x, y)];
+}
+
+function getCxelCharPtr(ptr) {
+  return getCxelChar(ptr.buffer, ptr.x, ptr.y);
+}
+
 export {
   rect,
   rectPtr,
@@ -121,4 +129,6 @@ export {
   hlinePtr,
   putCxel,
   putCxelPtr,
+  getCxelChar,
+  getCxelCharPtr,
 };

@@ -77,9 +77,14 @@ class TerminalRendererSystem extends System {
     const inputStart = Math.max(textInput.cursor - maxInputWidth, 0);
     const text = textInput.text.substr(inputStart, maxInputWidth);
     
+    const cursorX = textInput.cursor - inputStart; 
+    
     this.drawing.clipping(textInputSpatial)
         .sprint('>', textInputSpatial.x, textInputSpatial.y, BLUE_BRIGHT, BLACK)
-        .sprint(text, textInputSpatial.x + 2, textInputSpatial.y, BLUE_BRIGHT, BLACK);
+        .sprint(text, textInputSpatial.x + 2, textInputSpatial.y, BLUE_BRIGHT, BLACK)
+        .sprint(text[cursorX] || ' ',
+            textInputSpatial.x + 2 + cursorX, textInputSpatial.y,
+            BLACK, BLUE_BRIGHT);
   }
   
   frame(delta) {

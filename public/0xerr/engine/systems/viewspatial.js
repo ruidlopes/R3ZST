@@ -42,7 +42,7 @@ class ViewSpatialSystem extends System {
     textBufferSpatial.x = terminalViewSpatial.x + 1;
     textBufferSpatial.y = terminalViewSpatial.y + 1;
     textBufferSpatial.width = terminalViewSpatial.width - 2;
-    textBufferSpatial.height = terminalViewSpatial.height - 4;
+    textBufferSpatial.height = terminalViewSpatial.height - 3;
     
     const textInputSpatial = firstOf(this.manager.query(ids)
         .filter(TextInputComponent)
@@ -51,7 +51,7 @@ class ViewSpatialSystem extends System {
         .get(SpatialComponent);
     
     textInputSpatial.x = terminalViewSpatial.x + 1;
-    textInputSpatial.y = terminalViewSpatial.y + terminalViewSpatial.height - 3;
+    textInputSpatial.y = terminalViewSpatial.y + terminalViewSpatial.height - 2;
     textInputSpatial.width = terminalViewSpatial.width - 2;
     textInputSpatial.height = 1;
   }
