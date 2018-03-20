@@ -1,6 +1,6 @@
 import {Color} from '../../renderer/graphics/color.js';
 
-const BLACK       = new Color().setRGB(0, 0, 0).lock();
+const BLACK = new Color().setHSV(195, 1, 0.125).lock()
 
 const BLUE_BRIGHT = new Color().setHSV(195, 1, 1).lock();
 const BLUE_FADED  = new Color().setHSV(195, 1, 0.75).lock();

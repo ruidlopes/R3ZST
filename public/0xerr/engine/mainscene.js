@@ -6,6 +6,7 @@ import {
 } from './systems/qualifiers.js';
 
 import {EntityManager} from './entity/manager.js';
+import {EventManager} from './event/manager.js';
 import {NodeFactory} from './factories/node.js';
 import {PlayerFactory} from './factories/player.js';
 import {Scene} from './scene.js';
@@ -21,6 +22,7 @@ const States = enumOf(
 class MainScene extends Scene {
   constructor(
       manager = ij(EntityManager),
+      events = ij(EventManager),
       nodeFactory = ij(NodeFactory),
       viewFactory = ij(ViewFactory),
       playerFactory = ij(PlayerFactory),
@@ -35,6 +37,8 @@ class MainScene extends Scene {
     nodeFactory.make();
     viewFactory.make();
     playerFactory.make();
+        
+    this.events = events;
         
     this.updateSystems = updateSystems;
     this.renderBackgroundSystems = renderBackgroundSystems;
