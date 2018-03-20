@@ -42,7 +42,7 @@ class ViewSpatialSystem extends System {
     textBufferSpatial.x = terminalViewSpatial.x + 1;
     textBufferSpatial.y = terminalViewSpatial.y + 1;
     textBufferSpatial.width = terminalViewSpatial.width - 2;
-    textBufferSpatial.height = terminalViewSpatial.height - 3;
+    textBufferSpatial.height = terminalViewSpatial.height - 4;
     
     const textInputSpatial = firstOf(this.manager.query(ids)
         .filter(TextInputComponent)

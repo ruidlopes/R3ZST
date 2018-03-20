@@ -4,7 +4,7 @@ import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {IdentifiedComponent} from '../components/identified.js';
-import {firstOf} from '../../stdlib/collections.js';
+import {enumLabel, firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class IdentifyAction extends Action {
@@ -35,13 +35,21 @@ class IdentifyAction extends Action {
   
   execute() {
     if (!this.constraints()) {
-      // TODO error
+      this.events.emit(
+          EventType.LOG,
+          'NO COMPONENT IN RANGE.');
+      return;
     }
+    
     const chip = firstOf(this.manager.query([this.chipId])
         .iterate(ChipComponent, IdentifiedComponent));
     chip.get(IdentifiedComponent).identified = true;
     
-    // TODO log
+    const type = enumLabel(ChipType, chip.get(ChipComponent).type);
+    const version = chip.get(ChipComponent).version;
+    this.events.emit(
+        EventType.LOG,
+        `IDENTIFIED ${type} ${version}`); 
   }
 }
 

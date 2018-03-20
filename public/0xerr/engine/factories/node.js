@@ -26,7 +26,7 @@ class NodeFactory {
     const chip1 = this.manager.nextId();
     this.manager.add(
         chip1,
-        new ChipComponent(ChipType.CPU, '33'),
+        new ChipComponent(ChipType.CPU, 'RET V.33'),
         new SpatialComponent(4, 4, 12, 12),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false));
@@ -34,7 +34,7 @@ class NodeFactory {
     const chip2 = this.manager.nextId();
     this.manager.add(
         chip2,
-        new ChipComponent(ChipType.BIOS, '1'),
+        new ChipComponent(ChipType.BIOS, 'RETBIOS V.1'),
         new SpatialComponent(18, 4, 4, 4),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false));

@@ -64,6 +64,8 @@ class ActionsSystem extends System {
     
     const textInput = this.textInput(id);
     const text = textInput.text.trim();
+    this.events.emit(EventType.LOG, `> ${text}`);
+    
     if (text.length > 0) {
       const tokens = textInput.text.trim().split(/\s+/);
       const command = tokens.shift();
@@ -75,9 +77,13 @@ class ActionsSystem extends System {
         if (cyclesComponent.cycles >= action.cycles) {
           action.execute(...params);
           cyclesComponent.cycles--;
+        } else {
+          this.events.emit(
+              EventType.LOG,
+              'INSUFFICIENT CYCLES THIS TURN.');
         }
       } else {
-        // TODO log error
+        this.events.emit(EventType.LOG, 'UNKNOWN ACTION.');
       }
     }
     

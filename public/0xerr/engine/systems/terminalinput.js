@@ -77,6 +77,10 @@ class TerminalInputSystem extends System {
   }
   
   backspace(textInput) {
+    if (textInput.cursor == 0) {
+      return;
+    }
+    
     const pre = textInput.text.substr(0, textInput.cursor - 1);
     const post = textInput.text.substr(textInput.cursor);
     textInput.text = pre + post;

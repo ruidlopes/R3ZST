@@ -64,24 +64,24 @@ class NodeStatsRendererSystem extends System {
       const identified = chip.get(IdentifiedComponent).identified;
       const component = chip.get(ChipComponent);
       const version = component.version;
-      
+
       switch (component.type) {
         case ChipType.BIOS:
           if (identified) {
             draw.sprint(enumLabel(NodeType, type), dx + 8, dy + 1, ORANGE_BRIGHT, BLACK);
           }
           draw.sprint(
-              identified ? `BIOS.${version}` : 'UNKNOWN',
+              identified ? version : 'UNKNOWN',
               dx + 8, dy + 2, ORANGE_BRIGHT, BLACK);
           break;
         case ChipType.CPU:
           draw.sprint(
-              identified ? `RET.V${version}` : 'UNKNOWN',
+              identified ? version : 'UNKNOWN',
               dx + 8, dy + 4, ORANGE_BRIGHT, BLACK);
           break;
         case ChipType.RAM:
           draw.sprint(
-              identified ? 'RAM ' + version : 'UNKNOWN',
+              identified ? version : 'UNKNOWN',
               dx + 8, dy + 5, ORANGE_BRIGHT, BLACK);
           break;
       }

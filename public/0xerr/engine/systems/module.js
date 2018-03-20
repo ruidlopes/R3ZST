@@ -17,6 +17,7 @@ import {PlayerChipBoundsSystem} from './playerchipbounds.js';
 import {PlayerPositionSystem} from './playerposition.js';
 import {PlayerRendererSystem} from './playerrenderer.js';
 import {PlayerVelocitySystem} from './playervelocity.js';
+import {TerminalBufferSystem} from './terminalbuffer.js';
 import {TerminalInputSystem} from './terminalinput.js';
 import {TerminalRendererSystem} from './terminalrenderer.js';
 import {System} from '../system.js';
@@ -37,6 +38,7 @@ class SystemsModule extends Module {
     
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerChipBoundsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewSpatialSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, TerminalBufferSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER_BACKGROUND, ViewRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_1, TerminalRendererSystem);
