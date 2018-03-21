@@ -54,8 +54,8 @@ class TerminalRendererSystem extends System {
       const line = textBufferLines[cursor];
       const lineHeight = Math.ceil(line.length / textBufferSpatial.width);
       
-      for (let lineY = lineHeight - 1; lineY >= 0; --lineY) {
-        const y = textBufferSpatial.y + yy - lineY;
+      for (let lineY = 0; lineY < lineHeight; ++lineY) {
+        const y = textBufferSpatial.y + yy + lineY - lineHeight + 1;
         const text = line.substr(
             lineY * textBufferSpatial.width,
             textBufferSpatial.width);
@@ -72,7 +72,7 @@ class TerminalRendererSystem extends System {
     const textInput = input.get(TextInputComponent);
     const textInputSpatial = input.get(SpatialComponent);
     
-    const maxInputWidth = textInputSpatial.width - 1;
+    const maxInputWidth = textInputSpatial.width - 2;
     
     const inputStart = Math.max(textInput.cursor - maxInputWidth, 0);
     const text = textInput.text.substr(inputStart, maxInputWidth);
@@ -81,9 +81,9 @@ class TerminalRendererSystem extends System {
     
     this.drawing.clipping(textInputSpatial)
         .sprint('>', textInputSpatial.x, textInputSpatial.y, BLUE_BRIGHT, BLACK)
-        .sprint(text, textInputSpatial.x + 2, textInputSpatial.y, BLUE_BRIGHT, BLACK)
+        .sprint(text, textInputSpatial.x + 1, textInputSpatial.y, BLUE_BRIGHT, BLACK)
         .sprint(text[cursorX] || ' ',
-            textInputSpatial.x + 2 + cursorX, textInputSpatial.y,
+            textInputSpatial.x + 1 + cursorX, textInputSpatial.y,
             BLACK, BLUE_BRIGHT);
   }
   
