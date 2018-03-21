@@ -10,6 +10,7 @@ import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {ViewComponent, ViewType} from '../components/view.js';
+import {clamp} from '../../stdlib/math.js';
 import {firstOf, isEmpty} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
@@ -110,7 +111,7 @@ class TerminalInputSystem extends System {
   
   cursor(textInput, delta) {
     textInput.cursor += delta;
-    textInput.cursor = Math.max(Math.min(textInput.cursor, textInput.text.length), 0);
+    textInput.cursor = clamp(textInput.cursor, 0, textInput.text.length);
   }
 }
 
