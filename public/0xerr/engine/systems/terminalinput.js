@@ -8,6 +8,7 @@ import {KeyModifiers} from '../../observers/keyboard/modifiers.js';
 import {KeyShortcut, KeyShortcutRE} from '../../observers/keyboard/shortcut.js';
 import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
+import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf, isEmpty} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
@@ -38,6 +39,12 @@ class TerminalInputSystem extends System {
         .collect());
   }
   
+  isPlayerTurn() {
+    return !isEmpty(this.manager.query()
+        .filter(TurnComponent, component => component.turn == TurnEnum.PLAYER)
+        .collect());
+  }
+  
   terminalViewChildren() {
     return firstOf(this.manager.query()
         .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
@@ -55,7 +62,7 @@ class TerminalInputSystem extends System {
   }
   
   frame(delta) {
-    if (!this.isTerminalViewActive()) {
+    if (!this.isTerminalViewActive() || !this.isPlayerTurn()) {
       return;
     }
     

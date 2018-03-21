@@ -7,6 +7,7 @@ import {
 
 import {EntityManager} from './entity/manager.js';
 import {EventManager} from './event/manager.js';
+import {GameFactory} from './factories/game.js';
 import {NodeFactory} from './factories/node.js';
 import {PlayerFactory} from './factories/player.js';
 import {Scene} from './scene.js';
@@ -26,6 +27,7 @@ class MainScene extends Scene {
       nodeFactory = ij(NodeFactory),
       viewFactory = ij(ViewFactory),
       playerFactory = ij(PlayerFactory),
+      gameFactory = ij(GameFactory),
       updateSystems = ijset(System, MAIN_SCENE_UPDATE),
       renderBackgroundSystems = ijset(System, MAIN_SCENE_RENDER_BACKGROUND),
       renderForeground1Systems = ijset(System, MAIN_SCENE_RENDER_FOREGROUND_1),
@@ -37,6 +39,7 @@ class MainScene extends Scene {
     nodeFactory.make();
     viewFactory.make();
     playerFactory.make();
+    gameFactory.make();
         
     this.events = events;
         

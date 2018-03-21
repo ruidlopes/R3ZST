@@ -20,6 +20,7 @@ import {PlayerVelocitySystem} from './playervelocity.js';
 import {TerminalBufferSystem} from './terminalbuffer.js';
 import {TerminalInputSystem} from './terminalinput.js';
 import {TerminalRendererSystem} from './terminalrenderer.js';
+import {TurnManagementSystem} from './turnmanagement.js';
 import {System} from '../system.js';
 import {ViewFocusSystem} from './viewfocus.js';
 import {ViewSpatialSystem} from './viewspatial.js';
@@ -28,6 +29,7 @@ import {ViewRendererSystem} from './viewrenderer.js';
 class SystemsModule extends Module {
   configure() {
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ActionsSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, TurnManagementSystem);
 
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewFocusSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerPositionSystem);

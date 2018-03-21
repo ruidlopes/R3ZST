@@ -76,7 +76,11 @@ class ActionsSystem extends System {
         const action = this.keyedActions.get(command);
         if (cyclesComponent.cycles >= action.cycles) {
           action.execute(...params);
-          cyclesComponent.cycles--;
+          cyclesComponent.cycles -= action.cycles;
+          
+          if (cyclesComponent.cycles == 0) {
+            this.events.emit(EventType.END_TURN);
+          }
         } else {
           this.events.emit(
               EventType.LOG,

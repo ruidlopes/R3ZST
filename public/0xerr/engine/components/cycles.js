@@ -1,7 +1,12 @@
+const CYCLES_MAX = 10;
+
 class CyclesComponent {
-  constructor(cycles = 10) {
+  constructor(cycles = CYCLES_MAX) {
     this.cycles = cycles;
   }
 }
 
-export {CyclesComponent};
+export {
+  CyclesComponent,
+  CYCLES_MAX,
+};
