@@ -1,12 +1,11 @@
 import {
+  MAIN_SCENE_GLOBAL,
+  MAIN_SCENE_INPUT,
   MAIN_SCENE_UPDATE,
-  MAIN_SCENE_RENDER_BACKGROUND,
-  MAIN_SCENE_RENDER_FOREGROUND_1,
-  MAIN_SCENE_RENDER_FOREGROUND_3,
+  MAIN_SCENE_RENDER,
 } from './systems/qualifiers.js';
 
 import {EntityManager} from './entity/manager.js';
-import {EventManager} from './event/manager.js';
 import {GameFactory} from './factories/game.js';
 import {NodeFactory} from './factories/node.js';
 import {PlayerFactory} from './factories/player.js';
@@ -23,15 +22,14 @@ const States = enumOf(
 class MainScene extends Scene {
   constructor(
       manager = ij(EntityManager),
-      events = ij(EventManager),
       nodeFactory = ij(NodeFactory),
       viewFactory = ij(ViewFactory),
       playerFactory = ij(PlayerFactory),
       gameFactory = ij(GameFactory),
+      globalSystems = ijset(System, MAIN_SCENE_GLOBAL),
+      inputSystems = ijset(System, MAIN_SCENE_INPUT),
       updateSystems = ijset(System, MAIN_SCENE_UPDATE),
-      renderBackgroundSystems = ijset(System, MAIN_SCENE_RENDER_BACKGROUND),
-      renderForeground1Systems = ijset(System, MAIN_SCENE_RENDER_FOREGROUND_1),
-      renderForeground3Systems = ijset(System, MAIN_SCENE_RENDER_FOREGROUND_3),
+      renderSystems = ijset(System, MAIN_SCENE_RENDER),
   ) {
     super();
     
@@ -40,29 +38,25 @@ class MainScene extends Scene {
     viewFactory.make();
     playerFactory.make();
     gameFactory.make();
-        
-    this.events = events;
-        
+    
+    this.globalSystems = globalSystems;
+    this.inputSystems = inputSystems;
     this.updateSystems = updateSystems;
-    this.renderBackgroundSystems = renderBackgroundSystems;
-    this.renderForeground1Systems = renderForeground1Systems;
-    this.renderForeground3Systems = renderForeground3Systems;
+    this.renderSystems = renderSystems;
     
     this.sm.fixed(States.LOOP, (delta) => this.mainLoop(delta));
     this.sm.jump(States.LOOP);
   }
   
   mainLoop(delta) {
-    for (const system of this.updateSystems) {
-      system.frame(delta);
-    }
-    for (const system of this.renderBackgroundSystems) {
-      system.frame(delta);
-    }
-    for (const system of this.renderForeground1Systems) {
-      system.frame(delta);
-    }
-    for (const system of this.renderForeground3Systems) {
+    this.systemClusterFrame(this.globalSystems, delta);
+    this.systemClusterFrame(this.inputSystems, delta);
+    this.systemClusterFrame(this.updateSystems, delta);
+    this.systemClusterFrame(this.renderSystems, delta);
+  }
+  
+  systemClusterFrame(systemCluster, delta) {
+    for (const system of systemCluster) {
       system.frame(delta);
     }
   }

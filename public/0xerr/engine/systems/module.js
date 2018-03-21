@@ -1,9 +1,8 @@
 import {
+  MAIN_SCENE_GLOBAL,
+  MAIN_SCENE_INPUT,
   MAIN_SCENE_UPDATE,
-  MAIN_SCENE_RENDER_BACKGROUND,
-  MAIN_SCENE_RENDER_FOREGROUND_1,
-  MAIN_SCENE_RENDER_FOREGROUND_2,
-  MAIN_SCENE_RENDER_FOREGROUND_3,
+  MAIN_SCENE_RENDER,
 } from './qualifiers.js';
 
 import {ActionsSystem} from './actions.js';
@@ -28,29 +27,29 @@ import {ViewRendererSystem} from './viewrenderer.js';
 
 class SystemsModule extends Module {
   configure() {
-    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ActionsSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, TurnManagementSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, ActionsSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, TurnManagementSystem);
 
-    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewFocusSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerPositionSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, TerminalInputSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_INPUT, ViewFocusSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_INPUT, TerminalInputSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_INPUT, PlayerVelocitySystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, CameraTransformSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerVelocitySystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerPositionSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerChipBoundsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewSpatialSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, TerminalBufferSystem);
     
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER_BACKGROUND, ViewRendererSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_1, TerminalRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, ViewRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TerminalRendererSystem);
     
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_1, NodeRendererSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_1, ChipRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, NodeRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, ChipRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, PlayerRendererSystem);
     
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_3, PlayerRendererSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_3, GameStatsRendererSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER_FOREGROUND_3, NodeStatsRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, GameStatsRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, NodeStatsRendererSystem);
   }
 }
 
