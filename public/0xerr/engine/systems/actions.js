@@ -6,8 +6,9 @@ import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
+import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {ViewComponent, ViewType} from '../components/view.js';
-import {firstOf} from '../../stdlib/collections.js';
+import {firstOf, isEmpty} from '../../stdlib/collections.js';
 import {ij, ijset} from '../../injection/api.js';
 
 class ActionsSystem extends System {
@@ -57,6 +58,12 @@ class ActionsSystem extends System {
         .get(CyclesComponent);
   }
   
+  isPlayerTurn() {
+    return !isEmpty(this.manager.query()
+        .filter(TurnComponent, component => component.turn == TurnEnum.PLAYER)
+        .collect());
+  }
+  
   input(id) {
     if (!this.terminalViewChildren().includes(id)) {
       return;
@@ -78,7 +85,7 @@ class ActionsSystem extends System {
           action.execute(...params);
           cyclesComponent.cycles -= action.cycles;
           
-          if (cyclesComponent.cycles == 0) {
+          if (cyclesComponent.cycles == 0 && this.isPlayerTurn()) {
             this.events.emit(EventType.END_TURN);
           }
         } else {
