@@ -5,7 +5,7 @@ import {CompositeComponent} from '../components/composite.js';
 import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
 import {NodeComponent, NodeType} from '../components/node.js';
-import {SentinelComponent} from '../components/sentinel.js';
+import {SentryComponent} from '../components/sentry.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
 import {ij} from '../../injection/api.js';
@@ -24,10 +24,10 @@ class NodeFactory {
         new SpatialComponent(10, 10, 40, 20),
         new StyleComponent(BLUE_BRIGHT, BLACK));
 
-    const sentinel1 = this.manager.nextId();
+    const sentry1 = this.manager.nextId();
     this.manager.add(
-        sentinel1,
-        new SentinelComponent(),
+        sentry1,
+        new SentryComponent(),
         new SpatialComponent(6, 6, 0, 0),
         new StyleComponent(BLUE_BRIGHT, BLACK));
     
@@ -38,7 +38,7 @@ class NodeFactory {
         new SpatialComponent(4, 4, 12, 12),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
-        new CompositeComponent([sentinel1]));
+        new CompositeComponent([sentry1]));
     
     const chip2 = this.manager.nextId();
     this.manager.add(
