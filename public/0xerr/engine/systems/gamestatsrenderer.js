@@ -5,6 +5,7 @@ import {EntityManager} from '../entity/manager.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
+import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
@@ -24,6 +25,14 @@ class GameStatsRendererSystem extends System {
         .first()
         .iterate(SpatialComponent))
         .get(SpatialComponent);
+  }
+  
+  turn() {
+    return firstOf(this.manager.query()
+        .filter(TurnComponent)
+        .iterate(TurnComponent))
+        .get(TurnComponent)
+        .turn;
   }
   
   stealth() {
@@ -49,11 +58,17 @@ class GameStatsRendererSystem extends System {
     const dx = statusViewSpatial.x + 2;
     const dy = statusViewSpatial.y + 2;
     
+    const turn = this.turn() == TurnEnum.PLAYER ?
+        'PLAYER' :
+        'RETSAFE';
+    
     this.drawing.clipping(statusViewSpatial)
-        .sprint('STEALTH  [          ]', dx, dy, BLUE_BRIGHT, BLACK)
-        .sprint('\xfe'.repeat(this.stealth()), dx + 10, dy, ORANGE_BRIGHT, BLACK)
-        .sprint('CYCLES   [          ]', dx, dy + 2, BLUE_BRIGHT, BLACK)
-        .sprint('\xfe'.repeat(this.cycles()), dx + 10, dy + 2, ORANGE_BRIGHT, BLACK);
+        .sprint('TURN', dx, dy, BLUE_BRIGHT, BLACK)
+        .sprint(turn, dx + 9, dy, ORANGE_BRIGHT, BLACK)
+        .sprint('STEALTH  [          ]', dx, dy + 2, BLUE_BRIGHT, BLACK)
+        .sprint('\xfe'.repeat(this.stealth()), dx + 10, dy + 2, ORANGE_BRIGHT, BLACK)
+        .sprint('CYCLES   [          ]', dx, dy + 4, BLUE_BRIGHT, BLACK)
+        .sprint('\xfe'.repeat(this.cycles()), dx + 10, dy + 4, ORANGE_BRIGHT, BLACK);
   }
 }
 

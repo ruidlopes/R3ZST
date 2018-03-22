@@ -47,7 +47,7 @@ class NodeStatsRendererSystem extends System {
   frame(delta) {
     const statusViewSpatial = this.statusViewSpatial();
     const dx = statusViewSpatial.x + 2;
-    const dy = statusViewSpatial.y + 7;
+    const dy = statusViewSpatial.y + 9;
     
     const draw = this.drawing.clipping(statusViewSpatial);
     
