@@ -31,6 +31,14 @@ class TerminalInputSystem extends System {
     this.shortcutEnter = new KeyShortcut('ENTER');
     this.shortcutLeft = new KeyShortcut('ARROWLEFT');
     this.shortcutRight = new KeyShortcut('ARROWRIGHT');
+    
+    this.actionExecuting = false;
+    this.events.subscribe(
+        EventType.ACTION_START,
+        () => this.actionExecuting = true);
+    this.events.subscribe(
+        EventType.ACTION_DONE,
+        () => this.actionExecuting = false);
   }
   
   isTerminalViewActive() {
@@ -63,7 +71,9 @@ class TerminalInputSystem extends System {
   }
   
   frame(delta) {
-    if (!this.isTerminalViewActive() || !this.isPlayerTurn()) {
+    if (!this.isTerminalViewActive() ||
+        !this.isPlayerTurn() ||
+        this.actionExecuting) {
       return;
     }
     

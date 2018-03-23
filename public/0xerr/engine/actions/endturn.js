@@ -13,7 +13,7 @@ class EndTurnAction extends Action {
     this.cycles = 0;
   }
   
-  execute() {
+  start() {
     this.events.emit(EventType.END_TURN); 
   }
 }

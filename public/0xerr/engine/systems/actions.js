@@ -19,6 +19,8 @@ class ActionsSystem extends System {
     super();
     this.actions = actions;
     this.keyedActions = this.createKeyedActions();
+    
+    this.queuedActions = new Set();
         
     this.manager = manager;
     this.events = events;
@@ -82,12 +84,10 @@ class ActionsSystem extends System {
       if (this.keyedActions.has(command)) {
         const action = this.keyedActions.get(command);
         if (cyclesComponent.cycles >= action.cycles) {
-          action.execute(...params);
           cyclesComponent.cycles -= action.cycles;
-          
-          if (cyclesComponent.cycles == 0 && this.isPlayerTurn()) {
-            this.events.emit(EventType.END_TURN);
-          }
+          this.queuedActions.add(action);
+          action.start(...params);
+          this.events.emit(EventType.ACTION_START);
         } else {
           this.events.emit(
               EventType.LOG,
@@ -102,7 +102,24 @@ class ActionsSystem extends System {
     textInput.cursor = 0;
   }
   
-  frame(delta) {}
+  frame(delta) {
+    if (isEmpty(this.queuedActions)) {
+      return;
+    }
+    
+    const action = firstOf(this.queuedActions);
+    if (action.done()) {
+      this.events.emit(EventType.ACTION_DONE);
+      this.queuedActions.delete(action);
+      
+      const cyclesComponent = this.cyclesComponent();
+      if (cyclesComponent.cycles == 0 && this.isPlayerTurn()) {
+        this.events.emit(EventType.END_TURN);
+      }
+    } else {
+      action.frame(delta);
+    }
+  }
 }
 
 export {ActionsSystem};

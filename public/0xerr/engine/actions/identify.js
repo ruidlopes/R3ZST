@@ -33,7 +33,7 @@ class IdentifyAction extends Action {
     return Number.isInteger(this.chipId);
   }
   
-  execute() {
+  start() {
     if (!this.constraints()) {
       this.events.emit(
           EventType.LOG,
