@@ -1,3 +1,4 @@
+import {PLAYER} from '../actions/qualifiers.js';
 import {Action} from '../action.js';
 import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
@@ -11,9 +12,9 @@ import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf, isEmpty} from '../../stdlib/collections.js';
 import {ij, ijset} from '../../injection/api.js';
 
-class ActionsSystem extends System {
+class PlayerActionsSystem extends System {
   constructor(
-      actions = ijset(Action),
+      actions = ijset(Action, PLAYER),
       manager = ij(EntityManager),
       events = ij(EventManager)) {
     super();
@@ -122,4 +123,4 @@ class ActionsSystem extends System {
   }
 }
 
-export {ActionsSystem};
+export {PlayerActionsSystem};

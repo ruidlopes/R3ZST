@@ -5,13 +5,13 @@ import {
   MAIN_SCENE_RENDER,
 } from './qualifiers.js';
 
-import {ActionsSystem} from './actions.js';
 import {CameraTransformSystem} from './cameratransform.js';
 import {ChipRendererSystem} from './chiprenderer.js';
 import {GameStatsRendererSystem} from './gamestatsrenderer.js';
 import {Module} from '../../injection/module.js';
 import {NodeStatsRendererSystem} from './nodestatsrenderer.js';
 import {NodeRendererSystem} from './noderenderer.js';
+import {PlayerActionsSystem} from './playeractions.js';
 import {PlayerChipBoundsSystem} from './playerchipbounds.js';
 import {PlayerPositionSystem} from './playerposition.js';
 import {PlayerRendererSystem} from './playerrenderer.js';
@@ -28,7 +28,7 @@ import {ViewRendererSystem} from './viewrenderer.js';
 
 class SystemsModule extends Module {
   configure() {
-    this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, ActionsSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, PlayerActionsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, TurnManagementSystem);
 
     this.bindClassIntoSet(System, MAIN_SCENE_INPUT, ViewFocusSystem);

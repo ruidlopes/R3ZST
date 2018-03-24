@@ -1,7 +1,7 @@
-import {Action} from '../action.js';
-import {EventManager} from '../event/manager.js';
-import {EventType} from '../event/type.js';
-import {ij} from '../../injection/api.js';
+import {Action} from '../../action.js';
+import {EventManager} from '../../event/manager.js';
+import {EventType} from '../../event/type.js';
+import {ij} from '../../../injection/api.js';
 
 class EndTurnAction extends Action {
   constructor(events = ij(EventManager)) {

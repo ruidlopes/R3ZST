@@ -1,11 +1,11 @@
-import {Action} from '../action.js';
-import {ChipComponent, ChipType} from '../components/chip.js';
-import {EntityManager} from '../entity/manager.js';
-import {EventManager} from '../event/manager.js';
-import {EventType} from '../event/type.js';
-import {IdentifiedComponent} from '../components/identified.js';
-import {enumLabel, firstOf} from '../../stdlib/collections.js';
-import {ij} from '../../injection/api.js';
+import {Action} from '../../action.js';
+import {ChipComponent, ChipType} from '../../components/chip.js';
+import {EntityManager} from '../../entity/manager.js';
+import {EventManager} from '../../event/manager.js';
+import {EventType} from '../../event/type.js';
+import {IdentifiedComponent} from '../../components/identified.js';
+import {enumLabel, firstOf} from '../../../stdlib/collections.js';
+import {ij} from '../../../injection/api.js';
 
 class IdentifyAction extends Action {
   constructor(
