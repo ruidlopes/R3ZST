@@ -46,13 +46,12 @@ class ViewRendererSystem extends System {
           }
           break;
         case ViewType.STATUS: {
-            const foreground = active ? BLUE_BRIGHT : BLUE_FADED;
             this.drawing.absolute()
                 .box(spatial.x, spatial.y, spatial.width, spatial.height,
-                    BoxType.SINGLE, foreground, BLACK)
+                    BoxType.SINGLE, BLUE_BRIGHT, BLACK)
                 .rect(spatial.x + 1, spatial.y + 1, spatial.width - 2, spatial.height - 2,
-                    0x00, foreground, BLACK)
-                .sprint('STATUS', spatial.x + 2, spatial.y, foreground, BLACK);
+                    0x00, BLUE_BRIGHT, BLACK)
+                .sprint('STATUS', spatial.x + 2, spatial.y, BLUE_BRIGHT, BLACK);
           }
           break;
       }
