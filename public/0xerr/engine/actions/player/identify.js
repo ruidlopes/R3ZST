@@ -15,7 +15,6 @@ class IdentifyAction extends Action {
     this.manager = manager;
     this.events = events;
     
-    this.title = 'IDENTIFY';
     this.command = 'ID';
     this.cycles = 1;
         
