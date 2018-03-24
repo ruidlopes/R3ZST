@@ -35,7 +35,7 @@ class PlayerChipBoundsSystem extends System {
   chips() {
     return this.manager.query(this.activeNodeCompositeIds())
         .filter(ChipComponent)
-        .iterate(ChipComponent, SpatialComponent);
+        .iterate(ChipComponent, SpatialComponent, ActiveComponent);
   }
   
   playerSpatial() {
@@ -50,22 +50,18 @@ class PlayerChipBoundsSystem extends System {
     const playerSpatial = this.playerSpatial();
     const px = playerSpatial.x;
     const py = playerSpatial.y;
-    let insideAnyChip = false;
     
     for (const chip of this.chips()) {
       const chipSpatial = chip.get(SpatialComponent);
+      const chipActive = chip.get(ActiveComponent);
       if (px >= chipSpatial.x &&
           px < chipSpatial.x + chipSpatial.width &&
           py >= chipSpatial.y &&
           py < chipSpatial.y + chipSpatial.height) {
-        this.events.emit(EventType.PLAYER_INSIDE_CHIP, chip.id);
-        insideAnyChip = true;
-        break;
+        chipActive.active = true;
+      } else {
+        chipActive.active = false;
       }
-    }
-    
-    if (!insideAnyChip) {
-      this.events.emit(EventType.PLAYER_OUTSIDE_CHIPS);
     }
   }
 }

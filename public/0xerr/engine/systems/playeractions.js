@@ -1,5 +1,7 @@
 import {PLAYER} from '../actions/qualifiers.js';
 import {Action} from '../action.js';
+import {ActiveComponent} from '../components/active.js';
+import {ChipComponent} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
 import {EntityManager} from '../entity/manager.js';
@@ -7,6 +9,7 @@ import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
+import {TurnActionsComponent} from '../components/turnactions.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf, isEmpty} from '../../stdlib/collections.js';
@@ -67,6 +70,31 @@ class PlayerActionsSystem extends System {
         .collect());
   }
   
+  turnActionsComponent() {
+    return firstOf(this.manager.query()
+        .filter(TurnActionsComponent)
+        .first()
+        .iterate(TurnActionsComponent))
+        .get(TurnActionsComponent);
+  }
+  
+  activeChip() {
+    return this.manager.query()
+        .filter(ChipComponent)
+        .filter(ActiveComponent, component => component.active)
+        .iterate(ActiveComponent);
+  }
+  
+  recordAction(...params) {
+    const turnActions = this.turnActionsComponent();
+    if (isEmpty(this.activeChip()) ||
+        !firstOf(this.activeChip()).get(ActiveComponent).active) {
+      turnActions.globalActions.add(params);
+    } else {
+      turnActions.chipActions.set(firstOf(this.activeChip()).id, params);
+    }
+  }
+  
   input(id) {
     if (!this.terminalViewChildren().includes(id)) {
       return;
@@ -88,6 +116,8 @@ class PlayerActionsSystem extends System {
           if (action.constraints()) {
             cyclesComponent.cycles -= action.cycles;
             this.queuedActions.add(action);
+            this.recordAction(command, ...params);
+            
             action.start(...params);
             this.events.emit(EventType.ACTION_START);
           }

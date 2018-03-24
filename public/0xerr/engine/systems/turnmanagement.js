@@ -3,6 +3,7 @@ import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {System} from '../system.js';
+import {TurnActionsComponent} from '../components/turnactions.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
@@ -35,6 +36,15 @@ class TurnManagementSystem extends System {
         .get(CyclesComponent);
   }
   
+  turnActionsComponent() {
+    return firstOf(this.manager.query()
+        .filter(TurnActionsComponent)
+        .first()
+        .iterate(TurnActionsComponent))
+        .get(TurnActionsComponent)
+        .actions;
+  }
+  
   endTurn() {
     const turnComponent = this.turnComponent();
     const cyclesComponent = this.cyclesComponent();
@@ -46,6 +56,10 @@ class TurnManagementSystem extends System {
     } else {
       turnComponent.turn = TurnEnum.PLAYER;
       cyclesComponent.cycles = CYCLES_MAX;
+      
+      const turnActions = this.turnActionsComponent();
+      turnActions.chipActions.clear();
+      turnActions.globalActions.clear();
       this.events.emit(EventType.LOG, 'END OF RETSAFE\'S TURN.');
     }
   }
