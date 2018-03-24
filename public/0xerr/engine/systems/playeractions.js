@@ -85,10 +85,12 @@ class PlayerActionsSystem extends System {
       if (this.keyedActions.has(command)) {
         const action = this.keyedActions.get(command);
         if (cyclesComponent.cycles >= action.cycles) {
-          cyclesComponent.cycles -= action.cycles;
-          this.queuedActions.add(action);
-          action.start(...params);
-          this.events.emit(EventType.ACTION_START);
+          if (action.constraints()) {
+            cyclesComponent.cycles -= action.cycles;
+            this.queuedActions.add(action);
+            action.start(...params);
+            this.events.emit(EventType.ACTION_START);
+          }
         } else {
           this.events.emit(
               EventType.LOG,

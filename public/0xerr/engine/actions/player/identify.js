@@ -30,17 +30,16 @@ class IdentifyAction extends Action {
   }
   
   constraints() {
-    return Number.isInteger(this.chipId);
-  }
-  
-  start() {
-    if (!this.constraints()) {
+    if (!Number.isInteger(this.chipId)) {
       this.events.emit(
           EventType.LOG,
           'NO COMPONENT IN RANGE.');
-      return;
+      return false;
     }
-    
+    return true;
+  }
+  
+  start() {
     const chip = firstOf(this.manager.query([this.chipId])
         .iterate(ChipComponent, IdentifiedComponent));
     chip.get(IdentifiedComponent).identified = true;

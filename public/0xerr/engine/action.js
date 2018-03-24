@@ -1,4 +1,8 @@
 class Action {
+  constraints() {
+    return true;
+  }
+  
   start() {}
   
   done() {
