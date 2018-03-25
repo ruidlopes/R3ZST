@@ -16,7 +16,7 @@ class IdentifyAction extends Action {
     this.manager = manager;
     this.events = events;
     
-    this.command = 'ID';
+    this.command = 'CHIPID';
     this.cycles = 1;
   }
   
@@ -32,7 +32,7 @@ class IdentifyAction extends Action {
         !firstOf(this.activeChip()).get(ActiveComponent).active) {
       this.events.emit(
           EventType.LOG,
-          'NO COMPONENT IN RANGE.');
+          'NO CHIP IN RANGE.');
       return false;
     }
     return true;
