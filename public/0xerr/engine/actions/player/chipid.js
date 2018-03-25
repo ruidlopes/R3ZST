@@ -8,7 +8,7 @@ import {IdentifiedComponent} from '../../components/identified.js';
 import {enumLabel, firstOf, isEmpty} from '../../../stdlib/collections.js';
 import {ij} from '../../../injection/api.js';
 
-class IdentifyAction extends Action {
+class ChipIdAction extends Action {
   constructor(
       manager = ij(EntityManager),
       events = ij(EventManager)) {
@@ -46,8 +46,8 @@ class IdentifyAction extends Action {
     const version = chip.get(ChipComponent).version;
     this.events.emit(
         EventType.LOG,
-        `IDENTIFIED ${type} ${version}`); 
+        `IDENTIFIED CHIP ${type} ${version}`); 
   }
 }
 
-export {IdentifyAction};
+export {ChipIdAction};

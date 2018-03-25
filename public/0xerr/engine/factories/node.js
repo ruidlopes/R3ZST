@@ -5,7 +5,7 @@ import {CompositeComponent} from '../components/composite.js';
 import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
 import {NodeComponent, NodeType} from '../components/node.js';
-import {SentryComponent} from '../components/sentry.js';
+import {SentryComponent, SentryCapabilities} from '../components/sentry.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
 import {ij} from '../../injection/api.js';
@@ -27,7 +27,7 @@ class NodeFactory {
     const sentry1 = this.manager.nextId();
     this.manager.add(
         sentry1,
-        new SentryComponent(),
+        new SentryComponent([SentryCapabilities.CHIPID]),
         new SpatialComponent(6, 6, 0, 0),
         new StyleComponent(BLUE_BRIGHT, BLACK));
     

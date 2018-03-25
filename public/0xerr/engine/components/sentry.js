@@ -1,5 +1,16 @@
+import {enumOf} from '../../stdlib/collections.js';
+
+const SentryCapabilities = enumOf(
+  'CHIPID',
+);
+
 class SentryComponent {
-  constructor() {}
+  constructor(capabilities) {
+    this.capabilities = new Set(capabilities);
+  }
 }
 
-export {SentryComponent};
+export {
+  SentryComponent,
+  SentryCapabilities,
+};

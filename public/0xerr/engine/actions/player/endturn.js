@@ -1,6 +1,7 @@
 import {Action} from '../../action.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
+import {TurnEnum} from '../../components/turn.js';
 import {ij} from '../../../injection/api.js';
 
 class EndTurnAction extends Action {
@@ -13,7 +14,7 @@ class EndTurnAction extends Action {
   }
   
   start() {
-    this.events.emit(EventType.END_TURN); 
+    this.events.emit(EventType.END_TURN, TurnEnum.PLAYER); 
   }
 }
 

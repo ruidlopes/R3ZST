@@ -18,7 +18,7 @@ class TurnManagementSystem extends System {
         
     this.events.subscribe(
         EventType.END_TURN,
-        () => this.endTurn());
+        (turn) => this.endTurn(turn));
   }
   
   turnComponent() {
@@ -41,15 +41,14 @@ class TurnManagementSystem extends System {
         .filter(TurnActionsComponent)
         .first()
         .iterate(TurnActionsComponent))
-        .get(TurnActionsComponent)
-        .actions;
+        .get(TurnActionsComponent);
   }
   
-  endTurn() {
+  endTurn(turn) {
     const turnComponent = this.turnComponent();
     const cyclesComponent = this.cyclesComponent();
     
-    if (turnComponent.turn == TurnEnum.PLAYER) {
+    if (turn == TurnEnum.PLAYER) {
       turnComponent.turn = TurnEnum.RETSAFE;
       cyclesComponent.cycles = 0;
       this.events.emit(EventType.LOG, 'END OF PLAYER\'S TURN.');

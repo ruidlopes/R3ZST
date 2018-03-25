@@ -23,7 +23,6 @@ class PlayerActionsSystem extends System {
     super();
     this.actions = actions;
     this.keyedActions = this.createKeyedActions();
-    
     this.queuedActions = new Set();
         
     this.manager = manager;
@@ -91,7 +90,11 @@ class PlayerActionsSystem extends System {
         !firstOf(this.activeChip()).get(ActiveComponent).active) {
       turnActions.globalActions.add(params);
     } else {
-      turnActions.chipActions.set(firstOf(this.activeChip()).id, params);
+      const chipId = firstOf(this.activeChip()).id;
+      if (!turnActions.chipActions.has(chipId)) {
+        turnActions.chipActions.set(chipId, []);
+      }
+      turnActions.chipActions.get(chipId).push(params);
     }
   }
   
@@ -147,7 +150,7 @@ class PlayerActionsSystem extends System {
       
       const cyclesComponent = this.cyclesComponent();
       if (cyclesComponent.cycles == 0 && this.isPlayerTurn()) {
-        this.events.emit(EventType.END_TURN);
+        this.events.emit(EventType.END_TURN, TurnEnum.PLAYER);
       }
     } else {
       action.frame(delta);

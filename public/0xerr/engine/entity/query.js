@@ -29,6 +29,10 @@ class EntityQuery {
     return this;
   }
   
+  count() {
+    return this.ids.size;
+  }
+  
   *iterate(...types) {
     for (const id of this.ids.values()) {
       yield new EntityView(id, ...this.entityView(id, ...types));
