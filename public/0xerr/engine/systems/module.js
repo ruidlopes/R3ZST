@@ -8,6 +8,7 @@ import {
 import {CameraTransformSystem} from './cameratransform.js';
 import {ChipRendererSystem} from './chiprenderer.js';
 import {GameStatsRendererSystem} from './gamestatsrenderer.js';
+import {HardwareRendererSystem} from './hardwarerenderer.js';
 import {Module} from '../../injection/module.js';
 import {NodeStatsRendererSystem} from './nodestatsrenderer.js';
 import {NodeRendererSystem} from './noderenderer.js';
@@ -22,10 +23,10 @@ import {TerminalBufferSystem} from './terminalbuffer.js';
 import {TerminalInputSystem} from './terminalinput.js';
 import {TerminalRendererSystem} from './terminalrenderer.js';
 import {TurnManagementSystem} from './turnmanagement.js';
+import {StatusRendererSystem} from './statusrenderer.js';
 import {System} from '../system.js';
 import {ViewFocusSystem} from './viewfocus.js';
 import {ViewSpatialSystem} from './viewspatial.js';
-import {ViewRendererSystem} from './viewrenderer.js';
 
 class SystemsModule extends Module {
   configure() {
@@ -44,14 +45,14 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewSpatialSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, TerminalBufferSystem);
     
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, ViewRendererSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TerminalRendererSystem);
-    
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, HardwareRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, NodeRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, ChipRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, SentryRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, PlayerRendererSystem);
     
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TerminalRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, StatusRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, GameStatsRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, NodeStatsRendererSystem);
   }

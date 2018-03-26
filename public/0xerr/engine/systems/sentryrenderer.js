@@ -53,8 +53,8 @@ class SentryRendererSystem extends System {
     for (const sentry of this.sentries()) {
       const spatial = sentry.get(SpatialComponent);
       const style = sentry.get(StyleComponent);
-      const dx = Math.round(nodeSpatial.x + spatial.x);
-      const dy = Math.round(nodeSpatial.y + spatial.y);
+      const dx = Math.floor(nodeSpatial.x + spatial.x);
+      const dy = Math.floor(nodeSpatial.y + spatial.y);
       
       draw.putCxel(dx, dy, 0x73, style.foregroundColor, style.backgroundColor);
     }

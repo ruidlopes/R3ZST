@@ -51,9 +51,19 @@ class NodeFactory {
         new IdentifiedComponent(false),
         new CompositeComponent([]));
     
+    const chip3 = this.manager.nextId();
+    this.manager.add(
+        chip3,
+        new ActiveComponent(false),
+        new ChipComponent(ChipType.NIC, 'RETNET V.2'),
+        new SpatialComponent(37, 4, 3, 4),
+        new StyleComponent(BLUE_BRIGHT, BLACK),
+        new IdentifiedComponent(false),
+        new CompositeComponent([]));
+    
     this.manager.add(
         nodeId,
-        new CompositeComponent([chip1, chip2]));
+        new CompositeComponent([chip1, chip2, chip3]));
   }
 }
 

@@ -4,6 +4,7 @@ const ChipType = enumOf(
   'BIOS',
   'CPU',
   'RAM',
+  'NIC',
 );
 
 class ChipComponent {

@@ -54,8 +54,8 @@ class ChipRendererSystem extends System {
     const spatial = chip.get(SpatialComponent);
     const style = chip.get(StyleComponent);
     
-    const dx = Math.round(nodeSpatial.x + spatial.x);
-    const dy = Math.round(nodeSpatial.y + spatial.y);
+    const dx = Math.floor(nodeSpatial.x + spatial.x);
+    const dy = Math.floor(nodeSpatial.y + spatial.y);
     
     const draw = this.drawing.clipping(nodeSpatial);
     
@@ -72,6 +72,16 @@ class ChipRendererSystem extends System {
                 CPU_SMALL_CHARS, style.foregroundColor, style.backgroundColor)
             .box(dx + 1, dy + 1, spatial.width - 2, spatial.height - 2,
                 BoxType.OUTER, style.foregroundColor, style.backgroundColor);
+        break;
+      
+      case ChipType.RAM:
+        draw.box(dx, dy, spatial.width, spatial.height,
+                 BoxType.OUTER, style.foregroundColor, style.backgroundColor);
+        break;
+      
+      case ChipType.NIC:
+        draw.box(dx, dy, spatial.width, spatial.height,
+                 BoxType.OUTER, style.foregroundColor, style.backgroundColor);
         break;
     }
   }

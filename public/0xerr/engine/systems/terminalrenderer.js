@@ -1,4 +1,6 @@
-import {BLACK, BLUE_BRIGHT} from '../common/palette.js';
+import {BLACK, BLUE_BRIGHT, BLUE_FADED} from '../common/palette.js';
+import {ActiveComponent} from '../components/active.js';
+import {BoxType} from '../../renderer/primitives/boxes.js';
 import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
@@ -19,13 +21,15 @@ class TerminalRendererSystem extends System {
     this.drawing = drawing;
   }
   
-  terminalViewChildren() {
+  terminalView() {
     return firstOf(this.manager.query()
         .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
         .first()
-        .iterate(CompositeComponent))
-        .get(CompositeComponent)
-        .ids;
+        .iterate(CompositeComponent, SpatialComponent, ActiveComponent));
+  }
+  
+  terminalViewChildren() {
+    return this.terminalView().get(CompositeComponent).ids;
   }
   
   textBuffer() {
@@ -40,6 +44,21 @@ class TerminalRendererSystem extends System {
         .filter(TextInputComponent)
         .first()
         .iterate(TextInputComponent, SpatialComponent));
+  }
+  
+  renderView(delta) {
+    const terminalView = this.terminalView();
+    const spatial = terminalView.get(SpatialComponent);
+    const foreground = terminalView.get(ActiveComponent).active ?
+        BLUE_BRIGHT :
+        BLUE_FADED;
+    
+    this.drawing.absolute()
+        .box(spatial.x, spatial.y, spatial.width, spatial.height,
+            BoxType.SINGLE, foreground, BLACK)
+        .rect(spatial.x + 1, spatial.y + 1, spatial.width - 2, spatial.height - 2,
+            0x00, foreground, BLACK)
+        .sprint('TERMINAL', spatial.x + 2, spatial.y, foreground, BLACK);
   }
   
   renderTextBuffer(delta) {
@@ -88,6 +107,7 @@ class TerminalRendererSystem extends System {
   }
   
   frame(delta) {
+    this.renderView(delta);
     this.renderTextBuffer(delta);
     this.renderTextInput(delta);
   }
