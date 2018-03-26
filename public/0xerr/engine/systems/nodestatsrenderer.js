@@ -48,44 +48,48 @@ class NodeStatsRendererSystem extends System {
   frame(delta) {
     const statusViewSpatial = this.statusViewSpatial();
     const dx = statusViewSpatial.x + 2;
-    const dy = statusViewSpatial.y + 9;
+    let dy = statusViewSpatial.y + 8;
     
     const draw = this.drawing.clipping(statusViewSpatial);
-    
-    draw.sprint('NODE', dx, dy, BLUE_BRIGHT, BLACK)
-        .sprint('type', dx, dy + 1, BLUE_BRIGHT, BLACK)
-        .sprint('bios', dx, dy + 2, BLUE_BRIGHT, BLACK)
-        .sprint('ip', dx, dy + 3, BLUE_BRIGHT, BLACK)
-        .sprint('cpu', dx, dy + 4, BLUE_BRIGHT, BLACK)
-        .sprint('memory', dx, dy + 5, BLUE_BRIGHT, BLACK);
-    
     const type = this.activeNode().get(NodeComponent).type;
     
     for (const chip of this.chips()) {
       const identified = chip.get(IdentifiedComponent).identified;
+      if (!identified) {
+        continue;
+      }
+      
       const component = chip.get(ChipComponent);
       const version = component.version;
-
+      
       switch (component.type) {
         case ChipType.BIOS:
-          if (identified) {
-            draw.sprint(enumLabel(NodeType, type), dx + 8, dy + 1, ORANGE_BRIGHT, BLACK);
-          }
-          draw.sprint(
-              identified ? version : 'UNKNOWN',
-              dx + 8, dy + 2, ORANGE_BRIGHT, BLACK);
+          draw.sprint('NODE', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(enumLabel(NodeType, type), dx + 8, dy, ORANGE_BRIGHT, BLACK)
+              .sprint('BIOS', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
+        
         case ChipType.CPU:
-          draw.sprint(
-              identified ? version : 'UNKNOWN',
-              dx + 8, dy + 4, ORANGE_BRIGHT, BLACK);
+          draw.sprint('CPU', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
+        
         case ChipType.RAM:
-          draw.sprint(
-              identified ? version : 'UNKNOWN',
-              dx + 8, dy + 5, ORANGE_BRIGHT, BLACK);
+          draw.sprint('RAM', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+          break;
+        
+        case ChipType.NIC:
+          const ip = chip.get(IpComponent).ip.join('.');
+          draw.sprint('NIC', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK)
+              .sprint('IP', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(ip, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
       }
+      
+      dy++;
     }
   }
 }
