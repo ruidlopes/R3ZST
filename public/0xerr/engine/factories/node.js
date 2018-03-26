@@ -4,6 +4,7 @@ import {ChipComponent, ChipType} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
+import {IpComponent} from '../components/ip.js';
 import {NodeComponent, NodeType} from '../components/node.js';
 import {SentryComponent, SentryCapabilities} from '../components/sentry.js';
 import {SpatialComponent} from '../components/spatial.js';
@@ -59,7 +60,8 @@ class NodeFactory {
         new SpatialComponent(37, 4, 3, 4),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
-        new CompositeComponent([]));
+        new CompositeComponent([]),
+        new IpComponent([10, 10, 1, 1]));
     
     this.manager.add(
         nodeId,
