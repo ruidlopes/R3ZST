@@ -7,7 +7,6 @@ import {
 
 import {CameraTransformSystem} from './cameratransform.js';
 import {ChipRendererSystem} from './chiprenderer.js';
-import {GameStatsRendererSystem} from './gamestatsrenderer.js';
 import {HardwareRendererSystem} from './hardwarerenderer.js';
 import {Module} from '../../injection/module.js';
 import {NodeStatsRendererSystem} from './nodestatsrenderer.js';
@@ -53,7 +52,6 @@ class SystemsModule extends Module {
     
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TerminalRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, StatusRendererSystem);
-    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, GameStatsRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, NodeStatsRendererSystem);
   }
 }

@@ -5,6 +5,7 @@ import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
+import {IpComponent} from '../components/ip.js';
 import {NodeComponent, NodeType} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {System} from '../system.js';
@@ -41,7 +42,7 @@ class NodeStatsRendererSystem extends System {
     const chipIds = this.activeNode().get(CompositeComponent).ids;
     return this.manager.query(chipIds)
         .filter(ChipComponent)
-        .iterate(ChipComponent, IdentifiedComponent);
+        .iterate(ChipComponent, IdentifiedComponent, IpComponent);
   }
   
   frame(delta) {

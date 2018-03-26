@@ -46,7 +46,7 @@ class TerminalRendererSystem extends System {
         .iterate(TextInputComponent, SpatialComponent));
   }
   
-  renderView(delta) {
+  renderFrame(delta) {
     const terminalView = this.terminalView();
     const spatial = terminalView.get(SpatialComponent);
     const foreground = terminalView.get(ActiveComponent).active ?
@@ -107,7 +107,7 @@ class TerminalRendererSystem extends System {
   }
   
   frame(delta) {
-    this.renderView(delta);
+    this.renderFrame(delta);
     this.renderTextBuffer(delta);
     this.renderTextInput(delta);
   }
