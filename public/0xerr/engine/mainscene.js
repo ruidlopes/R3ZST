@@ -1,4 +1,5 @@
 import {
+  BOOT,
   MAIN_SCENE_GLOBAL,
   MAIN_SCENE_INPUT,
   MAIN_SCENE_UPDATE,
@@ -8,27 +9,21 @@ import {
 
 import {EventManager} from './event/manager.js';
 import {EventType} from './event/type.js';
-import {GameFactory} from './factories/game.js';
-import {NodeFactory} from './factories/node.js';
-import {PlayerFactory} from './factories/player.js';
 import {Scene} from './scene.js';
 import {System} from './system.js';
-import {ViewFactory} from './factories/view.js';
 import {enumOf} from '../stdlib/collections.js';
 import {ij, ijset} from '../injection/api.js';
 
 const States = enumOf(
-  'LOOP',
+  'BOOT',
+  'GAMELOOP',
   'DISCONNECTED',
 );
 
 class MainScene extends Scene {
   constructor(
       events = ij(EventManager),
-      nodeFactory = ij(NodeFactory),
-      viewFactory = ij(ViewFactory),
-      playerFactory = ij(PlayerFactory),
-      gameFactory = ij(GameFactory),
+      bootSystems = ijset(System, BOOT),
       globalSystems = ijset(System, MAIN_SCENE_GLOBAL),
       inputSystems = ijset(System, MAIN_SCENE_INPUT),
       updateSystems = ijset(System, MAIN_SCENE_UPDATE),
@@ -39,26 +34,33 @@ class MainScene extends Scene {
     
     this.events = events;
     this.events.subscribe(
+        EventType.BOOT,
+        () => this.sm.jump(States.BOOT));
+    this.events.subscribe(
+        EventType.CONNECTED,
+        () => this.sm.jump(States.GAMELOOP));
+    this.events.subscribe(
         EventType.DISCONNECTED,
         () => this.sm.jump(States.DISCONNECTED));
-
-    nodeFactory.make();
-    viewFactory.make();
-    playerFactory.make();
-    gameFactory.make();
     
+    this.bootSystems = bootSystems;
     this.globalSystems = globalSystems;
     this.inputSystems = inputSystems;
     this.updateSystems = updateSystems;
     this.renderSystems = renderSystems;
     this.disconnectedSystems = disconnectedSystems;
     
-    this.sm.fixed(States.LOOP, (delta) => this.mainLoop(delta));
+    this.sm.fixed(States.BOOT, (delta) => this.boot(delta));
+    this.sm.fixed(States.GAMELOOP, (delta) => this.gameLoop(delta));
     this.sm.fixed(States.DISCONNECTED, (delta) => this.disconnected(delta));
-    this.sm.jump(States.LOOP);
+    this.sm.jump(States.BOOT);
   }
   
-  mainLoop(delta) {
+  boot(delta) {
+    this.systemClusterFrame(this.bootSystems, delta);
+  }
+  
+  gameLoop(delta) {
     this.systemClusterFrame(this.globalSystems, delta);
     this.systemClusterFrame(this.inputSystems, delta);
     this.systemClusterFrame(this.updateSystems, delta);

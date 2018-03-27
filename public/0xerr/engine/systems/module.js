@@ -1,4 +1,6 @@
 import {
+  BOOT,
+  
   MAIN_SCENE_GLOBAL,
   MAIN_SCENE_INPUT,
   MAIN_SCENE_UPDATE,
@@ -7,6 +9,7 @@ import {
   DISCONNECTED,
 } from './qualifiers.js';
 
+import {BootSystem} from './boot.js';
 import {CameraTransformSystem} from './cameratransform.js';
 import {ChipRendererSystem} from './chiprenderer.js';
 import {DisconnectedSystem} from './disconnected.js';
@@ -32,6 +35,8 @@ import {ViewSpatialSystem} from './viewspatial.js';
 
 class SystemsModule extends Module {
   configure() {
+    this.bindClassIntoSet(System, BOOT, BootSystem);
+    
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, PlayerActionsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, RetsafeActionsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, TurnManagementSystem);

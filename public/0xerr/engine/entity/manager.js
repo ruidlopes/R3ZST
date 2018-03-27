@@ -41,6 +41,12 @@ class EntityManager {
     }
   }
   
+  clear() {
+    this.components = new Map();
+    this.ids = new Set();
+    this.idCounter = 0;
+  }
+  
   query(ids) {
     return new EntityQuery(this.components, new Set(ids || this.ids));
   }

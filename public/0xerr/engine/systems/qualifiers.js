@@ -1,3 +1,5 @@
+const BOOT = Symbol('BOOT');
+
 const MAIN_SCENE_GLOBAL = Symbol('MS_GLOBAL');
 const MAIN_SCENE_INPUT = Symbol('MS_INPUT');
 const MAIN_SCENE_UPDATE = Symbol('MS_UPDATE');
@@ -6,6 +8,8 @@ const MAIN_SCENE_RENDER = Symbol('MS_RENDER');
 const DISCONNECTED = Symbol('DISCONNECTED');
 
 export {
+  BOOT,
+  
   MAIN_SCENE_GLOBAL,
   MAIN_SCENE_INPUT,
   MAIN_SCENE_UPDATE,
