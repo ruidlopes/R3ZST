@@ -3,9 +3,11 @@ import {
   MAIN_SCENE_INPUT,
   MAIN_SCENE_UPDATE,
   MAIN_SCENE_RENDER,
+  DISCONNECTED,
 } from './systems/qualifiers.js';
 
-import {EntityManager} from './entity/manager.js';
+import {EventManager} from './event/manager.js';
+import {EventType} from './event/type.js';
 import {GameFactory} from './factories/game.js';
 import {NodeFactory} from './factories/node.js';
 import {PlayerFactory} from './factories/player.js';
@@ -17,11 +19,12 @@ import {ij, ijset} from '../injection/api.js';
 
 const States = enumOf(
   'LOOP',
+  'DISCONNECTED',
 );
 
 class MainScene extends Scene {
   constructor(
-      manager = ij(EntityManager),
+      events = ij(EventManager),
       nodeFactory = ij(NodeFactory),
       viewFactory = ij(ViewFactory),
       playerFactory = ij(PlayerFactory),
@@ -30,10 +33,15 @@ class MainScene extends Scene {
       inputSystems = ijset(System, MAIN_SCENE_INPUT),
       updateSystems = ijset(System, MAIN_SCENE_UPDATE),
       renderSystems = ijset(System, MAIN_SCENE_RENDER),
+      disconnectedSystems = ijset(System, DISCONNECTED),
   ) {
     super();
     
-    this.manager = manager;
+    this.events = events;
+    this.events.subscribe(
+        EventType.DISCONNECTED,
+        () => this.sm.jump(States.DISCONNECTED));
+
     nodeFactory.make();
     viewFactory.make();
     playerFactory.make();
@@ -43,8 +51,10 @@ class MainScene extends Scene {
     this.inputSystems = inputSystems;
     this.updateSystems = updateSystems;
     this.renderSystems = renderSystems;
+    this.disconnectedSystems = disconnectedSystems;
     
     this.sm.fixed(States.LOOP, (delta) => this.mainLoop(delta));
+    this.sm.fixed(States.DISCONNECTED, (delta) => this.disconnected(delta));
     this.sm.jump(States.LOOP);
   }
   
@@ -53,6 +63,10 @@ class MainScene extends Scene {
     this.systemClusterFrame(this.inputSystems, delta);
     this.systemClusterFrame(this.updateSystems, delta);
     this.systemClusterFrame(this.renderSystems, delta);
+  }
+  
+  disconnected(delta) {
+    this.systemClusterFrame(this.disconnectedSystems, delta);
   }
   
   systemClusterFrame(systemCluster, delta) {

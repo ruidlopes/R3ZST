@@ -9,7 +9,6 @@ import {NodeComponent} from '../../components/node.js';
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
 import {StealthComponent, STEALTH_MAX} from '../../components/stealth.js';
 import {TurnActionsComponent} from '../../components/turnactions.js';
-import {clamp} from '../../../stdlib/math.js';
 import {firstOf} from '../../../stdlib/collections.js';
 import {ij} from '../../../injection/api.js';
 
@@ -77,10 +76,9 @@ class DetectChipIdAction extends Action {
       
       const hitPoints = sentryCount * chipIdActionsCount;
       if (hitPoints > 0) {
-        this.stealthComponent().stealth = clamp(
-            this.stealthComponent().stealth - hitPoints, 0, STEALTH_MAX);
+        this.events.emit(EventType.STEALTH_UPDATE, -hitPoints);
         this.events.emit(
-            EventType.LOG, `DETECTED ${chipIdActionsCount} CHIPID ACTIONS.`);
+            EventType.LOG, `DETECTED ${chipIdActionsCount} CHIPID ACTION(S).`);
       }
     }
   }

@@ -3,10 +3,14 @@ import {
   MAIN_SCENE_INPUT,
   MAIN_SCENE_UPDATE,
   MAIN_SCENE_RENDER,
+  
+  DISCONNECTED,
 } from './qualifiers.js';
 
 import {CameraTransformSystem} from './cameratransform.js';
 import {ChipRendererSystem} from './chiprenderer.js';
+import {DisconnectedSystem} from './disconnected.js';
+import {GameEndingSystem} from './gameending.js';
 import {HardwareRendererSystem} from './hardwarerenderer.js';
 import {Module} from '../../injection/module.js';
 import {NodeRendererSystem} from './noderenderer.js';
@@ -31,6 +35,7 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, PlayerActionsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, RetsafeActionsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, TurnManagementSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, GameEndingSystem);
 
     this.bindClassIntoSet(System, MAIN_SCENE_INPUT, ViewFocusSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_INPUT, TerminalInputSystem);
@@ -51,6 +56,8 @@ class SystemsModule extends Module {
     
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TerminalRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, StatusRendererSystem);
+    
+    this.bindClassIntoSet(System, DISCONNECTED, DisconnectedSystem);
   }
 }
 
