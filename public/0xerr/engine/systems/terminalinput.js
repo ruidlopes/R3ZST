@@ -1,3 +1,4 @@
+import {ActionHistoryComponent} from '../components/actionhistory.js';
 import {ActiveComponent} from '../components/active.js';
 import {CompositeComponent} from '../components/composite.js';
 import {EntityManager} from '../entity/manager.js';
@@ -31,6 +32,8 @@ class TerminalInputSystem extends System {
     this.shortcutEnter = new KeyShortcut('ENTER');
     this.shortcutLeft = new KeyShortcut('ARROWLEFT');
     this.shortcutRight = new KeyShortcut('ARROWRIGHT');
+    this.shortcutUp = new KeyShortcut('ARROWUP');
+    this.shortcutDown = new KeyShortcut('ARROWDOWN');
     
     this.actionExecuting = false;
     this.events.subscribe(
@@ -70,6 +73,14 @@ class TerminalInputSystem extends System {
         .iterate(TextInputComponent));
   }
   
+  actionHistory() {
+    return firstOf(this.manager.query()
+        .filter(ActionHistoryComponent)
+        .first()
+        .iterate(ActionHistoryComponent))
+        .get(ActionHistoryComponent);
+  }
+  
   frame(delta) {
     if (!this.isTerminalViewActive() ||
         !this.isPlayerTurn() ||
@@ -79,18 +90,24 @@ class TerminalInputSystem extends System {
     
     const textInputEntity = this.textInputEntity();
     const textInput = textInputEntity.get(TextInputComponent);
+    
     this.updateChars(textInput, this.keyboard.released(this.shortcutChars));
     this.updateChars(textInput, this.keyboard.released(this.shortcutCharsShift));
+    
     if (this.keyboard.releasedAny(this.shortcutBackspace)) {
       this.backspace(textInput);
     } else if (this.keyboard.releasedAny(this.shortcutEscape)) {
       this.escape(textInput);
     } else if (this.keyboard.releasedAny(this.shortcutEnter)) {
-      this.events.emit(EventType.TEXT_INPUT, textInputEntity.id);
+      this.enter(textInputEntity);
     } else if (this.keyboard.releasedAny(this.shortcutLeft)) {
       this.cursor(textInput, -1);
     } else if (this.keyboard.releasedAny(this.shortcutRight)) {
       this.cursor(textInput, 1);
+    } else if (this.keyboard.releasedAny(this.shortcutUp)) {
+      this.history(textInput, -1);
+    } else if (this.keyboard.releasedAny(this.shortcutDown)) {
+      this.history(textInput, 1);
     }
   }
   
@@ -101,6 +118,15 @@ class TerminalInputSystem extends System {
       textInput.text = pre + char + post;
       textInput.cursor++;
     }
+  }
+  
+  enter(textInputEntity) {
+    const textInput = textInputEntity.get(TextInputComponent);
+    const actionHistory = this.actionHistory();
+    actionHistory.history.push(textInput.text);
+    actionHistory.cursor = actionHistory.history.length;
+    
+    this.events.emit(EventType.TEXT_INPUT, textInputEntity.id);
   }
   
   backspace(textInput) {
@@ -122,6 +148,20 @@ class TerminalInputSystem extends System {
   cursor(textInput, delta) {
     textInput.cursor += delta;
     textInput.cursor = clamp(textInput.cursor, 0, textInput.text.length);
+  }
+  
+  history(textInput, delta) {
+    const actionHistory = this.actionHistory();
+    actionHistory.cursor += delta;
+    actionHistory.cursor = clamp(actionHistory.cursor, 0, actionHistory.history.length);
+    
+    if (actionHistory.cursor == actionHistory.history.length) {
+      textInput.text = '';
+      textInput.cursor = 0;
+    } else {
+      textInput.text = actionHistory.history[actionHistory.cursor];
+      textInput.cursor = textInput.text.length;
+    }
   }
 }
 
