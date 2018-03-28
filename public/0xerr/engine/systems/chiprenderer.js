@@ -4,6 +4,7 @@ import {ChipComponent, ChipType} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
+import {IdentifiedComponent} from '../components/identified.js';
 import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
@@ -38,7 +39,7 @@ class ChipRendererSystem extends System {
   chips() {
     return this.manager.query(this.activeNodeCompositeIds())
         .filter(ChipComponent)
-        .iterate(ChipComponent, SpatialComponent, StyleComponent);
+        .iterate(ChipComponent, SpatialComponent, StyleComponent, IdentifiedComponent);
   }
   
   frame(delta) {
@@ -53,11 +54,18 @@ class ChipRendererSystem extends System {
     const type = chip.get(ChipComponent).type;
     const spatial = chip.get(SpatialComponent);
     const style = chip.get(StyleComponent);
+    const identified = chip.get(IdentifiedComponent).identified;
     
     const dx = Math.floor(nodeSpatial.x + spatial.x);
     const dy = Math.floor(nodeSpatial.y + spatial.y);
     
     const draw = this.drawing.clipping(nodeSpatial);
+    
+    if (!identified) {
+      draw.box(dx, dy, spatial.width, spatial.height,
+               BoxType.OUTER, style.foregroundColor, style.backgroundColor);
+      return;
+    }
     
     switch (type) {
       case ChipType.BIOS:
@@ -68,11 +76,8 @@ class ChipRendererSystem extends System {
         break;
       
       case ChipType.CAM:
-        const cx = dx + (spatial.width >> 1);
-        const cy = dy + (spatial.height >> 1);
         draw.box(dx, dy, spatial.width, spatial.height,
-                 BoxType.OUTER, style.foregroundColor, style.backgroundColor)
-            .sprint('O', cx, cy, style.foregroundColor, style.backgroundColor);
+                 BoxType.DOUBLE, style.foregroundColor, style.backgroundColor);
         break;
         
       case ChipType.CPU:

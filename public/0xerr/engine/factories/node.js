@@ -93,7 +93,7 @@ class NodeFactory {
         chip5,
         new ActiveComponent(false),
         new ChipComponent(ChipType.CAM, 'RETCAMERA V.3'),
-        new SpatialComponent(7, 7, 6, 3),
+        new SpatialComponent(7, 6, 6, 4),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
         new CompositeComponent([]));
