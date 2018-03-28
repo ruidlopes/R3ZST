@@ -85,7 +85,7 @@ class ConnectAction extends Action {
     
     if (!activeChip.get(IdentifiedComponent).identified) {
       this.events.emit(EventType.LOG, 'UNIDENTIFIED CHIP.');
-      return false
+      return false;
     }
     
     if (activeChip.get(ChipComponent).type != ChipType.NIC) {
@@ -95,6 +95,11 @@ class ConnectAction extends Action {
     
     if (ip == undefined) {
       this.events.emit(EventType.LOG, 'MISSING IP TO CONNECT TO.');
+      return false;
+    }
+    
+    if (sameElements(ip.split('.'), activeChip.get(IpComponent).ip)) {
+      this.events.emit(EventType.LOG, 'ALREADY AT ' + ip);
       return false;
     }
     
