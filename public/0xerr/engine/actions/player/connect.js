@@ -98,26 +98,21 @@ class ConnectAction extends Action {
       return false;
     }
     
-    const nic1 = activeChip.id;
-    const nic2 = this.destinationNic(ip).id;
-    
-    if (!this.hasConnection(nic1, nic2)) {
-      this.events.emit(EventType.LOG, 'CONNECTION NOT AVAILABLE.');
-      return false;
-    }
-    
     return true;
   }
   
   start(ip) {
     this.events.emit(EventType.LOG, `CONNECTING TO ${ip}`);
     
-    this.activeNode().get(ActiveComponent).active = false;
-    
     const nic1 = firstOf(this.activeChip());
-    nic1.get(ActiveComponent).active = false;
-    
     const nic2 = this.destinationNic(ip);
+    if (!this.hasConnection(nic1, nic2)) {
+      this.events.emit(EventType.LOG, 'CONNECTION NOT AVAILABLE.');
+      return;
+    }
+    
+    this.activeNode().get(ActiveComponent).active = false;
+    nic1.get(ActiveComponent).active = false;
     nic2.get(IdentifiedComponent).identified = true;
     nic2.get(ActiveComponent).active = true;
     
