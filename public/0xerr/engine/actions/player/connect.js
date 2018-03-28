@@ -99,7 +99,7 @@ class ConnectAction extends Action {
     }
     
     if (sameElements(ip.split('.'), activeChip.get(IpComponent).ip)) {
-      this.events.emit(EventType.LOG, 'ALREADY AT ' + ip);
+      this.events.emit(EventType.LOG, `ALREADY AT ${ip}`);
       return false;
     }
     
@@ -112,7 +112,7 @@ class ConnectAction extends Action {
     const nic1 = firstOf(this.activeChip());
     const nic2 = this.destinationNic(ip);
     if (!this.hasConnection(nic1.id, nic2.id)) {
-      this.events.emit(EventType.LOG, 'CONNECTION NOT AVAILABLE.');
+      this.events.emit(EventType.LOG, 'CONNECTION TIMEOUT.');
       return;
     }
     
