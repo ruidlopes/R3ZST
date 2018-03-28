@@ -143,6 +143,9 @@ class TerminalInputSystem extends System {
   escape(textInput) {
     textInput.text = '';
     textInput.cursor = 0;
+    
+    const actionHistory = this.actionHistory();
+    actionHistory.cursor = actionHistory.history.length;
   }
   
   cursor(textInput, delta) {
