@@ -32,15 +32,15 @@ class SentryRendererSystem extends System {
     return this.activeNode().get(CompositeComponent).ids;
   }
   
-  chipsComposite() {
+  chips() {
     return this.manager.query(this.activeNodeCompositeIds())
         .filter(ChipComponent)
         .iterate(CompositeComponent);
   }
   
   *sentries() {
-    for (const chip of this.chipsComposite()) {
-      yield* this.manager.query(chip.ids)
+    for (const chip of this.chips()) {
+      yield* this.manager.query(chip.get(CompositeComponent).ids)
           .filter(SentryComponent)
           .iterate(SpatialComponent, StyleComponent);
     }

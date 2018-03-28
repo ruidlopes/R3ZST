@@ -116,7 +116,7 @@ class PlayerActionsSystem extends System {
       if (this.keyedActions.has(command)) {
         const action = this.keyedActions.get(command);
         if (cyclesComponent.cycles >= action.cycles) {
-          if (action.constraints()) {
+          if (action.constraints(...params)) {
             cyclesComponent.cycles -= action.cycles;
             this.queuedActions.add(action);
             this.recordAction(command, ...params);

@@ -2,6 +2,7 @@ import {BLACK, BLUE_BRIGHT} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {ChipComponent, ChipType} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
+import {ConnectionComponent} from '../components/connection.js';
 import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
 import {IpComponent} from '../components/ip.js';
@@ -17,12 +18,12 @@ class NodeFactory {
   }
   
   make() {
-    const nodeId = this.manager.nextId();
+    const node1 = this.manager.nextId();
     this.manager.add(
-        nodeId,
-        new ActiveComponent(true),
+        node1,
+        new ActiveComponent(false),
         new NodeComponent(NodeType.WORKSTATION),
-        new SpatialComponent(10, 10, 40, 20),
+        new SpatialComponent(0, 0, 40, 20),
         new StyleComponent(BLUE_BRIGHT, BLACK));
 
     const sentry1 = this.manager.nextId();
@@ -64,8 +65,39 @@ class NodeFactory {
         new IpComponent([10, 10, 1, 1]));
     
     this.manager.add(
-        nodeId,
+        node1,
         new CompositeComponent([chip1, chip2, chip3]));
+    
+    
+    const node2 = this.manager.nextId();
+    this.manager.add(
+        node2,
+        new ActiveComponent(true),
+        new NodeComponent(NodeType.FIREWALL),
+        new SpatialComponent(0, 0, 50, 10),
+        new StyleComponent(BLUE_BRIGHT, BLACK));
+    
+    const chip4 = this.manager.nextId();
+    this.manager.add(
+        chip4,
+        new ActiveComponent(false),
+        new ChipComponent(ChipType.NIC, 'RETNET V.3'),
+        new SpatialComponent(1, 7, 4, 3),
+        new StyleComponent(BLUE_BRIGHT, BLACK),
+        new IdentifiedComponent(false),
+        new CompositeComponent([]),
+        new IpComponent([10, 10, 1, 2]));
+    
+    this.manager.add(
+        node2,
+        new CompositeComponent([chip4]));
+    
+    
+    const conn1 = this.manager.nextId();
+    this.manager.add(
+        conn1,
+        new ConnectionComponent(),
+        new CompositeComponent([chip3, chip4]));
   }
 }
 
