@@ -106,7 +106,7 @@ class ConnectAction extends Action {
     
     const nic1 = firstOf(this.activeChip());
     const nic2 = this.destinationNic(ip);
-    if (!this.hasConnection(nic1, nic2)) {
+    if (!this.hasConnection(nic1.id, nic2.id)) {
       this.events.emit(EventType.LOG, 'CONNECTION NOT AVAILABLE.');
       return;
     }
