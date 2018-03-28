@@ -66,6 +66,14 @@ class ChipRendererSystem extends System {
             .box(dx + 1, dy + 1, spatial.width - 2, spatial.height - 2,
                 BoxType.OUTER, style.foregroundColor, style.backgroundColor);
         break;
+      
+      case ChipType.CAM:
+        const cx = dx + (spatial.width >> 1);
+        const cy = dy + (spatial.height >> 1);
+        draw.box(dx, dy, spatial.width, spatial.height,
+                 BoxType.OUTER, style.foregroundColor, style.backgroundColor)
+            .sprint('O', cx, cy, style.foregroundColor, style.backgroundColor);
+        break;
         
       case ChipType.CPU:
         draw.boxWithChars(dx, dy, spatial.width, spatial.height,
@@ -74,12 +82,12 @@ class ChipRendererSystem extends System {
                 BoxType.OUTER, style.foregroundColor, style.backgroundColor);
         break;
       
-      case ChipType.RAM:
+      case ChipType.NIC:
         draw.box(dx, dy, spatial.width, spatial.height,
                  BoxType.OUTER, style.foregroundColor, style.backgroundColor);
         break;
-      
-      case ChipType.NIC:
+        
+      case ChipType.RAM:
         draw.box(dx, dy, spatial.width, spatial.height,
                  BoxType.OUTER, style.foregroundColor, style.backgroundColor);
         break;

@@ -131,13 +131,13 @@ class StatusRendererSystem extends System {
               .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
         
-        case ChipType.CPU:
-          draw.sprint('CPU', dx, ++dy, BLUE_BRIGHT, BLACK)
+        case ChipType.CAM:
+          draw.sprint('CAMERA', dx, ++dy, BLUE_BRIGHT, BLACK)
               .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
-        
-        case ChipType.RAM:
-          draw.sprint('RAM', dx, ++dy, BLUE_BRIGHT, BLACK)
+          
+        case ChipType.CPU:
+          draw.sprint('CPU', dx, ++dy, BLUE_BRIGHT, BLACK)
               .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
         
@@ -147,6 +147,11 @@ class StatusRendererSystem extends System {
               .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK)
               .sprint('IP', dx, ++dy, BLUE_BRIGHT, BLACK)
               .sprint(ip, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+          break;
+          
+        case ChipType.RAM:
+          draw.sprint('RAM', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
       }
       

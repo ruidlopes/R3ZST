@@ -88,9 +88,19 @@ class NodeFactory {
         new CompositeComponent([]),
         new IpComponent([10, 10, 1, 2]));
     
+    const chip5 = this.manager.nextId();
+    this.manager.add(
+        chip5,
+        new ActiveComponent(false),
+        new ChipComponent(ChipType.CAM, 'RETCAMERA V.3'),
+        new SpatialComponent(7, 7, 6, 3),
+        new StyleComponent(BLUE_BRIGHT, BLACK),
+        new IdentifiedComponent(false),
+        new CompositeComponent([]));
+    
     this.manager.add(
         node2,
-        new CompositeComponent([chip4]));
+        new CompositeComponent([chip4, chip5]));
     
     
     const conn1 = this.manager.nextId();

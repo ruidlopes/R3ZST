@@ -2,9 +2,10 @@ import {enumOf} from '../../stdlib/collections.js';
 
 const ChipType = enumOf(
   'BIOS',
+  'CAM',
   'CPU',
-  'RAM',
   'NIC',
+  'RAM',
 );
 
 class ChipComponent {
