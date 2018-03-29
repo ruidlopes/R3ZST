@@ -7,6 +7,7 @@ import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
 import {IpComponent} from '../components/ip.js';
 import {NodeComponent, NodeType} from '../components/node.js';
+import {RetCamStatusComponent} from '../components/retcamstatus.js';
 import {SentryComponent, SentryCapabilities} from '../components/sentry.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
@@ -96,6 +97,7 @@ class NodeFactory {
         new SpatialComponent(7, 6, 6, 4),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
+        new RetCamStatusComponent(),
         new CompositeComponent([]));
     
     this.manager.add(

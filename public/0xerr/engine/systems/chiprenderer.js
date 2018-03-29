@@ -1,3 +1,4 @@
+import {RED_BRIGHT} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
 import {ChipComponent, ChipType} from '../components/chip.js';
@@ -6,6 +7,7 @@ import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
 import {NodeComponent} from '../components/node.js';
+import {RetCamStatusComponent, RetCamStatus} from '../components/retcamstatus.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
 import {System} from '../system.js';
@@ -39,7 +41,12 @@ class ChipRendererSystem extends System {
   chips() {
     return this.manager.query(this.activeNodeCompositeIds())
         .filter(ChipComponent)
-        .iterate(ChipComponent, SpatialComponent, StyleComponent, IdentifiedComponent);
+        .iterate(
+            ChipComponent,
+            SpatialComponent,
+            StyleComponent,
+            IdentifiedComponent,
+            RetCamStatusComponent);
   }
   
   frame(delta) {
@@ -76,8 +83,12 @@ class ChipRendererSystem extends System {
         break;
       
       case ChipType.CAM:
+        const status = chip.get(RetCamStatusComponent).status;
+        const foreground = status == RetCamStatus.DISCONNECTED ?
+            RED_BRIGHT :
+            style.foregroundColor;
         draw.box(dx, dy, spatial.width, spatial.height,
-                 BoxType.DOUBLE, style.foregroundColor, style.backgroundColor);
+                 BoxType.DOUBLE, foreground, style.backgroundColor);
         break;
         
       case ChipType.CPU:

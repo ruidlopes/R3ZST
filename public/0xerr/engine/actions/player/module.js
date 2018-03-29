@@ -3,6 +3,7 @@ import {Action} from '../../action.js';
 import {ChipIdAction} from './chipid.js';
 import {ConnectAction} from './connect.js';
 import {EndTurnAction} from './endturn.js';
+import {RetCamKillAction} from './retcamkill.js';
 import {Module} from '../../../injection/module.js';
 
 class PlayerActionsModule extends Module {
@@ -10,6 +11,7 @@ class PlayerActionsModule extends Module {
     this.bindClassIntoSet(Action, PLAYER, ChipIdAction);
     this.bindClassIntoSet(Action, PLAYER, ConnectAction);
     this.bindClassIntoSet(Action, PLAYER, EndTurnAction);
+    this.bindClassIntoSet(Action, PLAYER, RetCamKillAction);
   }
 }
 

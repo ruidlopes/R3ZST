@@ -89,7 +89,7 @@ class ConnectAction extends Action {
     }
     
     if (activeChip.get(ChipComponent).type != ChipType.NIC) {
-      this.events.emit(EventType.LOG, 'INVALID CHIP TYPE');
+      this.events.emit(EventType.LOG, 'INVALID CHIP.');
       return false;
     }
     
