@@ -15,6 +15,7 @@ import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
 import {IpComponent} from '../components/ip.js';
 import {NodeComponent, NodeType} from '../components/node.js';
+import {RetCamStatusComponent, RetCamStatus} from '../components/retcamstatus.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
@@ -78,7 +79,11 @@ class StatusRendererSystem extends System {
     const chipIds = this.activeNode().get(CompositeComponent).ids;
     return this.manager.query(chipIds)
         .filter(ChipComponent)
-        .iterate(ChipComponent, IdentifiedComponent, IpComponent);
+        .iterate(
+            ChipComponent,
+            IdentifiedComponent,
+            IpComponent,
+            RetCamStatusComponent);
   }
   
   renderFrame(delta) {
@@ -132,8 +137,11 @@ class StatusRendererSystem extends System {
           break;
         
         case ChipType.CAM:
+          const status = enumLabel(RetCamStatus, chip.get(RetCamStatusComponent).status);
           draw.sprint('CAMERA', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK)
+              .sprint('STATUS', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(status, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
           
         case ChipType.CPU:
