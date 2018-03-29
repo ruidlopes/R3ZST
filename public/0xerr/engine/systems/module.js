@@ -1,12 +1,12 @@
 import {
-  BOOT,
-  
   MAIN_SCENE_GLOBAL,
   MAIN_SCENE_INPUT,
   MAIN_SCENE_UPDATE,
   MAIN_SCENE_RENDER,
   
+  BOOT,
   DISCONNECTED,
+  VICTORY,
 } from './qualifiers.js';
 
 import {BootSystem} from './boot.js';
@@ -30,6 +30,7 @@ import {TerminalRendererSystem} from './terminalrenderer.js';
 import {TurnManagementSystem} from './turnmanagement.js';
 import {StatusRendererSystem} from './statusrenderer.js';
 import {System} from '../system.js';
+import {VictorySystem} from './victory.js';
 import {ViewFocusSystem} from './viewfocus.js';
 import {ViewSpatialSystem} from './viewspatial.js';
 
@@ -63,6 +64,8 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, StatusRendererSystem);
     
     this.bindClassIntoSet(System, DISCONNECTED, DisconnectedSystem);
+    
+    this.bindClassIntoSet(System, VICTORY, VictorySystem);
   }
 }
 

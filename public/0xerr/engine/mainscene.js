@@ -5,6 +5,7 @@ import {
   MAIN_SCENE_UPDATE,
   MAIN_SCENE_RENDER,
   DISCONNECTED,
+  VICTORY,
 } from './systems/qualifiers.js';
 
 import {EventManager} from './event/manager.js';
@@ -18,6 +19,7 @@ const States = enumOf(
   'BOOT',
   'GAMELOOP',
   'DISCONNECTED',
+  'VICTORY',
 );
 
 class MainScene extends Scene {
@@ -29,6 +31,7 @@ class MainScene extends Scene {
       updateSystems = ijset(System, MAIN_SCENE_UPDATE),
       renderSystems = ijset(System, MAIN_SCENE_RENDER),
       disconnectedSystems = ijset(System, DISCONNECTED),
+      victorySystems = ijset(System, VICTORY),
   ) {
     super();
     
@@ -42,6 +45,9 @@ class MainScene extends Scene {
     this.events.subscribe(
         EventType.DISCONNECTED,
         () => this.sm.jump(States.DISCONNECTED));
+    this.events.subscribe(
+        EventType.VICTORY,
+        () => this.sm.jump(States.VICTORY));
     
     this.bootSystems = bootSystems;
     this.globalSystems = globalSystems;
@@ -49,10 +55,12 @@ class MainScene extends Scene {
     this.updateSystems = updateSystems;
     this.renderSystems = renderSystems;
     this.disconnectedSystems = disconnectedSystems;
+    this.victorySystems = victorySystems;
     
     this.sm.fixed(States.BOOT, (delta) => this.boot(delta));
     this.sm.fixed(States.GAMELOOP, (delta) => this.gameLoop(delta));
     this.sm.fixed(States.DISCONNECTED, (delta) => this.disconnected(delta));
+    this.sm.fixed(States.VICTORY, (delta) => this.victory(delta));
     this.sm.jump(States.BOOT);
   }
   
@@ -69,6 +77,10 @@ class MainScene extends Scene {
   
   disconnected(delta) {
     this.systemClusterFrame(this.disconnectedSystems, delta);
+  }
+  
+  victory(delta) {
+    this.systemClusterFrame(this.victorySystems, delta);
   }
   
   systemClusterFrame(systemCluster, delta) {

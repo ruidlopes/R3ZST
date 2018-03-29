@@ -1,6 +1,8 @@
+import {ChipComponent, ChipType} from '../components/chip.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
+import {RetCamStatusComponent, RetCamStatus} from '../components/retcamstatus.js';
 import {StealthComponent, STEALTH_MAX} from '../components/stealth.js';
 import {System} from '../system.js';
 import {clamp} from '../../stdlib/math.js';
@@ -9,10 +11,10 @@ import {ij} from '../../injection/api.js';
 
 class GameEndingSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
       events = ij(EventManager)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
     this.events = events;
         
     this.events.subscribe(
@@ -21,11 +23,18 @@ class GameEndingSystem extends System {
   }
   
   stealthComponent() {
-    return firstOf(this.manager.query()
+    return firstOf(this.entities.query()
         .filter(StealthComponent)
         .first()
         .iterate(StealthComponent))
         .get(StealthComponent);
+  }
+  
+  notDisconnectedRetCamCount() {
+    return this.entities.query()
+        .filter(ChipComponent, chip => chip.type == ChipType.CAM)
+        .filter(RetCamStatusComponent, component => component.status != RetCamStatus.DISCONNECTED)
+        .count();
   }
   
   updateStealth(delta) {
@@ -38,7 +47,11 @@ class GameEndingSystem extends System {
     }
   }
   
-  frame(delta) {}
+  frame(delta) {
+    if (this.notDisconnectedRetCamCount() == 0) {
+      this.events.emit(EventType.VICTORY);
+    }
+  }
 }
 
 export {GameEndingSystem};

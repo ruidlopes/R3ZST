@@ -7,6 +7,8 @@ const MAIN_SCENE_RENDER = Symbol('MS_RENDER');
 
 const DISCONNECTED = Symbol('DISCONNECTED');
 
+const VICTORY = Symbol('VICTORY');
+
 export {
   BOOT,
   
@@ -16,4 +18,6 @@ export {
   MAIN_SCENE_RENDER,
   
   DISCONNECTED,
+  
+  VICTORY,
 };
