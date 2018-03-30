@@ -1,9 +1,10 @@
 import {PLAYER} from '../actions/qualifiers.js';
-import {Action} from '../action.js';
+import {Action, ActionRefreshEnum} from '../action.js';
 import {ActiveComponent} from '../components/active.js';
 import {ChipComponent} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
+import {DeckComponent} from '../components/deck.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
@@ -29,6 +30,12 @@ class PlayerActionsSystem extends System {
     this.events.subscribe(
         EventType.TEXT_INPUT,
         (id) => this.input(id));
+    this.events.subscribe(
+        EventType.NODE,
+        () => this.refreshDeckNode());
+    this.events.subscribe(
+        EventType.END_TURN,
+        (turn) => turn == TurnEnum.PLAYER && this.refreshDeckTurn());
   }
   
   terminalViewChildren() {
@@ -75,6 +82,13 @@ class PlayerActionsSystem extends System {
         .iterate(ActiveComponent);
   }
   
+  deck() {
+    return firstOf(this.manager.query()
+        .filter(DeckComponent)
+        .iterate(DeckComponent))
+        .get(DeckComponent);
+  }
+  
   recordAction(...params) {
     const turnActions = this.turnActionsComponent();
     if (isEmpty(this.activeChip()) ||
@@ -106,19 +120,31 @@ class PlayerActionsSystem extends System {
       
       if (this.actions.has(command)) {
         const action = this.actions.get(command);
-        if (cyclesComponent.cycles >= action.cycles) {
-          if (action.constraints(...params)) {
-            cyclesComponent.cycles -= action.cycles;
-            this.queuedActions.add(action);
-            this.recordAction(command, ...params);
-            
-            action.start(...params);
-            this.events.emit(EventType.ACTION_START);
+        const deck = this.deck().items;
+        const count = deck.get(command);
+        
+        if (count == Infinity || count > 0) {
+          if (cyclesComponent.cycles >= action.cycles) {
+            if (action.constraints(...params)) {
+              cyclesComponent.cycles -= action.cycles;
+              this.queuedActions.add(action);
+              this.recordAction(command, ...params);
+              if (count != Infinity) {
+                deck.set(command, count - 1);
+              }
+              
+              action.start(...params);
+              this.events.emit(EventType.ACTION_START);
+            }
+          } else {
+            this.events.emit(
+                EventType.LOG,
+                'INSUFFICIENT CYCLES THIS TURN.');
           }
-        } else {
+        } else if (count == 0) {
           this.events.emit(
               EventType.LOG,
-              'INSUFFICIENT CYCLES THIS TURN.');
+              'SCRIPT IS EXHAUSTED.');
         }
       } else {
         this.events.emit(EventType.LOG, `UNKNOWN ACTION '${command}'`);
@@ -127,6 +153,24 @@ class PlayerActionsSystem extends System {
     
     textInput.text = '';
     textInput.cursor = 0;
+  }
+  
+  refreshDeckNode() {
+    this.refreshDeck(ActionRefreshEnum.NODE);
+  }
+  
+  refreshDeckTurn() {
+    this.refreshDeck(ActionRefreshEnum.TURN);
+  }
+  
+  refreshDeck(type) {
+    const deck = this.deck().items;
+    for (const key of deck.keys()) {
+      const action = this.actions.get(key);
+      if (action.refresh == type) {
+        deck.set(key, action.limit);
+      }
+    }
   }
   
   frame(delta) {

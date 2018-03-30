@@ -8,6 +8,7 @@ const EventType = enumOf(
   'DISCONNECTED',
   'END_TURN',
   'LOG',
+  'NODE',
   'PLAYER_INSIDE_CHIP',
   'PLAYER_OUTSIDE_CHIPS',
   'STEALTH_UPDATE',

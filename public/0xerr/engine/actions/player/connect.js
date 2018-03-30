@@ -127,6 +127,7 @@ class ConnectAction extends Action {
     
     this.destinationNodeActive(nic2.id).active = true;
     
+    this.events.emit(EventType.NODE);
     this.events.emit(EventType.LOG, 'CONNECTED');
   }
 }

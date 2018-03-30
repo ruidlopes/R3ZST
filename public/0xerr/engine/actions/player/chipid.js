@@ -1,4 +1,4 @@
-import {Action} from '../../action.js';
+import {Action, ActionRefreshEnum} from '../../action.js';
 import {ActiveComponent} from '../../components/active.js';
 import {ChipComponent, ChipType} from '../../components/chip.js';
 import {EntityManager} from '../../entity/manager.js';
@@ -17,6 +17,8 @@ class ChipIdAction extends Action {
     this.events = events;
     
     this.cycles = 1;
+    this.limit = 3;
+    this.refresh = ActionRefreshEnum.NODE;
   }
   
   activeChip() {
