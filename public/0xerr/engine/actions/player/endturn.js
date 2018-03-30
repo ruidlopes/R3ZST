@@ -9,7 +9,6 @@ class EndTurnAction extends Action {
     super();
     this.events = events;
     
-    this.command = 'ENDTURN';
     this.cycles = 0;
   }
   

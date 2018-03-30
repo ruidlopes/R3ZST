@@ -13,16 +13,15 @@ import {TurnActionsComponent} from '../components/turnactions.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf, isEmpty} from '../../stdlib/collections.js';
-import {ij, ijset} from '../../injection/api.js';
+import {ij, ijmap} from '../../injection/api.js';
 
 class PlayerActionsSystem extends System {
   constructor(
-      actions = ijset(Action, PLAYER),
+      actions = ijmap(Action, PLAYER),
       manager = ij(EntityManager),
       events = ij(EventManager)) {
     super();
     this.actions = actions;
-    this.keyedActions = this.createKeyedActions();
     this.queuedActions = new Set();
         
     this.manager = manager;
@@ -30,14 +29,6 @@ class PlayerActionsSystem extends System {
     this.events.subscribe(
         EventType.TEXT_INPUT,
         (id) => this.input(id));
-  }
-  
-  createKeyedActions() {
-    const keyed = new Map();
-    for (const action of this.actions) {
-      keyed.set(action.command, action);
-    }
-    return keyed;
   }
   
   terminalViewChildren() {
@@ -113,8 +104,8 @@ class PlayerActionsSystem extends System {
       const params = tokens;
       const cyclesComponent = this.cyclesComponent();
       
-      if (this.keyedActions.has(command)) {
-        const action = this.keyedActions.get(command);
+      if (this.actions.has(command)) {
+        const action = this.actions.get(command);
         if (cyclesComponent.cycles >= action.cycles) {
           if (action.constraints(...params)) {
             cyclesComponent.cycles -= action.cycles;

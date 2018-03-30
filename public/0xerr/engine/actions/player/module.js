@@ -8,10 +8,10 @@ import {Module} from '../../../injection/module.js';
 
 class PlayerActionsModule extends Module {
   configure() {
-    this.bindClassIntoSet(Action, PLAYER, ChipIdAction);
-    this.bindClassIntoSet(Action, PLAYER, ConnectAction);
-    this.bindClassIntoSet(Action, PLAYER, EndTurnAction);
-    this.bindClassIntoSet(Action, PLAYER, RetCamKillAction);
+    this.bindClassIntoMap(Action, PLAYER, 'CHIPID', ChipIdAction);
+    this.bindClassIntoMap(Action, PLAYER, 'CONNECT', ConnectAction);
+    this.bindClassIntoMap(Action, PLAYER, 'ENDTURN', EndTurnAction);
+    this.bindClassIntoMap(Action, PLAYER, 'RETCAMKILL', RetCamKillAction);
   }
 }
 

@@ -22,7 +22,6 @@ class ConnectAction extends Action {
     this.entities = entities;
     this.events = events;
     
-    this.command = 'CONNECT';
     this.cycles = 4;
   }
   

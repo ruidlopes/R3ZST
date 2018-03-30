@@ -11,6 +11,9 @@ class Injector {
     this.setBindings = new Map();
     this.setInstances = new Map();
     
+    this.mapBindings = new Map();
+    this.mapInstances = new Map();
+    
     this.provideInstance(Injector, this);
   }
   
@@ -55,6 +58,20 @@ class Injector {
     return this.setInstances.get(key);
   }
   
+  getMapInstance(type, qualifier = DEFAULT_QUALIFIER) {
+    return this.getMapInstanceForKey(this.keyFor(type, qualifier));
+  }
+  
+  getMapInstanceForKey(key) {
+    if (!this.mapInstances.has(key)) {
+      this.mapInstances.set(key, new Map());
+      for (const [mapKey, mapValue] of this.mapBindings.get(key)) {
+        this.mapInstances.get(key).set(mapKey, mapValue.instance());
+      }
+    }
+    return this.mapInstances.get(key);
+  }
+  
   provide(type, qualifier = DEFAULT_QUALIFIER) {
     this.provideForKey(
         this.keyFor(type, qualifier),
@@ -90,6 +107,31 @@ class Injector {
       this.setBindings.set(key, new Set());
     }
     this.setBindings.get(key).add(instancer);
+  }
+  
+  provideIntoMap(type, ...params) {
+    const qualifier = params.length == 3 ? params[0] : DEFAULT_QUALIFIER;
+    const key = params.length == 3 ? params[1] : params[0];
+    const clazz = params.length == 3 ? params[2] : params[1];
+    this.provideIntoMapForKey(
+        this.keyFor(type, qualifier),
+        key, new ClassInstancer(clazz));
+  }
+  
+  provideInstanceIntoMap(type, ...params) {
+    const qualifier = params.length == 3 ? params[0] : DEFAULT_QUALIFIER;
+    const key = params.length == 3 ? params[1] : params[0];
+    const clazz = params.length == 3 ? params[2] : params[1];
+    this.provideIntoMapForKey(
+        this.keyFor(type, qualifier),
+        key, new InstanceInstancer(clazz));
+  }
+  
+  provideIntoMapForKey(key, mapKey, instancer) {
+    if (!this.mapBindings.has(key)) {
+      this.mapBindings.set(key, new Map());
+    }
+    this.mapBindings.get(key).set(mapKey, instancer);
   }
 }
 

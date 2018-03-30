@@ -6,6 +6,9 @@ class Module {
     this.classesSets = new Set();
     this.instancesSets = new Set();
     
+    this.classesMaps = new Set();
+    this.instancesMaps = new Set();
+    
     this.modules = new Set();
   }
   
@@ -26,6 +29,12 @@ class Module {
     for (const params of this.instancesSets) {
       injector.provideInstanceIntoSet(...params);
     }
+    for (const params of this.classesMaps) {
+      injector.provideIntoMap(...params);
+    }
+    for (const params of this.instancesMaps) {
+      injector.provideInstanceIntoMap(...params);
+    }
     
     injector.install(...this.modules);
   }
@@ -38,12 +47,20 @@ class Module {
     this.classesSets.add(params);
   }
   
+  bindClassIntoMap(...params) {
+    this.classesMaps.add(params);
+  }
+  
   bindInstance(...params) {
     this.instances.add(params);
   }
   
   bindInstanceIntoSet(...params) {
     this.instancesSets.add(params);
+  }
+  
+  bindInstanceIntoMap(...params) {
+    this.instancesMap.add(params);
   }
   
   install(...modules) {

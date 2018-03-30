@@ -16,7 +16,6 @@ class ChipIdAction extends Action {
     this.manager = manager;
     this.events = events;
     
-    this.command = 'CHIPID';
     this.cycles = 1;
   }
   
