@@ -1,4 +1,17 @@
+import {enumOf} from '../stdlib/collections.js';
+
+const ActionRefreshEnum = enumOf(
+  'TURN',
+  'NODE',
+  'ZERO',
+);
+
 class Action {
+  constructor() {
+    this.limit = Infinity;
+    this.refresh = ActionRefreshEnum.TURN;
+  }
+  
   constraints() {
     return true;
   }
@@ -12,4 +25,7 @@ class Action {
   frame(delta) {}
 }
 
-export {Action};
+export {
+  Action,
+  ActionRefreshEnum,
+};
