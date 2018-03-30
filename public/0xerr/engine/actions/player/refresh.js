@@ -29,6 +29,12 @@ class RefreshAction extends Action {
           `${target} SCRIPT DOES NOT EXIST.`);
       return false;
     }
+    if (this.actions.get(target).limit == Infinity) {
+      this.events.emit(
+          EventType.LOG,
+          `${target} IS ALREADY UNLIMITED`);
+      return false;
+    }
     return true;
   }
   
@@ -43,6 +49,9 @@ class RefreshAction extends Action {
     const deck = this.deck().items;
     const action = this.actions.get(target);
     deck.set(target, action.limit);
+    this.events.emit(
+        EventType.LOG,
+        `REFRESHED ${target} TO ${action.limit}.`);
   }
 }
 
