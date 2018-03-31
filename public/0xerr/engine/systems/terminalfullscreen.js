@@ -1,4 +1,6 @@
 import {EntityManager} from '../entity/manager.js';
+import {EventManager} from '../event/manager.js';
+import {EventType} from '../event/type.js';
 import {Keyboard} from '../../observers/keyboard.js';
 import {KeyModifiers} from '../../observers/keyboard/modifiers.js';
 import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
@@ -16,10 +18,12 @@ const MIN_HEIGHT = 20;
 class TerminalFullScreenSystem extends System {
   constructor(
       entities = ij(EntityManager),
+      events = ij(EventManager),
       keyboard = ij(Keyboard),
       viewport = ij(Viewport)) {
     super();
     this.entities = entities;
+    this.events = events;
     this.keyboard = keyboard;
     this.viewport = viewport;
         
@@ -27,7 +31,9 @@ class TerminalFullScreenSystem extends System {
     this.animating = false;
     this.isFullscreen = false;
     
-    this.initialized = false;
+    this.events.subscribe(
+        EventType.CONNECTED,
+        () => this.initialize());
   }
   
   terminalSpatial() {
@@ -37,14 +43,15 @@ class TerminalFullScreenSystem extends System {
         .get(SpatialComponent);
   }
   
+  initialize() {
+    const spatial = this.terminalSpatial();
+    const screenHeight = this.viewport.screenHeight();
+    spatial.y = screenHeight - MIN_HEIGHT;
+  }
+  
   frame(delta) {
     const spatial = this.terminalSpatial();
     const screenHeight = this.viewport.screenHeight();
-    
-    if (!this.initialized) {  
-      spatial.y = screenHeight - MIN_HEIGHT;
-      this.initialized = true;
-    }
     
     if (this.keyboard.releasedAny(this.shortcutFullscreen)) {
       this.isFullscreen = !this.isFullscreen;
