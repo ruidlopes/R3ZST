@@ -40,7 +40,7 @@ function vline(buffer, x, y, height, charByte, foregroundColor, backgroundColor,
     return;
   }
   
-  const startY = Math.max(y, clipY);
+  const startY = Math.max(y, clipY, 0);
   const endY = Math.min(clipEndY, y + height);
   
   for (let yy = startY; yy < endY; ++yy) {
@@ -64,7 +64,7 @@ function hline(buffer, x, y, width, charByte, foregroundColor, backgroundColor, 
   const clipEndX = clipping ? clipping.x + clipping.width : buffer.width;
   const clipEndY = clipping ? clipping.y + clipping.height : buffer.height;
   
-  if (y < clipY || y >= clipEndY) {
+  if (y < 0 || y < clipY || y >= clipEndY) {
     return;
   }
   
@@ -101,7 +101,8 @@ function putCxel(buffer, x, y, charByte, foregroundColor, backgroundColor, clipp
   const endX = Math.min(clipEndX, x + 1);
   const endY = Math.min(clipEndY, y + 1);
   
-  if (x >= startX && x < endX && y >= startY && y < endY) {
+  if (x >= 0 && x >= startX && x < endX &&
+      y >= 0 && y >= startY && y < endY) {
     buffer.chars.data[buffer.chars.offset(x, y)] = charByte;
     buffer.foreground.data.set(foregroundColor.data, buffer.foreground.offset(x, y));
     buffer.background.data.set(backgroundColor.data, buffer.background.offset(x, y));
