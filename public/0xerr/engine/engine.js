@@ -60,11 +60,8 @@ class Engine {
   }
   
   resize() {
-    if (this.viewport.needsLayout(this)) {
-      this.viewport.resizeClient(this);
-      this.viewport.resizeRenderer(this.renderer);
-      this.viewport.resizeScreen(this.screen);
-    }
+    this.viewport.resizeRenderer(this.renderer);
+    this.viewport.resizeScreen(this.screen);
   }
   
   update(timestamp) {
