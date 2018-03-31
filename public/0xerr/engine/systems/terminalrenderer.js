@@ -53,12 +53,15 @@ class TerminalRendererSystem extends System {
         BLUE_BRIGHT :
         BLUE_FADED;
     
+    const x = Math.floor(spatial.x);
+    const y = Math.floor(spatial.y);
+    const width = Math.floor(spatial.width);
+    const height = Math.floor(spatial.height);
+    
     this.drawing.absolute()
-        .box(spatial.x, spatial.y, spatial.width, spatial.height,
-            BoxType.SINGLE, foreground, BLACK)
-        .rect(spatial.x + 1, spatial.y + 1, spatial.width - 2, spatial.height - 2,
-            0x00, foreground, BLACK)
-        .sprint('TERMINAL', spatial.x + 2, spatial.y, foreground, BLACK);
+        .box(x, y, width, height, BoxType.SINGLE, foreground, BLACK)
+        .rect(x + 1, y + 1, width - 2, height - 2, 0x00, foreground, BLACK)
+        .sprint('TERMINAL', x + 2, y, foreground, BLACK);
   }
   
   renderTextBuffer(delta) {

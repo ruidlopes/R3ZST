@@ -24,12 +24,14 @@ class ViewSpatialSystem extends System {
         .iterate(SpatialComponent, ViewComponent);
   }
   
-  resizeTerminalChildren() {
-    const terminalView = firstOf(this.manager.query()
+  terminalView() {
+    return firstOf(this.manager.query()
         .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .first()
         .iterate(CompositeComponent, SpatialComponent));
-    
+  }
+  
+  resizeTerminalChildren() {
+    const terminalView = this.terminalView();
     const terminalViewSpatial = terminalView.get(SpatialComponent);
     const ids = terminalView.get(CompositeComponent).ids;
     
@@ -40,9 +42,9 @@ class ViewSpatialSystem extends System {
         .get(SpatialComponent);
     
     textBufferSpatial.x = terminalViewSpatial.x + 1;
-    textBufferSpatial.y = terminalViewSpatial.y + 1;
+    textBufferSpatial.y = Math.floor(terminalViewSpatial.y) + 1;
     textBufferSpatial.width = terminalViewSpatial.width - 2;
-    textBufferSpatial.height = terminalViewSpatial.height - 3;
+    textBufferSpatial.height = Math.floor(terminalViewSpatial.height) - 3;
     
     const textInputSpatial = firstOf(this.manager.query(ids)
         .filter(TextInputComponent)
@@ -51,7 +53,8 @@ class ViewSpatialSystem extends System {
         .get(SpatialComponent);
     
     textInputSpatial.x = terminalViewSpatial.x + 1;
-    textInputSpatial.y = terminalViewSpatial.y + terminalViewSpatial.height - 2;
+    textInputSpatial.y = Math.floor(terminalViewSpatial.y) +
+        Math.floor(terminalViewSpatial.height) - 2;
     textInputSpatial.width = terminalViewSpatial.width - 2;
     textInputSpatial.height = 1;
   }
@@ -64,14 +67,12 @@ class ViewSpatialSystem extends System {
           spatial.x = 0;
           spatial.y = 0;
           spatial.width = this.viewport.screenWidth() - 25;
-          spatial.height = this.viewport.screenHeight() - 20;
+          spatial.height = this.terminalView().get(SpatialComponent).y;
           break;
           
         case ViewType.TERMINAL:
           spatial.x = 0;
-          spatial.y = this.viewport.screenHeight() - 20;
           spatial.width = this.viewport.screenWidth() - 25;
-          spatial.height = 20;
           this.resizeTerminalChildren();
           break;
           

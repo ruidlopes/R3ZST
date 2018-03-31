@@ -25,6 +25,7 @@ import {PlayerVelocitySystem} from './playervelocity.js';
 import {RetsafeActionsSystem} from './retsafeactions.js';
 import {SentryRendererSystem} from './sentryrenderer.js';
 import {TerminalBufferSystem} from './terminalbuffer.js';
+import {TerminalFullScreenSystem} from './terminalfullscreen.js';
 import {TerminalInputSystem} from './terminalinput.js';
 import {TerminalRendererSystem} from './terminalrenderer.js';
 import {TurnManagementSystem} from './turnmanagement.js';
@@ -44,6 +45,7 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, GameEndingSystem);
 
     this.bindClassIntoSet(System, MAIN_SCENE_INPUT, ViewFocusSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_INPUT, TerminalFullScreenSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_INPUT, TerminalInputSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_INPUT, PlayerVelocitySystem);
     
