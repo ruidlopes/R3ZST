@@ -1,7 +1,6 @@
 import {ActiveComponent} from '../components/active.js';
 import {EntityManager} from '../entity/manager.js';
 import {Keyboard} from '../../observers/keyboard.js';
-import {KeyModifiers} from '../../observers/keyboard/modifiers.js';
 import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
 import {System} from '../system.js';
 import {ViewComponent, ViewType} from '../components/view.js';
@@ -27,17 +26,21 @@ class ViewFocusSystem extends System {
   
   frame(delta) {
     if (this.keyboard.releasedAny(this.shortcutNext)) {
-      const views = this.views();
-      const current = views.find(
-          view => view.get(ActiveComponent).active);
-      const currentIndex = this.indexOf(current);
-      const nextIndex = (currentIndex + 1) % 2;
-      const next = views.find(
-          view => view.get(ViewComponent).type == VIEW_ORDER[nextIndex]);
-
-      current.get(ActiveComponent).active = false;
-      next.get(ActiveComponent).active = true;
+      this.next(delta);
     }
+  }
+  
+  next(delta) {
+    const views = this.views();
+    const current = views.find(
+        view => view.get(ActiveComponent).active);
+    const currentIndex = this.indexOf(current);
+    const nextIndex = (currentIndex + 1) % 2;
+    const next = views.find(
+        view => view.get(ViewComponent).type == VIEW_ORDER[nextIndex]);
+
+    current.get(ActiveComponent).active = false;
+    next.get(ActiveComponent).active = true;
   }
   
   indexOf(entityView) {
