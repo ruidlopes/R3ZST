@@ -19,6 +19,7 @@ class TerminalRendererSystem extends System {
     super();
     this.manager = manager;
     this.drawing = drawing;
+    this.deltaAcc = 0;
   }
   
   terminalView() {
@@ -99,14 +100,18 @@ class TerminalRendererSystem extends System {
     const inputStart = Math.max(textInput.cursor - maxInputWidth, 0);
     const text = textInput.text.substr(inputStart, maxInputWidth);
     
-    const cursorX = textInput.cursor - inputStart; 
+    const cursorX = textInput.cursor - inputStart;
+    const active = this.terminalView().get(ActiveComponent).active;
+    this.deltaAcc = (this.deltaAcc + delta) % 1000;
+    const cursorForeground = active && this.deltaAcc < 500 ? BLACK : BLUE_BRIGHT;
+    const cursorBackground = active && this.deltaAcc < 500 ? BLUE_BRIGHT : BLACK;
     
     this.drawing.clipping(textInputSpatial)
         .sprint('>', textInputSpatial.x, textInputSpatial.y, BLUE_BRIGHT, BLACK)
         .sprint(text, textInputSpatial.x + 1, textInputSpatial.y, BLUE_BRIGHT, BLACK)
         .sprint(text[cursorX] || ' ',
             textInputSpatial.x + 1 + cursorX, textInputSpatial.y,
-            BLACK, BLUE_BRIGHT);
+            cursorForeground, cursorBackground);
   }
   
   frame(delta) {
