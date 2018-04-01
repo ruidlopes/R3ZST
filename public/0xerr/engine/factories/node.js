@@ -1,6 +1,14 @@
 import {BLACK, BLUE_BRIGHT} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
-import {ChipComponent, ChipType} from '../components/chip.js';
+import {
+  ChipComponent,
+  ChipType,
+  ChipBiosVersion,
+  ChipCamVersion,
+  ChipCpuVersion,
+  ChipMemVersion,
+  ChipNicVersion,
+} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {ConnectionComponent} from '../components/connection.js';
 import {EntityManager} from '../entity/manager.js';
@@ -11,6 +19,7 @@ import {RetCamStatusComponent} from '../components/retcamstatus.js';
 import {SentryComponent, SentryCapabilities} from '../components/sentry.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
+import {enumValue} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class NodeFactory {
@@ -38,7 +47,7 @@ class NodeFactory {
     this.manager.add(
         chip1,
         new ActiveComponent(false),
-        new ChipComponent(ChipType.CPU, 'RET V.33'),
+        new ChipComponent(ChipType.CPU, enumValue(ChipCpuVersion, 'RET.ARM R8')),
         new SpatialComponent(4, 4, 12, 12),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
@@ -48,7 +57,7 @@ class NodeFactory {
     this.manager.add(
         chip2,
         new ActiveComponent(false),
-        new ChipComponent(ChipType.BIOS, 'RETBIOS V.1'),
+        new ChipComponent(ChipType.BIOS, enumValue(ChipBiosVersion, 'RET.BIOS EMBED')),
         new SpatialComponent(18, 4, 4, 4),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
@@ -58,7 +67,7 @@ class NodeFactory {
     this.manager.add(
         chip3,
         new ActiveComponent(false),
-        new ChipComponent(ChipType.NIC, 'RETNET V.2'),
+        new ChipComponent(ChipType.NIC, enumValue(ChipNicVersion, 'RET.NET GIGA1')),
         new SpatialComponent(37, 4, 3, 4),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
@@ -82,7 +91,7 @@ class NodeFactory {
     this.manager.add(
         chip4,
         new ActiveComponent(false),
-        new ChipComponent(ChipType.NIC, 'RETNET V.3'),
+        new ChipComponent(ChipType.NIC, enumValue(ChipNicVersion, 'RET.NET FIBER1')),
         new SpatialComponent(1, 7, 4, 3),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
@@ -93,7 +102,7 @@ class NodeFactory {
     this.manager.add(
         chip5,
         new ActiveComponent(false),
-        new ChipComponent(ChipType.CAM, 'RETCAMERA V.3'),
+        new ChipComponent(ChipType.CAM, enumValue(ChipCamVersion, 'RETINA CAM1')),
         new SpatialComponent(7, 6, 6, 4),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),

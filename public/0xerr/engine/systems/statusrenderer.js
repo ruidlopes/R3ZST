@@ -9,7 +9,15 @@ import {PLAYER} from '../actions/qualifiers.js';
 import {Action, ActionRefreshEnum} from '../action.js';
 import {ActiveComponent} from '../components/active.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
-import {ChipComponent, ChipType} from '../components/chip.js';
+import {
+  ChipComponent,
+  ChipType,
+  ChipBiosVersion,
+  ChipCamVersion,
+  ChipCpuVersion,
+  ChipMemVersion,
+  ChipNicVersion,
+} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
 import {DeckComponent} from '../components/deck.js';
@@ -168,40 +176,43 @@ class StatusRendererSystem extends System {
       }
       
       const component = chip.get(ChipComponent);
-      const version = component.version;
-      
       switch (component.type) {
         case ChipType.BIOS:
+          const biosVersion = enumLabel(ChipBiosVersion, component.version);
           draw.sprint('NODE', dx, ++dy, BLUE_BRIGHT, BLACK)
               .sprint(enumLabel(NodeType, type), dx + 8, dy, ORANGE_BRIGHT, BLACK)
               .sprint('BIOS', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+              .sprint(biosVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
         
         case ChipType.CAM:
+          const camVersion = enumLabel(ChipCamVersion, component.version);
           const status = enumLabel(RetCamStatus, chip.get(RetCamStatusComponent).status);
           draw.sprint('CAMERA', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK)
+              .sprint(camVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK)
               .sprint('STATUS', dx, ++dy, BLUE_BRIGHT, BLACK)
               .sprint(status, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
           
         case ChipType.CPU:
+          const cpuVersion = enumLabel(ChipCpuVersion, component.version);
           draw.sprint('CPU', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+              .sprint(cpuVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
         
-        case ChipType.NIC:
-          const ip = chip.get(IpComponent).ip.join('.');
-          draw.sprint('NIC', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK)
-              .sprint('IP', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(ip, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+        case ChipType.MEM:
+          const memVersion = enumLabel(ChipMemVersion, component.version);
+          draw.sprint('RAM', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(memVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
           
-        case ChipType.RAM:
-          draw.sprint('RAM', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(version, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+        case ChipType.NIC:
+          const nicVersion = enumLabel(ChipNicVersion, component.version);
+          const ip = chip.get(IpComponent).ip.join('.');
+          draw.sprint('NIC', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(nicVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK)
+              .sprint('IP', dx, ++dy, BLUE_BRIGHT, BLACK)
+              .sprint(ip, dx + 8, dy, ORANGE_BRIGHT, BLACK);
           break;
       }
       

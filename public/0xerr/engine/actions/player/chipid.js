@@ -1,6 +1,14 @@
 import {Action, ActionRefreshEnum} from '../../action.js';
 import {ActiveComponent} from '../../components/active.js';
-import {ChipComponent, ChipType} from '../../components/chip.js';
+import {
+  ChipComponent,
+  ChipType, 
+  ChipBiosVersion,
+  ChipCamVersion,
+  ChipCpuVersion,
+  ChipMemVersion,
+  ChipNicVersion,
+} from '../../components/chip.js';
 import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
@@ -43,11 +51,23 @@ class ChipIdAction extends Action {
     const chip = firstOf(this.activeChip());
     chip.get(IdentifiedComponent).identified = true;
     
-    const type = enumLabel(ChipType, chip.get(ChipComponent).type);
+    const type = chip.get(ChipComponent).type;
+    const typeStr = enumLabel(ChipType, type);
     const version = chip.get(ChipComponent).version;
+    const versionStr = this.versionStr(type, version);
     this.events.emit(
         EventType.LOG,
-        `IDENTIFIED CHIP ${type} ${version}`); 
+        `IDENTIFIED CHIP ${typeStr} ${versionStr}`); 
+  }
+  
+  versionStr(type, value) {
+    const versionType =
+        type == ChipType.BIOS ? ChipBiosVersion :
+        type == ChipType.CAM ? ChipCamVersion :
+        type == ChipType.CPU ? ChipCpuVersion :
+        type == ChipType.MEM ? ChipMemVersion :
+        type == ChipType.NIC ? ChipNicVersion : null;
+    return enumLabel(versionType, value)
   }
 }
 
