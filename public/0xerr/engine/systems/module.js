@@ -28,6 +28,7 @@ import {TerminalBufferSystem} from './terminalbuffer.js';
 import {TerminalFullScreenSystem} from './terminalfullscreen.js';
 import {TerminalInputSystem} from './terminalinput.js';
 import {TerminalRendererSystem} from './terminalrenderer.js';
+import {TextInputRendererSystem} from './textinputrenderer.js';
 import {TextInputSystem} from './textinput.js';
 import {TurnManagementSystem} from './turnmanagement.js';
 import {StatusRendererSystem} from './statusrenderer.js';
@@ -65,6 +66,7 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, PlayerRendererSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TerminalRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TextInputRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, StatusRendererSystem);
     
     this.bindClassIntoSet(System, DISCONNECTED, DisconnectedSystem);
