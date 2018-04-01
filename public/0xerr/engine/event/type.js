@@ -14,6 +14,7 @@ const EventType = enumOf(
   'STEALTH_UPDATE',
   'TEXT_INPUT',
   'VICTORY',
+  'VIEW_FOCUS',
 );
 
 export {EventType};

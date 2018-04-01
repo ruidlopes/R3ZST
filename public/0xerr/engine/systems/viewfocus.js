@@ -1,5 +1,7 @@
 import {ActiveComponent} from '../components/active.js';
 import {EntityManager} from '../entity/manager.js';
+import {EventManager} from '../event/manager.js';
+import {EventType} from '../event/type.js';
 import {Keyboard} from '../../observers/keyboard.js';
 import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
 import {System} from '../system.js';
@@ -11,15 +13,17 @@ const VIEW_ORDER = [ViewType.HARDWARE, ViewType.TERMINAL];
 class ViewFocusSystem extends System {
   constructor(
       keyboard = ij(Keyboard),
-      manager = ij(EntityManager)) {
+      entities = ij(EntityManager),
+      events = ij(EventManager)) {
     super();
     this.keyboard = keyboard;
-    this.manager = manager;
+    this.entities = entities;
+    this.events = events;
     this.shortcutNext = new KeyShortcut('TAB');
   }
   
   views() {
-    return this.manager.query()
+    return this.entities.query()
         .filter(ViewComponent)
         .collect(ActiveComponent, ViewComponent);
   }
@@ -41,6 +45,8 @@ class ViewFocusSystem extends System {
 
     current.get(ActiveComponent).active = false;
     next.get(ActiveComponent).active = true;
+    
+    this.events.emit(EventType.VIEW_FOCUS, next.get(ViewComponent).type);
   }
   
   indexOf(entityView) {

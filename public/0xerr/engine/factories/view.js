@@ -36,6 +36,7 @@ class ViewFactory {
     const terminalInputId = this.manager.nextId();
     this.manager.add(
         terminalInputId,
+        new ActiveComponent(false),
         new TextInputComponent('', 0),
         new SpatialComponent(0, 0, 0, 0));
     

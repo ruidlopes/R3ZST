@@ -17,11 +17,11 @@ import {ij} from '../../injection/api.js';
 
 class TerminalInputSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
       events = ij(EventManager),
       keyboard = ij(Keyboard)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
     this.events = events;
     this.keyboard = keyboard;
 
@@ -38,57 +38,98 @@ class TerminalInputSystem extends System {
     this.actionExecuting = false;
     this.events.subscribe(
         EventType.ACTION_START,
-        () => this.actionExecuting = true);
+        () => {
+          this.actionExecuting = true;
+          this.updateTerminalTextInputFocus();
+        });
     this.events.subscribe(
         EventType.ACTION_DONE,
-        () => this.actionExecuting = false);
-  }
-  
-  isTerminalViewActive() {
-    return !isEmpty(this.manager.query()
-        .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .filter(ActiveComponent, component => component.active)
-        .collect());
-  }
-  
-  isPlayerTurn() {
-    return !isEmpty(this.manager.query()
-        .filter(TurnComponent, component => component.turn == TurnEnum.PLAYER)
-        .collect());
+        () => {
+          this.actionExecuting = false;
+          this.updateTerminalTextInputFocus();
+        });
+    
+    this.playerTurn = false;
+    this.events.subscribe(
+        EventType.END_TURN,
+        (turn) => {
+          this.playerTurn = turn == TurnEnum.RETSAFE;
+          this.updateTerminalTextInputFocus();
+        });
+    this.events.subscribe(
+        EventType.CONNECTED,
+        () => {
+          this.playerTurn = true;
+          this.updateTerminalTextInputFocus();
+        });
+        
+    this.terminalViewActive = false;
+    this.events.subscribe(
+        EventType.VIEW_FOCUS,
+        (view) => {
+          this.terminalViewActive = view == ViewType.TERMINAL;
+          this.updateTerminalTextInputFocus();
+        });
+    this.events.subscribe(
+        EventType.CONNECTED,
+        () => {
+          this.terminalViewActive = true;
+          this.updateTerminalTextInputFocus();
+        });
+    this.events.subscribe(
+        EventType.DISCONNECTED,
+        () => {
+          this.terminalViewActive = false;
+          this.updateTerminalTextInputFocus();
+        });
+    this.events.subscribe(
+        EventType.VICTORY,
+        () => {
+          this.terminalViewActive = false;
+          this.updateTerminalTextInputFocus();
+        });
   }
   
   terminalViewChildren() {
-    return firstOf(this.manager.query()
+    return firstOf(this.entities.query()
         .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .first()
         .iterate(CompositeComponent))
         .get(CompositeComponent)
         .ids;
   }
   
-  textInputEntity() {
-    return firstOf(this.manager.query(this.terminalViewChildren())
+  terminalTextInputEntity() {
+    return firstOf(this.entities.query(this.terminalViewChildren())
         .filter(TextInputComponent)
-        .first()
-        .iterate(TextInputComponent));
+        .iterate(TextInputComponent, ActiveComponent));
+  }
+  
+  updateTerminalTextInputFocus() {
+    const focused = this.playerTurn &&
+        this.terminalViewActive &&
+        !this.actionExecuting;
+    this.terminalTextInputEntity().get(ActiveComponent).active = focused;
   }
   
   actionHistory() {
-    return firstOf(this.manager.query()
+    return firstOf(this.entities.query()
         .filter(ActionHistoryComponent)
-        .first()
         .iterate(ActionHistoryComponent))
         .get(ActionHistoryComponent);
   }
   
+  activeTextInputEntity() {
+    return firstOf(this.entities.query()
+        .filter(TextInputComponent)
+        .filter(ActiveComponent, component => component.active)
+        .iterate(TextInputComponent));
+  }
+  
   frame(delta) {
-    if (!this.isTerminalViewActive() ||
-        !this.isPlayerTurn() ||
-        this.actionExecuting) {
+    const textInputEntity = this.activeTextInputEntity();
+    if (!textInputEntity) {
       return;
     }
-    
-    const textInputEntity = this.textInputEntity();
     const textInput = textInputEntity.get(TextInputComponent);
     
     this.updateChars(textInput, this.keyboard.released(this.shortcutChars));
@@ -97,8 +138,10 @@ class TerminalInputSystem extends System {
     if (this.keyboard.releasedAny(this.shortcutBackspace)) {
       this.backspace(textInput);
     } else if (this.keyboard.releasedAny(this.shortcutEscape)) {
+      this.escapeHistory();
       this.escape(textInput);
     } else if (this.keyboard.releasedAny(this.shortcutEnter)) {
+      this.enterHistory(textInput);
       this.enter(textInputEntity);
     } else if (this.keyboard.releasedAny(this.shortcutLeft)) {
       this.cursor(textInput, -1);
@@ -120,12 +163,13 @@ class TerminalInputSystem extends System {
     }
   }
   
-  enter(textInputEntity) {
-    const textInput = textInputEntity.get(TextInputComponent);
+  enterHistory(textInput) {
     const actionHistory = this.actionHistory();
     actionHistory.history.push(textInput.text);
     actionHistory.cursor = actionHistory.history.length;
-    
+  }
+  
+  enter(textInputEntity) {
     this.events.emit(EventType.TEXT_INPUT, textInputEntity.id);
   }
   
@@ -140,12 +184,14 @@ class TerminalInputSystem extends System {
     textInput.cursor--;
   }
   
+  escapeHistory() {
+    const actionHistory = this.actionHistory();
+    actionHistory.cursor = actionHistory.history.length;
+  }
+  
   escape(textInput) {
     textInput.text = '';
     textInput.cursor = 0;
-    
-    const actionHistory = this.actionHistory();
-    actionHistory.cursor = actionHistory.history.length;
   }
   
   cursor(textInput, delta) {
