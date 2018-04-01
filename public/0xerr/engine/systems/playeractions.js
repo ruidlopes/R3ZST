@@ -147,7 +147,7 @@ class PlayerActionsSystem extends System {
               'SCRIPT IS EXHAUSTED.');
         }
       } else {
-        this.events.emit(EventType.LOG, `UNKNOWN ACTION '${command}'`);
+        this.events.emit(EventType.LOG, `UNKNOWN SCRIPT: '${command}'.`);
       }
     }
     
