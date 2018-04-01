@@ -1,11 +1,12 @@
 import {BLACK, BLUE_BRIGHT} from '../common/palette.js';
+import {DeckFactory} from '../factories/debug/deck.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {GameFactory} from '../factories/game.js';
-import {NodeFactory} from '../factories/node.js';
-import {PlayerFactory} from '../factories/player.js';
+import {NodeFactory} from '../factories/debug/node.js';
+import {PlayerFactory} from '../factories/debug/player.js';
 import {System} from '../system.js';
 import {ViewFactory} from '../factories/view.js';
 import {Viewport} from '../../observers/viewport.js';
@@ -17,21 +18,23 @@ class BootSystem extends System {
       events = ij(EventManager),
       viewport = ij(Viewport),
       drawing = ij(Drawing),
+      deckFactory = ij(DeckFactory),
+      gameFactory = ij(GameFactory),
       nodeFactory = ij(NodeFactory),
-      viewFactory = ij(ViewFactory),
       playerFactory = ij(PlayerFactory),
-      gameFactory = ij(GameFactory)) {
+      viewFactory = ij(ViewFactory)) {
     super();
         
     this.entities = entities;
     this.events = events;
     this.viewport = viewport;
     this.drawing = drawing;
-        
-    this.nodeFactory = nodeFactory;
-    this.viewFactory = viewFactory;
-    this.playerFactory = playerFactory;
+    
+    this.deckFactory = deckFactory;
     this.gameFactory = gameFactory;
+    this.nodeFactory = nodeFactory;
+    this.playerFactory = playerFactory;
+    this.viewFactory = viewFactory;
         
     this.events.subscribe(
         EventType.BOOT,
@@ -46,10 +49,11 @@ class BootSystem extends System {
   }
   
   createNetwork() {
-    this.nodeFactory.make();
-    this.viewFactory.make();
-    this.playerFactory.make();
+    this.deckFactory.make();
     this.gameFactory.make();
+    this.nodeFactory.make();
+    this.playerFactory.make();
+    this.viewFactory.make();
     
     this.events.emit(EventType.CONNECTED);
   }

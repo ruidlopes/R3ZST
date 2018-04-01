@@ -1,5 +1,5 @@
-import {BLACK, BLUE_BRIGHT} from '../common/palette.js';
-import {ActiveComponent} from '../components/active.js';
+import {BLACK, BLUE_BRIGHT} from '../../common/palette.js';
+import {ActiveComponent} from '../../components/active.js';
 import {
   ChipComponent,
   ChipType,
@@ -8,19 +8,19 @@ import {
   ChipCpuVersion,
   ChipMemVersion,
   ChipNicVersion,
-} from '../components/chip.js';
-import {CompositeComponent} from '../components/composite.js';
-import {ConnectionComponent} from '../components/connection.js';
-import {EntityManager} from '../entity/manager.js';
-import {IdentifiedComponent} from '../components/identified.js';
-import {IpComponent} from '../components/ip.js';
-import {NodeComponent, NodeType} from '../components/node.js';
-import {RetCamStatusComponent} from '../components/retcamstatus.js';
-import {SentryComponent, SentryCapabilities} from '../components/sentry.js';
-import {SpatialComponent} from '../components/spatial.js';
-import {StyleComponent} from '../components/style.js';
-import {enumValue} from '../../stdlib/collections.js';
-import {ij} from '../../injection/api.js';
+} from '../../components/chip.js';
+import {CompositeComponent} from '../../components/composite.js';
+import {ConnectionComponent} from '../../components/connection.js';
+import {EntityManager} from '../../entity/manager.js';
+import {IdentifiedComponent} from '../../components/identified.js';
+import {IpComponent} from '../../components/ip.js';
+import {NodeComponent, NodeType} from '../../components/node.js';
+import {RetCamStatusComponent} from '../../components/retcamstatus.js';
+import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
+import {SpatialComponent} from '../../components/spatial.js';
+import {StyleComponent} from '../../components/style.js';
+import {enumValue} from '../../../stdlib/collections.js';
+import {ij} from '../../../injection/api.js';
 
 class NodeFactory {
   constructor(manager = ij(EntityManager)) {
