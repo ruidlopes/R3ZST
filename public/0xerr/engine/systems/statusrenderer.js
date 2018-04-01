@@ -140,6 +140,9 @@ class StatusRendererSystem extends System {
     const deck = this.deck().items.entries();
     for (const [name, stats] of deck) {
       const action = this.actions.get(name);
+      if (action.hidden) {
+        continue;
+      }
       const refresh = stats == Infinity ? '-' : ActionRefreshIcon.get(action.refresh);
       const count = stats == Infinity ? '-' : String(stats);
       const cycles = String(action.cycles);

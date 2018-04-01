@@ -10,6 +10,7 @@ class Action {
   constructor() {
     this.limit = Infinity;
     this.refresh = ActionRefreshEnum.TURN;
+    this.hidden = false;
   }
   
   constraints() {

@@ -15,6 +15,14 @@ function enumLabel(enumType, value) {
   return undefined;
 }
 
+function enumValue(enumType, label) {
+  return enumType[label];
+}
+
+function enumHas(enumType, label) {
+  return label in enumType;
+}
+
 function firstOf(iterable) {
   return iterable[Symbol.iterator]().next().value;
 }
@@ -46,6 +54,8 @@ function sameElements(arr1, arr2) {
 export {
   enumOf,
   enumLabel,
+  enumValue,
+  enumHas,
   firstOf,
   isEmpty,
   mapOf,
