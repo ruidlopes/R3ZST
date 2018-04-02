@@ -1,5 +1,6 @@
-import {Canvas3D} from './graphics/canvas3d.js';
+import {BLACK} from '../engine/common/palette.js';
 import {CHAR_SIZE} from './font/constants.js';
+import {Canvas3D} from './graphics/canvas3d.js';
 import {Mesh} from './graphics/mesh.js';
 import {Program} from './graphics/program.js';
 import {Texture} from './graphics/texture.js';
@@ -39,6 +40,12 @@ class Renderer {
     
     this.matrixLoc = undefined;
     this.matrix = undefined;
+        
+    this.clearColor = [
+        BLACK.rgb.r / 255,
+        BLACK.rgb.g / 255,
+        BLACK.rgb.b / 255,
+    ];
   }
   
   attach() {
@@ -99,7 +106,7 @@ class Renderer {
   }
   
   renderScreen(scr) {
-    this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    this.gl.clearColor(...this.clearColor, 1.0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     
     this.gl.useProgram(this.program.instance);
