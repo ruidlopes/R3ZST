@@ -35,6 +35,7 @@ class TextInputRendererSystem extends System {
     
     const inputStart = Math.max(textInput.cursor - maxInputWidth, 0);
     const text = textInput.text.substr(inputStart, maxInputWidth);
+    const prompt = textInput.prompt;
     
     const cursorX = textInput.cursor - inputStart;
     const active = input.get(ActiveComponent).active;
@@ -43,10 +44,12 @@ class TextInputRendererSystem extends System {
     const cursorBackground = active && this.deltaAcc < 500 ? BLUE_BRIGHT : BLACK;
     
     this.drawing.clipping(textInputSpatial)
-        .sprint('>', textInputSpatial.x, textInputSpatial.y, BLUE_BRIGHT, BLACK)
-        .sprint(text, textInputSpatial.x + 1, textInputSpatial.y, BLUE_BRIGHT, BLACK)
+        .sprint(prompt, textInputSpatial.x, textInputSpatial.y, BLUE_BRIGHT, BLACK)
+        .sprint(text,
+            textInputSpatial.x + prompt.length, textInputSpatial.y,
+            BLUE_BRIGHT, BLACK)
         .sprint(text[cursorX] || ' ',
-            textInputSpatial.x + 1 + cursorX, textInputSpatial.y,
+            textInputSpatial.x + prompt.length + cursorX, textInputSpatial.y,
             cursorForeground, cursorBackground);
   }
 }

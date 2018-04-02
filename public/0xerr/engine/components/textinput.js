@@ -1,5 +1,6 @@
 class TextInputComponent {
-  constructor(text = '', cursor = 0) {
+  constructor(prompt = '', text = '', cursor = 0) {
+    this.prompt = prompt;
     this.text = text;
     this.cursor = cursor;
   }
