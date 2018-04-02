@@ -61,7 +61,8 @@ class MainScene extends Scene {
     this.sm.fixed(States.GAMELOOP, (delta) => this.gameLoop(delta));
     this.sm.fixed(States.DISCONNECTED, (delta) => this.disconnected(delta));
     this.sm.fixed(States.VICTORY, (delta) => this.victory(delta));
-    this.sm.jump(States.BOOT);
+    
+    this.events.emit(EventType.BOOT);
   }
   
   boot(delta) {

@@ -39,7 +39,9 @@ import {ViewSpatialSystem} from './viewspatial.js';
 
 class SystemsModule extends Module {
   configure() {
+    this.bindClassIntoSet(System, BOOT, TextInputSystem);
     this.bindClassIntoSet(System, BOOT, BootSystem);
+    this.bindClassIntoSet(System, BOOT, TextInputRendererSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, PlayerActionsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_GLOBAL, RetsafeActionsSystem);

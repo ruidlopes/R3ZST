@@ -38,13 +38,10 @@ class PlayerActionsSystem extends System {
         (turn) => turn == TurnEnum.PLAYER && this.refreshDeckTurn());
   }
   
-  terminalViewChildren() {
+  terminalViewComposite() {
     return firstOf(this.manager.query()
         .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .first()
-        .iterate(CompositeComponent))
-        .get(CompositeComponent)
-        .ids;
+        .iterate(CompositeComponent));
   }
   
   textInput(id) {
@@ -104,7 +101,9 @@ class PlayerActionsSystem extends System {
   }
   
   input(id) {
-    if (!this.terminalViewChildren().includes(id)) {
+    const terminalViewComposite = this.terminalViewComposite();
+    if (!terminalViewComposite ||
+        !terminalViewComposite.get(CompositeComponent).ids.includes(id)) {
       return;
     }
     
