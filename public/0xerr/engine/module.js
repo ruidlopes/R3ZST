@@ -8,6 +8,7 @@ import {EventModule} from './event/module.js';
 import {FactoryModule} from './factories/module.js';
 import {MainScene} from './mainscene.js';
 import {Module} from '../injection/module.js';
+import {Random} from '../stdlib/random.js';
 import {Scene} from './scene.js';
 import {SystemsModule} from './systems/module.js';
 
@@ -23,6 +24,7 @@ class EngineModule extends Module {
     );
     this.bindClass(CxelBuffer, SCREEN);
     this.bindClass(Engine);
+    this.bindClass(Random);
     
     this.bindClassIntoSet(Scene, MainScene);
   }

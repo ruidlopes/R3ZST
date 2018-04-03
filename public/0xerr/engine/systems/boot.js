@@ -6,6 +6,7 @@ import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {GameFactory} from '../factories/game.js';
+import {NetworkFactory} from '../factories/network.js';
 import {NodeFactory} from '../factories/debug/node.js';
 import {PlayerFactory} from '../factories/debug/player.js';
 import {TextInputComponent} from '../components/textinput.js';
@@ -23,6 +24,7 @@ class BootSystem extends System {
       viewport = ij(Viewport),
       drawing = ij(Drawing),
       gameFactory = ij(GameFactory),
+      networkFactory = ij(NetworkFactory),
       viewFactory = ij(ViewFactory),
       debugDeckFactory = ij(DeckFactory),
       debugNodeFactory = ij(NodeFactory),
@@ -35,6 +37,7 @@ class BootSystem extends System {
     this.drawing = drawing;
     
     this.gameFactory = gameFactory;
+    this.networkFactory = networkFactory;
     this.viewFactory = viewFactory;
     
     this.debugDeckFactory = debugDeckFactory;
@@ -79,27 +82,25 @@ class BootSystem extends System {
   
   handleSeedInput() {
     const textInput = this.seedInput().get(TextInputComponent);
-    const seed = textInput.text.trim();
+    const rawSeed = textInput.text.trim();
     this.booting = false;
     this.entities.clear();
     this.gameFactory.make();
     this.viewFactory.make();
     
-    if (seed) {
+    if (rawSeed == 'DEBUG') {
+      this.debugDeckFactory.make();
+      this.debugNodeFactory.make();
+      this.debugPlayerFactory.make();
+    } else {
       // TODO: replace debug factories.
       this.debugDeckFactory.make();
       this.debugPlayerFactory.make();
-    } else {
-      this.createDebugNetwork();
+      
+      this.networkFactory.make(rawSeed);
     }
     
     this.events.emit(EventType.CONNECTED);
-  }
-  
-  createDebugNetwork() {
-    this.debugDeckFactory.make();
-    this.debugNodeFactory.make();
-    this.debugPlayerFactory.make();
   }
   
   frame(delta) {
