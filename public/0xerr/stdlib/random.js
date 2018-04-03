@@ -47,6 +47,18 @@ class RandomXorWow {
   randomBoolean() {
     return this.random() >= 0.5;
   }
+  
+  randomItem(array) {
+    return array[this.randomRange(0, array.length)];
+  }
+  
+  randomCollection(collection) {
+    return this.randomItem(Array.from(collection));
+  }
+  
+  randomEnum(enumType) {
+    return this.randomCollection(Object.values(enumType));
+  }
 }
 
 
