@@ -1,10 +1,7 @@
+import {unsigned} from './math.js';
 import {stringBytes} from './strings.js';
 
 const UINT32_MASK = 0xffffffff;
-
-function unsigned(int32) {
-  return int32 >>> 0;
-}
 
 const DEFAULT_SEED = Uint32Array.from([
     0x12345678,
