@@ -45,10 +45,29 @@ class NodeFactory {
       chipIds.push(id);
     }
     
+    const minWidth = this.random.channel(RNG_NETWORK)
+        .randomRangeInclusive(1, chipIds.length);
+    const minHeight = Math.ceil(chipIds.length / minWidth);
+    
+    const width = this.random.channel(RNG_NETWORK)
+        .randomRangeInclusive(minWidth, minWidth * 2);
+    const height = this.random.channel(RNG_NETWORK)
+        .randomRangeInclusive(minHeight, minHeight * 2);
+    
+    const cells = new Array(width * height);
+    cells.fill(-1);
+    for (let i = 0; i < chipIds.length; ++i) {
+      cells[i] = i;
+    }
+    shuffle(cells, this.random.channel(RNG_NETWORK));
+    
     chipIds.forEach((chipId, i) => {
+      const cell = cells.indexOf(i);
+      const cellY = Math.floor(cell / width);
+      const cellX = cell % width;
       this.entities.add(
         chipId,
-        new SpatialComponent(1 + i * 5, 1, 4, 4));
+        new SpatialComponent(1 + cellX * 5, 1 + cellY * 5, 4, 4));
     });
     
     const nodeId = this.entities.nextId();
@@ -57,7 +76,7 @@ class NodeFactory {
         new ActiveComponent(false),
         new CompositeComponent(chipIds),
         new NodeComponent(type),
-        new SpatialComponent(0, 0, 2 + 5 * (chipIds.length), 10),
+        new SpatialComponent(0, 0, 1 + 5 * width, 1 + 5 * height),
         new StyleComponent(BLUE_BRIGHT, BLACK));
     return nodeId;
   }
