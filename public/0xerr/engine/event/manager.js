@@ -16,6 +16,14 @@ class EventManager {
     }
   }
   
+  once(event, handler) {
+    const onceHandler = (...params) => {
+      handler(...params);
+      this.unsubscribe(event, onceHandler);
+    };
+    this.subscribe(event, onceHandler);
+  }
+  
   emit(event, ...params) {
     if (!this.handlers.has(event)) {
       return;

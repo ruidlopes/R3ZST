@@ -9,9 +9,10 @@ import {GameFactory} from '../factories/game.js';
 import {NetworkFactory} from '../factories/network.js';
 import {NodeFactory} from '../factories/debug/node.js';
 import {PlayerFactory} from '../factories/debug/player.js';
-import {TextInputComponent} from '../components/textinput.js';
+import {Random} from '../../stdlib/random.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {System} from '../system.js';
+import {TextInputComponent} from '../components/textinput.js';
 import {ViewFactory} from '../factories/view.js';
 import {Viewport} from '../../observers/viewport.js';
 import {firstOf} from '../../stdlib/collections.js';
@@ -23,9 +24,12 @@ class BootSystem extends System {
       events = ij(EventManager),
       viewport = ij(Viewport),
       drawing = ij(Drawing),
+      random = ij(Random),
+      
       gameFactory = ij(GameFactory),
       networkFactory = ij(NetworkFactory),
       viewFactory = ij(ViewFactory),
+      
       debugDeckFactory = ij(DeckFactory),
       debugNodeFactory = ij(NodeFactory),
       debugPlayerFactory = ij(PlayerFactory)) {
@@ -35,6 +39,7 @@ class BootSystem extends System {
     this.events = events;
     this.viewport = viewport;
     this.drawing = drawing;
+    this.random = random;
     
     this.gameFactory = gameFactory;
     this.networkFactory = networkFactory;
@@ -49,14 +54,10 @@ class BootSystem extends System {
         EventType.BOOT,
         () => this.boot());
     
-    this.seedInputId = undefined;
-    this.seedInputHandler = (id) => {
-        id == this.seedInputId && this.handleSeedInput(id);
-      this.events.unsubscribe(
-          EventType.TEXT_INPUT, this.seedInputHandler);
-    };
-    this.events.subscribe(
-        EventType.TEXT_INPUT, this.seedInputHandler);
+    this.bootInputId = undefined;
+    this.events.once(
+        EventType.TEXT_INPUT,
+        (id) => id == this.bootInputId && this.handleBootInput(id));
   }
   
   boot() {
@@ -66,28 +67,31 @@ class BootSystem extends System {
   }
   
   createPrompt() {
-    this.seedInputId = this.entities.nextId();
+    this.bootInputId = this.entities.nextId();
     this.entities.add(
-        this.seedInputId,
-        new TextInputComponent('INPUT SEED>'),
+        this.bootInputId,
+        new TextInputComponent('BOOT>'),
         new ActiveComponent(true),
         new SpatialComponent(0, 1, 50, 1));
   }
   
-  seedInput() {
+  bootInput() {
     return firstOf(this.entities.query()
         .filter(TextInputComponent)
         .iterate(TextInputComponent, SpatialComponent));
   }
   
-  handleSeedInput() {
-    const textInput = this.seedInput().get(TextInputComponent);
-    const rawSeed = textInput.text.trim();
+  handleBootInput() {
+    const textInput = this.bootInput().get(TextInputComponent).text.trim();
+    const tokens = textInput.split(/\s+/);
+    const params = new Map(tokens.map(token => token.split('=')));
+    
     this.booting = false;
     this.entities.clear();
     this.gameFactory.make();
     this.viewFactory.make();
     
+    const rawSeed = params.get('SEED') || '';
     if (rawSeed == 'DEBUG') {
       this.debugDeckFactory.make();
       this.debugNodeFactory.make();
@@ -97,7 +101,8 @@ class BootSystem extends System {
       this.debugDeckFactory.make();
       this.debugPlayerFactory.make();
       
-      this.networkFactory.make(rawSeed);
+      this.random.setSeed(rawSeed);
+      this.networkFactory.make();
     }
     
     this.events.emit(EventType.CONNECTED);
@@ -115,7 +120,7 @@ class BootSystem extends System {
         .rect(0, 0, width, height, 0x20, BLUE_BRIGHT, BLACK)
         .sprint('WELCOME TO RETSAFE.', 0, 0, BLUE_BRIGHT, BLACK);
     
-    this.seedInput().get(SpatialComponent).width = width;
+    this.bootInput().get(SpatialComponent).width = width;
   }
 }
 

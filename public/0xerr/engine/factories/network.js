@@ -18,8 +18,7 @@ class NetworkFactory {
     this.nodeFactory = nodeFactory;
   }
   
-  make(rawSeed) {
-    this.random.setRawSeed(rawSeed);
+  make() {
     const id = this.nodeFactory.make(NodeType.RETSAFE_CAM);
     
     firstOf(this.entities.query([id])
