@@ -36,7 +36,7 @@ function vline(buffer, x, y, height, charByte, foregroundColor, backgroundColor,
   const clipEndX = clipping ? clipping.x + clipping.width : buffer.width;
   const clipEndY = clipping ? clipping.y + clipping.height : buffer.height;
   
-  if (x < clipX || x >= clipEndX) {
+  if (x < 0 || x < clipX || x >= clipEndX) {
     return;
   }
   

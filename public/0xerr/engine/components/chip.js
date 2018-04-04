@@ -1,4 +1,4 @@
-import {enumOf} from '../../stdlib/collections.js';
+import {enumOf, mapOf} from '../../stdlib/collections.js';
 
 const ChipType = enumOf(
   'BIOS',
@@ -39,6 +39,14 @@ const ChipNicVersion = enumOf(
   'RET.NET FIBER1',
 );
 
+const ChipVersionMap = mapOf(
+  ChipType.CPU, ChipCpuVersion,
+  ChipType.NIC, ChipNicVersion,
+  ChipType.BIOS, ChipBiosVersion,
+  ChipType.CAM, ChipCamVersion,
+  ChipType.MEM, ChipMemVersion,
+);
+
 class ChipComponent {
   constructor(type, version) {
     this.type = type;
@@ -53,5 +61,6 @@ export {
   ChipCamVersion,
   ChipCpuVersion,
   ChipMemVersion,
-  ChipNicVersion
+  ChipNicVersion,
+  ChipVersionMap,
 };

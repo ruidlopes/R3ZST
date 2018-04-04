@@ -19,6 +19,10 @@ function enumValue(enumType, label) {
   return enumType[label];
 }
 
+function enumValues(enumType, ...labels) {
+  return labels.map(label => enumValue(enumType, label));
+}
+
 function enumHas(enumType, label) {
   return label in enumType;
 }
@@ -55,6 +59,7 @@ export {
   enumOf,
   enumLabel,
   enumValue,
+  enumValues,
   enumHas,
   firstOf,
   isEmpty,
