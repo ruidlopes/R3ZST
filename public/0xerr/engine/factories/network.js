@@ -1,4 +1,5 @@
 import {NETWORK} from './qualifiers.js';
+import {RNG_NETWORK} from '../common/randomchannels.js';
 import {ActiveComponent} from '../components/active.js';
 import {EntityManager} from '../entity/manager.js';
 import {NodeFactory} from './network/node.js';
@@ -13,7 +14,7 @@ class NetworkFactory {
       random = ij(Random),
       nodeFactory = ij(NodeFactory, NETWORK)) {
     this.entities = entities;
-    this.random = random;
+    this.random = random.channel(RNG_NETWORK);
     
     this.nodeFactory = nodeFactory;
   }

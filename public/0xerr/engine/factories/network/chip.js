@@ -1,4 +1,5 @@
 import {BLACK, BLUE_BRIGHT} from '../../common/palette.js';
+import {RNG_NETWORK} from '../../common/randomchannels.js';
 import {ActiveComponent} from '../../components/active.js';
 import {ChipComponent, ChipType, ChipVersionMap} from '../../components/chip.js';
 import {CompositeComponent} from '../../components/composite.js';
@@ -16,7 +17,7 @@ class ChipFactory {
       entities = ij(EntityManager),
       random = ij(Random)) {
     this.entities = entities;
-    this.random = random.channel('NETWORK');
+    this.random = random.channel(RNG_NETWORK);
   }
   
   make(type, constraints) {

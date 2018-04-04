@@ -55,6 +55,15 @@ function sameElements(arr1, arr2) {
   return true;
 }
 
+function shuffle(arr, rng) {
+  for (let i = arr.length - 1; i > 0; --i) {
+    const j = rng.randomRangeInclusive(0, i);
+    const temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+}
+
 export {
   enumOf,
   enumLabel,
@@ -65,4 +74,5 @@ export {
   isEmpty,
   mapOf,
   sameElements,
+  shuffle,
 };
