@@ -47,7 +47,7 @@ class RetsafeActionsSystem extends System {
 
     const next = this.actionIterator.next();
     if (next.done) {
-      this.events.emit(EventType.END_TURN);
+      this.events.emit(EventType.END_TURN, TurnEnum.RETSAFE);
       return;
     }
     
