@@ -11,9 +11,12 @@ const DEFAULT_SEED = Uint32Array.from([
     0x12345678,
 ]);
 
+const WARMUP_CYCLES = 100;
+
 class RandomXorWow {
   constructor(seed = DEFAULT_SEED) {
     this.state = Uint32Array.from(seed);
+    this.warmUp();
   }
   
   next() {
@@ -29,6 +32,12 @@ class RandomXorWow {
     this.state[0] = unsigned(t);
     this.state[4] = unsigned(this.state[4] + 0x587c5);
     return unsigned(t + this.state[4]);
+  }
+  
+  warmUp() {
+    for (let i = 0; i < WARMUP_CYCLES; ++i) {
+      this.next();
+    }
   }
   
   random() {
@@ -93,13 +102,13 @@ class Random {
   
   channel(channel) {
     if (!this.channels.has(channel)) {
-      this.channels.set(channel,
-          new RandomXorWow([
-              this.generator.next(),
-              this.generator.next(),
-              this.generator.next(),
-              this.generator.next(),
-              this.generator.next()]));
+      this.channels.set(channel, new RandomXorWow([
+          this.generator.next(),
+          this.generator.next(),
+          this.generator.next(),
+          this.generator.next(),
+          this.generator.next(),
+      ]));
     }
     return this.channels.get(channel);
   }

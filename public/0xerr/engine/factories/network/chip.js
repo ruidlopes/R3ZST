@@ -17,12 +17,13 @@ class ChipFactory {
       entities = ij(EntityManager),
       random = ij(Random)) {
     this.entities = entities;
-    this.random = random.channel(RNG_NETWORK);
+    this.random = random;
   }
   
   make(type, constraints) {
     const id = this.entities.nextId();
-    const version = this.random.randomItem(constraints.get('versions'));
+    const version = this.random.channel(RNG_NETWORK)
+        .randomItem(constraints.get('versions'));
     
     this.entities.add(
         id,

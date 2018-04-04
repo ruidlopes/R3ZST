@@ -19,7 +19,7 @@ class NodeFactory {
       random = ij(Random),
       chipFactory = ij(ChipFactory, NETWORK)) {
     this.entities = entities;
-    this.random = random.channel(RNG_NETWORK);
+    this.random = random;
     this.chipFactory = chipFactory;
   }
   
@@ -28,13 +28,14 @@ class NodeFactory {
     for (const [chipType, chipSpec] of NodeSpec.get(type)) {
       const min = chipSpec.get('min');
       const max = chipSpec.get('max');
-      const count = this.random.randomRangeInclusive(min, max);
+      const count = this.random.channel(RNG_NETWORK)
+          .randomRangeInclusive(min, max);
       
       for (let i = 0; i < count; ++i) {
         chipTemplates.push(chipType);
       }
     }
-    shuffle(chipTemplates, this.random);
+    shuffle(chipTemplates, this.random.channel(RNG_NETWORK));
     
     const chipIds = [];
     for (const chipType of chipTemplates) {

@@ -14,7 +14,7 @@ class NetworkFactory {
       random = ij(Random),
       nodeFactory = ij(NodeFactory, NETWORK)) {
     this.entities = entities;
-    this.random = random.channel(RNG_NETWORK);
+    this.random = random;
     
     this.nodeFactory = nodeFactory;
   }

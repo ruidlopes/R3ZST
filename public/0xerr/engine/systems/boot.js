@@ -101,7 +101,7 @@ class BootSystem extends System {
       this.debugDeckFactory.make();
       this.debugPlayerFactory.make();
       
-      this.random.setSeed(rawSeed);
+      this.random.setRawSeed(rawSeed);
       this.networkFactory.make();
     }
     
