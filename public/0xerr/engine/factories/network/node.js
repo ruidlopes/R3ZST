@@ -23,11 +23,15 @@ class NodeFactory {
     this.chipFactory = chipFactory;
   }
   
-  make(type) {
+  make(type, overrides = new Map()) {
     const chipTemplates = [];
     for (const [chipType, chipSpec] of NodeSpec.get(type)) {
-      const min = chipSpec.get('min');
-      const max = chipSpec.get('max');
+      const min = overrides.has(chipType) ?
+          overrides.get(chipType).get('min') :
+          chipSpec.get('min');
+      const max = overrides.has(chipType) ?
+          overrides.get(chipType).get('max') :
+          chipSpec.get('max');
       const count = this.random.channel(RNG_NETWORK)
           .randomRangeInclusive(min, max);
       
