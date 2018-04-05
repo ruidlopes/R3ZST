@@ -1,14 +1,13 @@
 import {enumOf} from '../../stdlib/collections.js';
 
 const NodeType = enumOf(
-  'POWER_SUPPLY',
   'WORKSTATION',
   'ROUTER',
-  'FIREWALL',
   'RETSAFE_CAM',
-  'RETSAFE_CITYWIDE',
-  'RETSAFE_COUNTRYWIDE',
+  'RETSAFE_CAMROUTER_L1',
+  'RETSAFE_CAMROUTER_L2',
   'DATACENTER_UNIT',
+  'CORE',
 );
 
 class NodeComponent {
