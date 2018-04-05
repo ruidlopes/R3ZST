@@ -67,6 +67,8 @@ class ChipRendererSystem extends System {
     const dy = Math.floor(nodeSpatial.y + spatial.y);
     
     const draw = this.drawing.clipping(nodeSpatial);
+    draw.rect(dx, dy, spatial.width, spatial.height,
+              0x00, style.foregroundColor, style.backgroundColor);
     
     if (!identified) {
       draw.box(dx, dy, spatial.width, spatial.height,
@@ -76,9 +78,9 @@ class ChipRendererSystem extends System {
     
     switch (type) {
       case ChipType.BIOS:
-        draw.boxWithChars(dx, dy, spatial.width, spatial.height,
+        draw.boxWithChars(dx - 1, dy - 1, spatial.width + 2, spatial.height + 2,
                 CPU_SMALL_CHARS, style.foregroundColor, style.backgroundColor)
-            .box(dx + 1, dy + 1, spatial.width - 2, spatial.height - 2,
+            .box(dx, dy, spatial.width, spatial.height,
                 BoxType.OUTER, style.foregroundColor, style.backgroundColor);
         break;
       
@@ -92,9 +94,9 @@ class ChipRendererSystem extends System {
         break;
         
       case ChipType.CPU:
-        draw.boxWithChars(dx, dy, spatial.width, spatial.height,
+        draw.boxWithChars(dx - 1, dy - 1, spatial.width + 2, spatial.height + 2,
                 CPU_SMALL_CHARS, style.foregroundColor, style.backgroundColor)
-            .box(dx + 1, dy + 1, spatial.width - 2, spatial.height - 2,
+            .box(dx, dy, spatial.width, spatial.height,
                 BoxType.OUTER, style.foregroundColor, style.backgroundColor);
         break;
               

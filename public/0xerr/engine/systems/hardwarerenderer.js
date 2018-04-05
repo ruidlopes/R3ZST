@@ -1,4 +1,4 @@
-import {BLACK, BLUE_BRIGHT, BLUE_FADED, BLUE_FADED2} from '../common/palette.js';
+import {BLACK, BLUE_FADED2} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
@@ -31,7 +31,7 @@ class HardwareRendererSystem extends System {
     
     this.drawing.absolute()
         .rect(spatial.x, spatial.y, spatial.width, spatial.height,
-              0xef, active ? BLUE_BRIGHT : BLUE_FADED2, BLACK);
+              active ? 0xef : 0x00, BLUE_FADED2, BLACK);
   }
 }
 

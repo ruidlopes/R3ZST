@@ -1,3 +1,4 @@
+import {BLUE_FADED2} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
@@ -42,12 +43,12 @@ class NodeRendererSystem extends System {
     const style = activeNode.get(StyleComponent);
 
     this.drawing.clipping(this.hardwareViewSpatial())
-        .box(Math.floor(spatial.x), Math.floor(spatial.y),
+        .box(Math.floor(spatial.x) - 1, Math.floor(spatial.y) - 1,
+            spatial.width + 2, spatial.height + 2,
+            BoxType.SINGLE, style.foregroundColor, style.backgroundColor)
+        .rect(Math.floor(spatial.x), Math.floor(spatial.y),
             spatial.width, spatial.height,
-            BoxType.OUTER, style.foregroundColor, style.backgroundColor)
-        .rect(Math.floor(spatial.x + 1), Math.floor(spatial.y + 1),
-            spatial.width - 2, spatial.height - 2,
-            0x00, style.foregroundColor, style.backgroundColor);
+            0x0d, BLUE_FADED2, style.backgroundColor);
   }
 }
 
