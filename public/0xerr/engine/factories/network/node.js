@@ -49,10 +49,7 @@ class NodeFactory {
       chipIds.push(id);
     }
     
-    const minWidth = this.random.channel(RNG_NETWORK)
-        .randomRangeInclusive(
-            Math.floor(chipIds.length / 3),
-            Math.floor(chipIds.length / 2));
+    const minWidth = Math.ceil(Math.sqrt(chipIds.length));
     const minHeight = Math.ceil(chipIds.length / minWidth);
     
     const width = this.random.channel(RNG_NETWORK)
