@@ -20,7 +20,10 @@ class NetworkFactory {
   }
   
   make() {
-    const id = this.nodeFactory.make(NodeType.RETSAFE_CAM);
+    this.nodeFactory.make(NodeType.RETSAFE_CAM);
+    this.nodeFactory.make(NodeType.RETSAFE_CAM);
+    
+    const id = this.nodeFactory.make(NodeType.CORE);
     
     firstOf(this.entities.query([id])
         .iterate(ActiveComponent))

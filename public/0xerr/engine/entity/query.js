@@ -45,7 +45,7 @@ class EntityQuery {
   
   *entityView(id, ...types) {
     for (const type of types) {
-      if (this.components.get(type).has(id)) {
+      if (this.components.has(type) && this.components.get(type).has(id)) {
         yield this.components.get(type).get(id);
       }
     }

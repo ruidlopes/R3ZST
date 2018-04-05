@@ -24,6 +24,15 @@ class ChipRendererSystem extends System {
     super();
     this.manager = manager;
     this.drawing = drawing;
+        
+    this.clipped = {x: 0, y: 0, width: 0, height: 0};
+  }
+  
+  hardwareViewSpatial() {
+    return firstOf(this.manager.query()
+        .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
+        .iterate(SpatialComponent))
+        .get(SpatialComponent);
   }
   
   activeNode() {
@@ -57,16 +66,25 @@ class ChipRendererSystem extends System {
   
   chipFrame(chip, delta) {
     const nodeSpatial = this.activeNode().get(SpatialComponent);
-
+    const viewSpatial = this.hardwareViewSpatial();
+    this.clipped.x = nodeSpatial.x;
+    this.clipped.y = nodeSpatial.y;
+    this.clipped.width = Math.min(
+        nodeSpatial.width,
+        viewSpatial.width - nodeSpatial.x);
+    this.clipped.height = Math.min(
+        nodeSpatial.height,
+        viewSpatial.height - nodeSpatial.y);
+    
     const type = chip.get(ChipComponent).type;
     const spatial = chip.get(SpatialComponent);
     const style = chip.get(StyleComponent);
     const identified = chip.get(IdentifiedComponent).identified;
     
-    const dx = Math.floor(nodeSpatial.x + spatial.x);
-    const dy = Math.floor(nodeSpatial.y + spatial.y);
+    const dx = Math.floor(this.clipped.x + spatial.x);
+    const dy = Math.floor(this.clipped.y + spatial.y);
     
-    const draw = this.drawing.clipping(nodeSpatial);
+    const draw = this.drawing.clipping(this.clipped);
     draw.rect(dx, dy, spatial.width, spatial.height,
               0x00, style.foregroundColor, style.backgroundColor);
     

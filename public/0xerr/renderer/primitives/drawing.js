@@ -4,6 +4,10 @@ function rect(buffer, x, y, width, height, charByte, foregroundColor, background
   const clipEndX = clipping ? clipping.x + clipping.width : buffer.width;
   const clipEndY = clipping ? clipping.y + clipping.height : buffer.height;
   
+  if (x >= clipEndX || y >= clipEndY) {
+    return;
+  }
+  
   const startX = Math.max(x, clipX, 0);
   const startY = Math.max(y, clipY, 0);
   const endX = Math.min(clipEndX, x + width);
