@@ -87,7 +87,7 @@ class Random {
     if (isNaN(seedNumber) || String(seedNumber) != rawSeed) {
       const buffer = new ArrayBuffer(20);
       const seedBase = new Uint8Array(buffer);
-      seedBase.set(stringBytes(rawSeed));
+      seedBase.set(stringBytes(rawSeed.substr(0, 20)));
       this.setSeed(new Uint32Array(buffer));
     } else {
       const seedBase = unsigned(seedNumber);
