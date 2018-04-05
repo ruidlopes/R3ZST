@@ -68,7 +68,7 @@ function hline(buffer, x, y, width, charByte, foregroundColor, backgroundColor, 
     return;
   }
   
-  const startX = Math.max(x, clipX);
+  const startX = Math.max(x, clipX, 0);
   const endX = Math.min(clipEndX, x + width);
   
   buffer.chars.data.fill(
