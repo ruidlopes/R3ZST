@@ -40,9 +40,9 @@ class PlayerPositionSystem extends System {
     const activeNodeSpatial = this.activeNodeSpatial();
 
     playerSpatial.x = clamp(
-        playerSpatial.x + playerVelocity.vx, 1, activeNodeSpatial.width - 2);
+        playerSpatial.x + playerVelocity.vx, 0, activeNodeSpatial.width - 1);
     playerSpatial.y = clamp(
-        playerSpatial.y + playerVelocity.vy, 1, activeNodeSpatial.height - 2);
+        playerSpatial.y + playerVelocity.vy, 0, activeNodeSpatial.height - 1);
   }
 }
 

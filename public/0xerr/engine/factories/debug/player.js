@@ -14,7 +14,7 @@ class PlayerFactory {
     this.manager.add(
         this.manager.nextId(),
         new CyclesComponent(CYCLES_MAX),
-        new SpatialComponent(1, 1, 0, 0),
+        new SpatialComponent(0, 0, 0, 0),
         new StealthComponent(8),
         new VelocityComponent(0, 0));
   }
