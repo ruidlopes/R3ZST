@@ -12,13 +12,16 @@ const ChipBiosVersion = enumOf(
   'RET.BIOS EMBED',
   'RET.UEFI EMBED',
   'RET.UEFI SECURE1',
+  'RET.UEFI SECURE2',
   'RET.UEFI HYPER1',
+  'RET.UEFI HYPER2',
 );
 
 const ChipCamVersion = enumOf(
   'RETINA CAM1',
   'RETINA CAM2',
   'RETINA PANOPTIC1',
+  'RETINA PANOPTIC2',
 );
 
 const ChipCpuVersion = enumOf(
@@ -26,6 +29,7 @@ const ChipCpuVersion = enumOf(
   'RET.ARM R32',
   'RET.ARM R64',
   'RET.ARM 1K',
+  'RET.ARM 10K',
 );
 
 const ChipMemVersion = enumOf(

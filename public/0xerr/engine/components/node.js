@@ -5,7 +5,6 @@ const NodeType = enumOf(
   'ROUTER',
   'RETSAFE_CAM',
   'RETSAFE_CAMROUTER_L1',
-  'RETSAFE_CAMROUTER_L2',
   'DATACENTER_UNIT',
   'CORE',
 );
