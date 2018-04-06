@@ -73,7 +73,9 @@ class NodeFactory {
         new SpatialComponent(1 + cellX * 5, 1 + cellY * 5, 4, 4));
     });
     
-    const nodeId = this.entities.nextId();
+    const nodeId = overrides.has('nodeId') ?
+        overrides.get('nodeId') :
+        this.entities.nextId();
     this.entities.add(
         nodeId,
         new ActiveComponent(false),
