@@ -39,12 +39,8 @@ class ChipFactory {
         break;
       
       case ChipType.NIC:
-        this.entities.add(id, new IpComponent([10, 10, 1, 1]));
+        this.entities.add(id, new IpComponent([0, 0, 0, 0]));
         break;
-    }
-    
-    if (type == ChipType.CAM) {
-      
     }
     
     return id;
