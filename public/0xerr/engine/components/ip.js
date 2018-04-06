@@ -1,7 +1,12 @@
+const NO_IP = [0, 0, 0, 0];
+
 class IpComponent {
-  constructor(ip) {
+  constructor(ip = NO_IP) {
     this.ip = ip;
   }
 }
 
-export {IpComponent};
+export {
+  IpComponent,
+  NO_IP,
+};

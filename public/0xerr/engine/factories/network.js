@@ -2,6 +2,7 @@ import {NETWORK} from './qualifiers.js';
 import {RNG_NETWORK} from '../common/randomchannels.js';
 import {ActiveComponent} from '../components/active.js';
 import {ChipType} from '../components/chip.js';
+import {ConnectionFactory} from './network/connection.js';
 import {EntityManager} from '../entity/manager.js';
 import {NetSpec} from './network/netspec.js';
 import {NodeFactory} from './network/node.js';
@@ -14,11 +15,13 @@ class NetworkFactory {
   constructor(
       entities = ij(EntityManager),
       random = ij(Random),
-      nodeFactory = ij(NodeFactory, NETWORK)) {
+      nodeFactory = ij(NodeFactory, NETWORK),
+      connectionFactory = ij(ConnectionFactory, NETWORK)) {
     this.entities = entities;
     this.random = random;
     
     this.nodeFactory = nodeFactory;
+    this.connectionFactory = connectionFactory;
   }
   
   ids(type) {
@@ -77,6 +80,7 @@ class NetworkFactory {
           'max', children.get(datacenterId).length + 1,
         ),
       ));
+      this.connectionFactory.make(coreId, datacenterId);
       
       const isCameraNetwork = datacenterTypes.get(datacenterId);
       const routerType = isCameraNetwork ?
@@ -94,11 +98,13 @@ class NetworkFactory {
             'max', children.get(routerId).length + 1,
           ),
         ));
+        this.connectionFactory.make(datacenterId, routerId);
         
         for (const machineId of children.get(routerId)) {
           this.nodeFactory.make(machineType, mapOf(
             'nodeId', machineId,
           ));
+          this.connectionFactory.make(routerId, machineId);
         }
       }
     }

@@ -5,7 +5,7 @@ import {ChipComponent, ChipType, ChipVersionMap} from '../../components/chip.js'
 import {CompositeComponent} from '../../components/composite.js';
 import {EntityManager} from '../../entity/manager.js';
 import {IdentifiedComponent} from '../../components/identified.js';
-import {IpComponent} from '../../components/ip.js';
+import {IpComponent, NO_IP} from '../../components/ip.js';
 import {Random} from '../../../stdlib/random.js';
 import {RetCamStatusComponent} from '../../components/retcamstatus.js';
 import {StyleComponent} from '../../components/style.js';
@@ -39,7 +39,7 @@ class ChipFactory {
         break;
       
       case ChipType.NIC:
-        this.entities.add(id, new IpComponent([0, 0, 0, 0]));
+        this.entities.add(id, new IpComponent(NO_IP));
         break;
     }
     
