@@ -54,7 +54,7 @@ class ConnectAction extends Action {
     const position = composite.ids.indexOf(activeChip.id);
     const destination = composite.ids[1 - position];
     return firstOf(this.entities.query([destination])
-        .iterate(ActiveComponent, IdentifiedComponent, SpatialComponent));
+        .iterate(ActiveComponent, IdentifiedComponent, SpatialComponent, IpComponent));
   }
   
   destinationNodeActive(nic) {
@@ -92,7 +92,7 @@ class ConnectAction extends Action {
   }
   
   start() {
-    this.events.emit(EventType.LOG, `CONNECTING...`);
+    this.events.emit(EventType.LOG, 'CONNECTING...');
     if (!this.connection()) {
       this.events.emit(EventType.LOG, 'CONNECTION TIMEOUT.');
       return;
@@ -114,7 +114,9 @@ class ConnectAction extends Action {
     this.destinationNodeActive(nic2.id).active = true;
     
     this.events.emit(EventType.NODE);
-    this.events.emit(EventType.LOG, 'CONNECTED');
+    
+    const targetIp = nic2.get(IpComponent).ip;
+    this.events.emit(EventType.LOG, `CONNECTED TO ${targetIp}.`);
   }
 }
 
