@@ -5,8 +5,8 @@ import {ChipType} from '../components/chip.js';
 import {ConnectionFactory} from './network/connection.js';
 import {EntityManager} from '../entity/manager.js';
 import {NetSpec} from './network/netspec.js';
+import {NodeComponent, NodeType} from '../components/node.js';
 import {NodeFactory} from './network/node.js';
-import {NodeType} from '../components/node.js';
 import {Random} from '../../stdlib/random.js';
 import {firstOf, mapOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
@@ -109,7 +109,15 @@ class NetworkFactory {
       }
     }
     
-    firstOf(this.entities.query([coreId])
+    const edges = Array.from(this.entities.query()
+        .filter(NodeComponent, node =>
+            node.type == NodeType.WORKSTATION ||
+            node.type == NodeType.RETSAFE_CAM).ids);
+    const startingEdgeIndex = this.random.channel(RNG_NETWORK)
+        .randomRange(0, edges.length);
+    const startingEdgeId = edges[startingEdgeIndex];
+    
+    firstOf(this.entities.query([startingEdgeId])
         .iterate(ActiveComponent))
         .get(ActiveComponent).active = true;
   }
