@@ -126,6 +126,10 @@ class ChipRendererSystem extends System {
       case ChipType.NIC:
         draw.box(dx, dy, spatial.width, spatial.height,
                  BoxType.OUTER, style.foregroundColor, style.backgroundColor);
+        for (let y = 1; y < spatial.height - 1; ++y) {
+          draw.hline(dx + 1, dy + y, spatial.width - 2,
+                     0xc4, style.foregroundColor, style.backgroundColor);
+        } 
         break;
     }
   }
