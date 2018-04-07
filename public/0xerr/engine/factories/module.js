@@ -1,3 +1,4 @@
+import {NETWORK} from './qualifiers.js';
 import {DebugModule} from './debug/module.js';
 import {GameFactory} from './game.js';
 import {Module} from '../../injection/module.js';
@@ -11,7 +12,7 @@ class FactoryModule extends Module {
     this.install(new NetworkModule());
     
     this.bindClass(GameFactory);
-    this.bindClass(NetworkFactory);
+    this.bindClass(NetworkFactory, NETWORK);
     this.bindClass(ViewFactory);
   }
 }

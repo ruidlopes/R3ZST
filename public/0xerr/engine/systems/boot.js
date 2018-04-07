@@ -1,4 +1,5 @@
 import {BLACK, BLUE_BRIGHT} from '../common/palette.js';
+import {NETWORK} from '../factories/qualifiers.js';
 import {ActiveComponent} from '../components/active.js';
 import {DeckFactory} from '../factories/debug/deck.js';
 import {Drawing} from '../common/drawing.js';
@@ -8,7 +9,8 @@ import {EventType} from '../event/type.js';
 import {GameFactory} from '../factories/game.js';
 import {NetworkFactory} from '../factories/network.js';
 import {NodeFactory} from '../factories/debug/node.js';
-import {PlayerFactory} from '../factories/debug/player.js';
+import {PlayerFactory} from '../factories/network/player.js';
+import {PlayerFactory as DebugPlayerFactory} from '../factories/debug/player.js';
 import {Random} from '../../stdlib/random.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {System} from '../system.js';
@@ -27,12 +29,13 @@ class BootSystem extends System {
       random = ij(Random),
       
       gameFactory = ij(GameFactory),
-      networkFactory = ij(NetworkFactory),
+      networkFactory = ij(NetworkFactory, NETWORK),
+      playerFactory = ij(PlayerFactory, NETWORK),
       viewFactory = ij(ViewFactory),
       
       debugDeckFactory = ij(DeckFactory),
       debugNodeFactory = ij(NodeFactory),
-      debugPlayerFactory = ij(PlayerFactory)) {
+      debugPlayerFactory = ij(DebugPlayerFactory)) {
     super();
         
     this.entities = entities;
@@ -43,6 +46,7 @@ class BootSystem extends System {
     
     this.gameFactory = gameFactory;
     this.networkFactory = networkFactory;
+    this.playerFactory = playerFactory;
     this.viewFactory = viewFactory;
     
     this.debugDeckFactory = debugDeckFactory;
@@ -99,10 +103,10 @@ class BootSystem extends System {
     } else {
       // TODO: replace debug factories.
       this.debugDeckFactory.make();
-      this.debugPlayerFactory.make();
       
       this.random.setRawSeed(rawSeed);
       this.networkFactory.make();
+      this.playerFactory.make();
     }
     
     this.events.emit(EventType.CONNECTED);
