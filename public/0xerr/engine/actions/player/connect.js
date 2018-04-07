@@ -39,11 +39,21 @@ class ConnectAction extends Action {
         .iterate(ChipComponent, ActiveComponent, IdentifiedComponent, IpComponent);
   }
   
-  destinationNic(ip) {
-    const address = ip.split('.');
+  connection() {
+    const activeChip = firstOf(this.activeChip());
     return firstOf(this.entities.query()
-        .filter(ChipComponent, chip => chip.type == ChipType.NIC)
-        .filter(IpComponent, component => sameElements(component.ip, address))
+        .filter(ConnectionComponent)
+        .filter(CompositeComponent, composite => composite.ids.includes(activeChip.id))
+        .iterate(ConnectionComponent, CompositeComponent));
+  }
+  
+  destinationNic() {
+    const connection = this.connection();
+    const activeChip = firstOf(this.activeChip());
+    const composite = connection.get(CompositeComponent);
+    const position = composite.ids.indexOf(activeChip.id);
+    const destination = composite.ids[1 - position];
+    return firstOf(this.entities.query([destination])
         .iterate(ActiveComponent, IdentifiedComponent, SpatialComponent));
   }
   
@@ -55,65 +65,41 @@ class ConnectAction extends Action {
         .get(ActiveComponent);
   }
   
-  hasConnection(nic1, nic2) {
-    return !isEmpty(this.entities.query()
-        .filter(ConnectionComponent)
-        .filter(CompositeComponent,
-                composite => (composite.ids[0] == nic1 &&
-                              composite.ids[1] == nic2) ||
-                             (composite.ids[0] == nic2 &&
-                              composite.ids[1] == nic1))
-        .iterate(ConnectionComponent));
-  }
-  
   playerSpatial() {
     return firstOf(this.entities.query()
         .filter(StealthComponent)
-        .first()
         .iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   
-  constraints(ip) {
+  constraints() {
     if (isEmpty(this.activeChip())) {
       this.events.emit(EventType.LOG, 'NO NIC CHIP IN RANGE.');
       return false;
     }
     
     const activeChip = firstOf(this.activeChip());
-    
     if (!activeChip.get(IdentifiedComponent).identified) {
       this.events.emit(EventType.LOG, 'UNIDENTIFIED CHIP.');
       return false;
     }
-    
     if (activeChip.get(ChipComponent).type != ChipType.NIC) {
       this.events.emit(EventType.LOG, 'INVALID CHIP.');
-      return false;
-    }
-    
-    if (ip == undefined) {
-      this.events.emit(EventType.LOG, 'MISSING IP TO CONNECT TO.');
-      return false;
-    }
-    
-    if (sameElements(ip.split('.'), activeChip.get(IpComponent).ip)) {
-      this.events.emit(EventType.LOG, `ALREADY AT ${ip}`);
       return false;
     }
     
     return true;
   }
   
-  start(ip) {
-    this.events.emit(EventType.LOG, `CONNECTING TO ${ip}`);
-    
-    const nic1 = firstOf(this.activeChip());
-    const nic2 = this.destinationNic(ip);
-    if (!this.hasConnection(nic1.id, nic2.id)) {
+  start() {
+    this.events.emit(EventType.LOG, `CONNECTING...`);
+    if (!this.connection()) {
       this.events.emit(EventType.LOG, 'CONNECTION TIMEOUT.');
       return;
     }
+    
+    const nic1 = firstOf(this.activeChip());
+    const nic2 = this.destinationNic();
     
     this.activeNode().get(ActiveComponent).active = false;
     nic1.get(ActiveComponent).active = false;
