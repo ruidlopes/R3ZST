@@ -67,14 +67,14 @@ class ChipRendererSystem extends System {
   chipFrame(chip, delta) {
     const nodeSpatial = this.activeNode().get(SpatialComponent);
     const viewSpatial = this.hardwareViewSpatial();
-    this.clipped.x = nodeSpatial.x;
-    this.clipped.y = nodeSpatial.y;
+    this.clipped.x = Math.floor(nodeSpatial.x);
+    this.clipped.y = Math.floor(nodeSpatial.y);
     this.clipped.width = Math.min(
         nodeSpatial.width,
-        viewSpatial.width - nodeSpatial.x);
+        viewSpatial.width - Math.floor(nodeSpatial.x));
     this.clipped.height = Math.min(
         nodeSpatial.height,
-        viewSpatial.height - nodeSpatial.y);
+        viewSpatial.height - Math.floor(nodeSpatial.y));
     
     const type = chip.get(ChipComponent).type;
     const spatial = chip.get(SpatialComponent);
