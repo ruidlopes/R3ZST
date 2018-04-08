@@ -59,12 +59,6 @@ class ChipRendererSystem extends System {
   }
   
   frame(delta) {
-    for (const chip of this.chips()) {
-      this.chipFrame(chip, delta);
-    }
-  }
-  
-  chipFrame(chip, delta) {
     const nodeSpatial = this.activeNode().get(SpatialComponent);
     const viewSpatial = this.hardwareViewSpatial();
     this.clipped.x = Math.floor(nodeSpatial.x);
@@ -76,6 +70,12 @@ class ChipRendererSystem extends System {
         nodeSpatial.height,
         viewSpatial.height - Math.floor(nodeSpatial.y));
     
+    for (const chip of this.chips()) {
+      this.chipFrame(chip, delta);
+    }
+  }
+  
+  chipFrame(chip, delta) {
     const type = chip.get(ChipComponent).type;
     const spatial = chip.get(SpatialComponent);
     const style = chip.get(StyleComponent);
