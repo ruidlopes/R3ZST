@@ -2,6 +2,8 @@ import {EntityView} from './view.js';
 import {ALWAYS_TRUE} from '../../stdlib/functions.js';
 import {firstOf} from '../../stdlib/collections.js';
 
+const EntityViewTemplate = new EntityView();
+
 class EntityQuery {
   constructor(components, ids) {
     this.components = components;
@@ -37,11 +39,11 @@ class EntityQuery {
   
   *iterate(...types) {
     for (const id of this.ids.values()) {
-      yield new EntityView(id, ...this.entityView(id, ...types));
+      yield EntityViewTemplate.mutate(id, this.entityView(id, types));
     }
   }
   
-  *entityView(id, ...types) {
+  *entityView(id, types) {
     for (const type of types) {
       if (this.components.has(type) && this.components.get(type).has(id)) {
         yield this.components.get(type).get(id);
