@@ -16,7 +16,8 @@ class EntityQuery {
     for (const id of this.ids) {
       const idHasType = this.components.has(type) &&
           this.components.get(type).has(id);
-      if (idHasType && cond(this.components.get(type).get(id))) {
+      if (idHasType &&
+          (cond == ALWAYS_TRUE || cond(this.components.get(type).get(id)))) {
         ids.add(id);
       }
     }
