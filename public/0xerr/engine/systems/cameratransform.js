@@ -9,13 +9,13 @@ import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class CameraTransformSystem extends System {
-  constructor(manager = ij(EntityManager)) {
+  constructor(entities = ij(EntityManager)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
   }
   
   activeNodeSpatial() {
-    return firstOf(this.manager.query()
+    return firstOf(this.entities.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
         .iterate(SpatialComponent))
@@ -23,14 +23,14 @@ class CameraTransformSystem extends System {
   }
   
   playerSpatial() {
-    return firstOf(this.manager.query()
+    return firstOf(this.entities.query()
         .filter(StealthComponent)
         .iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   
   hardwareViewSpatial() {
-    return firstOf(this.manager.query()
+    return firstOf(this.entities.query()
         .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
         .iterate(SpatialComponent))
         .get(SpatialComponent);
@@ -40,6 +40,11 @@ class CameraTransformSystem extends System {
     const activeNodeSpatial = this.activeNodeSpatial();
     const playerSpatial = this.playerSpatial();
     const hardwareViewSpatial = this.hardwareViewSpatial();
+    
+    const intX = Math.floor(playerSpatial.x);
+    const intY = Math.floor(playerSpatial.y);
+    const fracX = playerSpatial.x - intX;
+    const fracY = playerSpatial.y - intY;
     
     activeNodeSpatial.x = Math.floor(hardwareViewSpatial.width * 0.5) - playerSpatial.x;
     activeNodeSpatial.y = Math.floor(hardwareViewSpatial.height * 0.5) - playerSpatial.y;
