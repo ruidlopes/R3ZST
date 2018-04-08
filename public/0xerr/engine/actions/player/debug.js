@@ -9,6 +9,7 @@ import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {IpComponent} from '../../components/ip.js';
+import {NodeComponent, NodeType} from '../../components/node.js';
 import {RetCamStatusComponent, RetCamStatus} from '../../components/retcamstatus.js';
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
 import {SpatialComponent} from '../../components/spatial.js';
@@ -21,6 +22,7 @@ const DebugDirectives = enumOf(
     'CHIP',
     'CONNECTIONS',
     'DECK',
+    'NODE',
     'PLAYER',
     'SENTRIES',
 );
@@ -66,8 +68,11 @@ class DebugAction extends Action {
       case DebugDirectives.DECK:
         this.debugDeck();
         break;
+      case DebugDirectives.NODE:
+        this.debugNode();
+        break;
       case DebugDirectives.PLAYER:
-        this.debugPlayer(...params);
+        this.debugPlayer();
         break;
       case DebugDirectives.SENTRIES:
         this.debugSentries();
@@ -155,20 +160,33 @@ class DebugAction extends Action {
     }
   }
   
-  debugPlayer(...params) {
-    const command = params.shift();
-    switch (command) {
-      case 'LOCATION':
-        const playerSpatial = firstOf(this.entities.query()
-            .filter(StealthComponent)
-            .iterate(SpatialComponent))
-            .get(SpatialComponent);
-        
-        const x = playerSpatial.x.toFixed(2);
-        const y = playerSpatial.y.toFixed(2);
-        this.events.emit(EventType.LOG,`@ ${x}, ${y}`);
-        break;
-    }
+  debugNode() {
+    const activeNode = firstOf(this.entities.query()
+        .filter(NodeComponent)
+        .filter(ActiveComponent, component => component.active)
+        .first()
+        .iterate(NodeComponent, SpatialComponent));
+    
+    const type = enumLabel(NodeType, activeNode.get(NodeComponent).type);
+    this.events.emit(
+        EventType.LOG, `TYPE: ${type}`);
+    
+    const spatial = activeNode.get(SpatialComponent);
+    const x = spatial.x.toFixed(2);
+    const y = spatial.y.toFixed(2);
+    this.events.emit(
+        EventType.LOG, `@ ${x}, ${y} (${spatial.width}, ${spatial.height})`);
+  }
+  
+  debugPlayer() {
+    const playerSpatial = firstOf(this.entities.query()
+        .filter(StealthComponent)
+        .iterate(SpatialComponent))
+        .get(SpatialComponent);
+
+    const x = playerSpatial.x.toFixed(2);
+    const y = playerSpatial.y.toFixed(2);
+    this.events.emit(EventType.LOG,`@ ${x}, ${y}`);
   }
   
   debugSentries() {
