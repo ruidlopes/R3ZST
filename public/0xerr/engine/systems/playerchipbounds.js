@@ -24,7 +24,6 @@ class PlayerChipBoundsSystem extends System {
     return firstOf(this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
-        .first()
         .iterate(SpatialComponent, CompositeComponent));
   }
   
@@ -39,10 +38,8 @@ class PlayerChipBoundsSystem extends System {
   }
   
   playerSpatial() {
-    return firstOf(this.manager.query()
-        .filter(StealthComponent)
-        .first()
-        .iterate(SpatialComponent))
+    return this.manager.query()
+        .head(StealthComponent, SpatialComponent)
         .get(SpatialComponent);
   }
   

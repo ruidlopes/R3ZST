@@ -20,16 +20,13 @@ class PlayerPositionSystem extends System {
     return firstOf(this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
-        .first()
         .iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   
   player() {
-    return firstOf(this.manager.query()
-        .filter(StealthComponent)
-        .first()
-        .iterate(SpatialComponent, VelocityComponent));
+    return this.manager.query()
+        .head(StealthComponent, SpatialComponent, VelocityComponent);
   }
   
   frame(delta) {

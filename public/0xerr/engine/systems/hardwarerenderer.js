@@ -20,7 +20,6 @@ class HardwareRendererSystem extends System {
   hardwareView() {
     return firstOf(this.manager.query()
         .filter(ViewComponent, view => view.type == ViewType.HARDWARE)
-        .first()
         .iterate(SpatialComponent, ActiveComponent));
   }
   

@@ -22,25 +22,20 @@ class TurnManagementSystem extends System {
   }
   
   turnComponent() {
-    return firstOf(this.manager.query()
-        .filter(TurnComponent)
-        .iterate(TurnComponent))
+    return this.manager.query()
+        .head(TurnComponent)
         .get(TurnComponent);
   }
   
   cyclesComponent() {
-    return firstOf(this.manager.query()
-        .filter(CyclesComponent)
-        .first()
-        .iterate(CyclesComponent))
+    return this.manager.query()
+        .head(CyclesComponent)
         .get(CyclesComponent);
   }
   
   turnActionsComponent() {
-    return firstOf(this.manager.query()
-        .filter(TurnActionsComponent)
-        .first()
-        .iterate(TurnActionsComponent))
+    return this.manager.query()
+        .head(TurnActionsComponent)
         .get(TurnActionsComponent);
   }
   

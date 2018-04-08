@@ -39,9 +39,8 @@ class PlayerVelocitySystem extends System {
   }
   
   playerVelocity() {
-    return firstOf(this.manager.query()
-        .filter(StealthComponent)
-        .iterate(VelocityComponent))
+    return this.manager.query()
+        .head(StealthComponent, VelocityComponent)
         .get(VelocityComponent);
   }
   

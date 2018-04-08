@@ -1,5 +1,6 @@
-import {EntityView} from './view.js';
 import {ALWAYS_TRUE} from '../../stdlib/functions.js';
+import {EntityView} from './view.js';
+import {assertEquals} from '../../stdlib/asserts.js';
 import {firstOf} from '../../stdlib/collections.js';
 
 const EntityViewTemplate = new EntityView();
@@ -35,6 +36,15 @@ class EntityQuery {
   
   count() {
     return this.ids.size;
+  }
+  
+  head(...types) {
+    const uniqueType = types[0];
+    const uniqueComponents = this.components.get(uniqueType);
+    assertEquals(1, uniqueComponents.size);
+    
+    const id = firstOf(uniqueComponents)[0];
+    return EntityViewTemplate.mutate(id, this.entityView(id, types));
   }
   
   *iterate(...types) {

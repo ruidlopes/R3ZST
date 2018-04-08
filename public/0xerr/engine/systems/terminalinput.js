@@ -106,9 +106,8 @@ class TerminalInputSystem extends System {
   }
   
   actionHistory() {
-    return firstOf(this.entities.query()
-        .filter(ActionHistoryComponent)
-        .iterate(ActionHistoryComponent))
+    return this.entities.query()
+        .head(ActionHistoryComponent)
         .get(ActionHistoryComponent);
   }
   

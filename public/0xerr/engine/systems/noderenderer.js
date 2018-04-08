@@ -24,14 +24,12 @@ class NodeRendererSystem extends System {
     return firstOf(this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
-        .first()
         .iterate(NodeComponent, SpatialComponent, StyleComponent));
   }
   
   hardwareViewSpatial() {
     return firstOf(this.manager.query()
         .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
-        .first()
         .iterate(SpatialComponent))
         .get(SpatialComponent);
   }

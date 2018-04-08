@@ -23,9 +23,8 @@ class CameraTransformSystem extends System {
   }
   
   playerSpatial() {
-    return firstOf(this.entities.query()
-        .filter(StealthComponent)
-        .iterate(SpatialComponent))
+    return this.entities.query()
+        .head(StealthComponent, SpatialComponent)
         .get(SpatialComponent);
   }
   

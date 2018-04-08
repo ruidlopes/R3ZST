@@ -60,33 +60,29 @@ class StatusRendererSystem extends System {
   }
   
   turn() {
-    return firstOf(this.manager.query()
-        .filter(TurnComponent)
-        .iterate(TurnComponent))
+    return this.manager.query()
+        .head(TurnComponent)
         .get(TurnComponent)
         .turn;
   }
   
   stealth() {
-    return firstOf(this.manager.query()
-        .filter(StealthComponent)
-        .iterate(StealthComponent))
+    return this.manager.query()
+        .head(StealthComponent)
         .get(StealthComponent)
         .stealth;
   }
   
   cycles() {
-    return firstOf(this.manager.query()
-        .filter(CyclesComponent)
-        .iterate(CyclesComponent))
+    return this.manager.query()
+        .head(CyclesComponent)
         .get(CyclesComponent)
         .cycles;
   }
   
   deck() {
-    return firstOf(this.manager.query()
-        .filter(DeckComponent)
-        .iterate(DeckComponent))
+    return this.manager.query()
+        .head(DeckComponent)
         .get(DeckComponent);
   }
   
