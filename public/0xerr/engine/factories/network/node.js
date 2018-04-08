@@ -91,11 +91,19 @@ class NodeFactory {
       const sentryCount = this.random.channel(RNG_NETWORK)
           .randomRangeInclusive(1, Math.floor(cellWidth * cellHeight * ratio));
       
+      const sentryCells = new Array(cellWidth * cellHeight);
+      sentryCells.fill(-1);
+      for (let i = 0; i < sentryCount; ++i) {
+        sentryCells[i] = i;
+      }
+      shuffle(sentryCells, this.random.channel(RNG_NETWORK));
+      
       const sentryIds = [];
       for (let i = 0; i < sentryCount; ++i) {
         const sentryId = this.sentryFactory.make(sentrySpec);
-        const sentryY = Math.floor(i / cellHeight);
-        const sentryX = i % cellWidth;
+        const sentryIndex = sentryCells.indexOf(i);
+        const sentryY = Math.floor(sentryIndex / cellHeight);
+        const sentryX = sentryIndex % cellWidth;
         
         this.entities.add(
             sentryId,
