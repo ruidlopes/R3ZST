@@ -29,11 +29,6 @@ class EntityQuery {
     return this;
   }
   
-  none() {
-    this.ids = new Set();
-    return this;
-  }
-  
   count() {
     return this.ids.size;
   }
