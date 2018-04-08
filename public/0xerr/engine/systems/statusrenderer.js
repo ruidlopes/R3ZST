@@ -55,7 +55,6 @@ class StatusRendererSystem extends System {
   statusViewSpatial() {
     return firstOf(this.manager.query()
         .filter(ViewComponent, component => component.type == ViewType.STATUS)
-        .first()
         .iterate(SpatialComponent))
         .get(SpatialComponent);
   }
@@ -71,7 +70,6 @@ class StatusRendererSystem extends System {
   stealth() {
     return firstOf(this.manager.query()
         .filter(StealthComponent)
-        .first()
         .iterate(StealthComponent))
         .get(StealthComponent)
         .stealth;
@@ -80,7 +78,6 @@ class StatusRendererSystem extends System {
   cycles() {
     return firstOf(this.manager.query()
         .filter(CyclesComponent)
-        .first()
         .iterate(CyclesComponent))
         .get(CyclesComponent)
         .cycles;
@@ -97,23 +94,21 @@ class StatusRendererSystem extends System {
     return firstOf(this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
-        .first()
         .iterate(NodeComponent, CompositeComponent));
   }
   
-  chips() {
-    const chipIds = this.activeNode().get(CompositeComponent).ids;
-    return this.manager.query(chipIds)
+  activeChip() {
+    return firstOf(this.manager.query()
         .filter(ChipComponent)
+        .filter(ActiveComponent, component => component.active)
         .iterate(
             ChipComponent,
             IdentifiedComponent,
             IpComponent,
-            RetCamStatusComponent);
+            RetCamStatusComponent));
   }
   
-  renderFrame(delta) {
-    const spatial = this.statusViewSpatial();
+  renderFrame(delta, spatial) {
     this.drawing.absolute()
         .box(spatial.x, spatial.y, spatial.width, spatial.height,
             BoxType.SINGLE, BLUE_BRIGHT, BLACK)
@@ -122,8 +117,7 @@ class StatusRendererSystem extends System {
         .sprint('STATUS', spatial.x + 2, spatial.y, BLUE_BRIGHT, BLACK);
   }
   
-  renderGameStats(delta) {
-    const spatial = this.statusViewSpatial();
+  renderGameStats(delta, spatial) {
     const dx = spatial.x + 2;
     const dy = spatial.y + 2;
     
@@ -137,8 +131,7 @@ class StatusRendererSystem extends System {
         .sprint('\xfe'.repeat(this.cycles()), dx + 10, dy + 4, ORANGE_BRIGHT, BLACK);
   }
   
-  renderDeckStats(delta) {
-    const spatial = this.statusViewSpatial();
+  renderDeckStats(delta, spatial) {
     const dx = spatial.x + 2;
     let dy = spatial.y + 9;
     
@@ -161,70 +154,66 @@ class StatusRendererSystem extends System {
     }
   }
   
-  renderNodeStats(delta) {
-    const statusViewSpatial = this.statusViewSpatial();
-    const dx = statusViewSpatial.x + 2;
-    let dy = statusViewSpatial.y + 25;
+  renderNodeStats(delta, spatial) {
+    const dx = spatial.x + 2;
+    let dy = spatial.y + 25;
     
-    const draw = this.drawing.clipping(statusViewSpatial);
+    const draw = this.drawing.clipping(spatial);
     const type = this.activeNode().get(NodeComponent).type;
     
-    for (const chip of this.chips()) {
-      const identified = chip.get(IdentifiedComponent).identified;
-      if (!identified) {
-        continue;
-      }
+    const chip = this.activeChip();
+    if (!chip || !chip.get(IdentifiedComponent).identified) {
+      return;
+    }
       
-      const component = chip.get(ChipComponent);
-      switch (component.type) {
-        case ChipType.BIOS:
-          const biosVersion = enumLabel(ChipBiosVersion, component.version);
-          draw.sprint('NODE', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(enumLabel(NodeType, type), dx + 8, dy, ORANGE_BRIGHT, BLACK)
-              .sprint('BIOS', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(biosVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
-          break;
-        
-        case ChipType.CAM:
-          const camVersion = enumLabel(ChipCamVersion, component.version);
-          const status = enumLabel(RetCamStatus, chip.get(RetCamStatusComponent).status);
-          draw.sprint('CAMERA', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(camVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK)
-              .sprint('STATUS', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(status, dx + 8, dy, ORANGE_BRIGHT, BLACK);
-          break;
-          
-        case ChipType.CPU:
-          const cpuVersion = enumLabel(ChipCpuVersion, component.version);
-          draw.sprint('CPU', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(cpuVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
-          break;
-        
-        case ChipType.MEM:
-          const memVersion = enumLabel(ChipMemVersion, component.version);
-          draw.sprint('RAM', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(memVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
-          break;
-          
-        case ChipType.NIC:
-          const nicVersion = enumLabel(ChipNicVersion, component.version);
-          const ip = chip.get(IpComponent).ip.join('.');
-          draw.sprint('NIC', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(nicVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK)
-              .sprint('IP', dx, ++dy, BLUE_BRIGHT, BLACK)
-              .sprint(ip, dx + 8, dy, ORANGE_BRIGHT, BLACK);
-          break;
-      }
-      
-      dy++;
+    const component = chip.get(ChipComponent);
+    switch (component.type) {
+      case ChipType.BIOS:
+        const biosVersion = enumLabel(ChipBiosVersion, component.version);
+        draw.sprint('NODE', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(enumLabel(NodeType, type), dx + 8, dy, ORANGE_BRIGHT, BLACK)
+            .sprint('BIOS', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(biosVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+        break;
+
+      case ChipType.CAM:
+        const camVersion = enumLabel(ChipCamVersion, component.version);
+        const status = enumLabel(RetCamStatus, chip.get(RetCamStatusComponent).status);
+        draw.sprint('CAMERA', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(camVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK)
+            .sprint('STATUS', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(status, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+        break;
+
+      case ChipType.CPU:
+        const cpuVersion = enumLabel(ChipCpuVersion, component.version);
+        draw.sprint('CPU', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(cpuVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+        break;
+
+      case ChipType.MEM:
+        const memVersion = enumLabel(ChipMemVersion, component.version);
+        draw.sprint('RAM', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(memVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+        break;
+
+      case ChipType.NIC:
+        const nicVersion = enumLabel(ChipNicVersion, component.version);
+        const ip = chip.get(IpComponent).ip.join('.');
+        draw.sprint('NIC', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(nicVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK)
+            .sprint('IP', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(ip, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+        break;
     }
   }
   
   frame(delta) {
-    this.renderFrame(delta);
-    this.renderGameStats(delta);
-    this.renderDeckStats(delta);
-    this.renderNodeStats(delta);
+    const spatial = this.statusViewSpatial();
+    this.renderFrame(delta, spatial);
+    this.renderGameStats(delta, spatial);
+    this.renderDeckStats(delta, spatial);
+    this.renderNodeStats(delta, spatial);
   }
 }
 
