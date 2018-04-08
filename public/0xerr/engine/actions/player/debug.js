@@ -1,5 +1,6 @@
 import {PLAYER} from '../qualifiers.js';
 import {Action, ActionRefreshEnum} from '../../action.js';
+import {ActiveComponent} from '../../components/active.js';
 import {ChipComponent, ChipType} from '../../components/chip.js';
 import {CompositeComponent} from '../../components/composite.js';
 import {ConnectionComponent} from '../../components/connection.js';
@@ -10,13 +11,17 @@ import {EventType} from '../../event/type.js';
 import {IpComponent} from '../../components/ip.js';
 import {RetCamStatusComponent, RetCamStatus} from '../../components/retcamstatus.js';
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
+import {SpatialComponent} from '../../components/spatial.js';
+import {StealthComponent} from '../../components/stealth.js';
 import {enumHas, enumLabel, enumOf, enumValue, firstOf} from '../../../stdlib/collections.js';
 import {ij, ijmap} from '../../../injection/api.js';
 
 const DebugDirectives = enumOf(
     'CAMERAS',
+    'CHIP',
     'CONNECTIONS',
     'DECK',
+    'PLAYER',
     'SENTRIES',
 );
 
@@ -52,11 +57,17 @@ class DebugAction extends Action {
       case DebugDirectives.CAMERAS:
         this.debugCameras();
         break;
+      case DebugDirectives.CHIP:
+        this.debugChip();
+        break;
       case DebugDirectives.CONNECTIONS:
         this.debugConnections();
         break;
       case DebugDirectives.DECK:
         this.debugDeck();
+        break;
+      case DebugDirectives.PLAYER:
+        this.debugPlayer(...params);
         break;
       case DebugDirectives.SENTRIES:
         this.debugSentries();
@@ -79,6 +90,25 @@ class DebugAction extends Action {
       this.events.emit(
           EventType.LOG, `TOTAL ${key} CAMERAS: ${totalStatus}`);
     }
+  }
+  
+  debugChip() {
+    const chip = firstOf(this.entities.query()
+        .filter(ChipComponent)
+        .filter(ActiveComponent, component => component.active)
+        .iterate(ChipComponent, SpatialComponent));
+    
+    if (!chip) {
+      this.events.emit(
+          EventType.LOG, 'NO ACTIVE CHIP IN RANGE.');
+      return;
+    }
+    
+    const spatial = chip.get(SpatialComponent);
+    const x = spatial.x.toFixed(2);
+    const y = spatial.y.toFixed(2);
+    this.events.emit(
+        EventType.LOG, `@ ${x}, ${y} (${spatial.width}, ${spatial.height})`);
   }
   
   debugConnections() {
@@ -122,6 +152,22 @@ class DebugAction extends Action {
       this.events.emit(
           EventType.LOG,
           `${key} (REFRESH: ${refresh}, COUNT: ${count}, CYCLES: ${cycles})`);
+    }
+  }
+  
+  debugPlayer(...params) {
+    const command = params.shift();
+    switch (command) {
+      case 'LOCATION':
+        const playerSpatial = firstOf(this.entities.query()
+            .filter(StealthComponent)
+            .iterate(SpatialComponent))
+            .get(SpatialComponent);
+        
+        const x = playerSpatial.x.toFixed(2);
+        const y = playerSpatial.y.toFixed(2);
+        this.events.emit(EventType.LOG,`@ ${x}, ${y}`);
+        break;
     }
   }
   
