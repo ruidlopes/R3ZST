@@ -1,4 +1,5 @@
 import {BLACK, BLUE_BRIGHT} from '../../common/palette.js';
+import {RNG_NETWORK} from '../../common/randomchannels.js';
 import {EntityManager} from '../../entity/manager.js';
 import {Random} from '../../../stdlib/random.js';
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
@@ -17,10 +18,13 @@ class SentryFactory {
   
   make(spec = new Map()) {
     const id = this.entities.nextId();
+    const capability = spec.has('capabilities') ?
+        this.random.channel(RNG_NETWORK).randomItem(spec.get('capabilities')) :
+        undefined;
     
     this.entities.add(
         id,
-        new SentryComponent([]),
+        new SentryComponent(capability ? [capability] : []),
         new StyleComponent(BLUE_BRIGHT, BLACK));
     
     return id;
