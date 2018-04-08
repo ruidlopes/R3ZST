@@ -3,6 +3,7 @@ import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
 import {SpatialComponent} from '../components/spatial.js';
+import {StyleComponent} from '../components/style.js';
 import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
 import {firstOf} from '../../stdlib/collections.js';
@@ -21,7 +22,7 @@ class TextInputRendererSystem extends System {
   frame(delta) {
     const inputs = this.entities.query()
         .filter(TextInputComponent)
-        .iterate(TextInputComponent, SpatialComponent, ActiveComponent);
+        .iterate(TextInputComponent, SpatialComponent, StyleComponent, ActiveComponent);
     for (const input of inputs) {
       this.renderTextInput(input, delta);
     }
@@ -40,14 +41,19 @@ class TextInputRendererSystem extends System {
     const cursorX = textInput.cursor - inputStart;
     const active = input.get(ActiveComponent).active;
     this.deltaAcc = (this.deltaAcc + delta) % 1000;
-    const cursorForeground = active && this.deltaAcc < 500 ? BLACK : BLUE_BRIGHT;
-    const cursorBackground = active && this.deltaAcc < 500 ? BLUE_BRIGHT : BLACK;
+    
+    const style = input.get(StyleComponent);
+    const foregroundColor = style ? style.foregroundColor : BLUE_BRIGHT;
+    const backgroundColor = style ? style.backgroundColor : BLACK;
+    
+    const cursorForeground = active && this.deltaAcc < 500 ? backgroundColor : foregroundColor;
+    const cursorBackground = active && this.deltaAcc < 500 ? foregroundColor : backgroundColor;
     
     this.drawing.clipping(textInputSpatial)
-        .sprint(prompt, textInputSpatial.x, textInputSpatial.y, BLUE_BRIGHT, BLACK)
+        .sprint(prompt, textInputSpatial.x, textInputSpatial.y, foregroundColor, backgroundColor)
         .sprint(text,
             textInputSpatial.x + prompt.length, textInputSpatial.y,
-            BLUE_BRIGHT, BLACK)
+            foregroundColor, backgroundColor)
         .sprint(text[cursorX] || ' ',
             textInputSpatial.x + prompt.length + cursorX, textInputSpatial.y,
             cursorForeground, cursorBackground);

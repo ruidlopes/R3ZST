@@ -5,7 +5,7 @@ import {EventType} from '../event/type.js';
 import {System} from '../system.js';
 import {TextBufferComponent} from '../components/textbuffer.js';
 import {ViewComponent, ViewType} from '../components/view.js';
-import {firstOf} from '../../stdlib/collections.js';
+import {firstOf, mapOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class TerminalBufferSystem extends System {
@@ -18,13 +18,12 @@ class TerminalBufferSystem extends System {
         
     this.events.subscribe(
         EventType.LOG,
-        (message) => this.log(message));
+        (message, attributes) => this.log(message, attributes));
   }
   
   terminalViewChildren() {
     return firstOf(this.manager.query()
         .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .first()
         .iterate(CompositeComponent))
         .get(CompositeComponent)
         .ids;
@@ -33,13 +32,15 @@ class TerminalBufferSystem extends System {
   textBuffer() {
     return firstOf(this.manager.query(this.terminalViewChildren())
         .filter(TextBufferComponent)
-        .first()
         .iterate(TextBufferComponent))
         .get(TextBufferComponent);
   }
   
-  log(message) {
-    this.textBuffer().buffer.push(message.toUpperCase());
+  log(message, attributes = new Map()) {
+    this.textBuffer().buffer.push(mapOf(
+        'message', message.toUpperCase(),
+        'attributes', attributes,
+    ));
     
   }
 }

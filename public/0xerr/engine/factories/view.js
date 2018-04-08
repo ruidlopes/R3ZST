@@ -1,7 +1,9 @@
+import {BLACK, ORANGE_BRIGHT} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {CompositeComponent} from '../components/composite.js';
 import {EntityManager} from '../entity/manager.js';
 import {SpatialComponent} from '../components/spatial.js';
+import {StyleComponent} from '../components/style.js';
 import {TextBufferComponent} from '../components/textbuffer.js';
 import {TextInputComponent} from '../components/textinput.js';
 import {ViewComponent, ViewType} from '../components/view.js';
@@ -38,7 +40,8 @@ class ViewFactory {
         terminalInputId,
         new ActiveComponent(false),
         new TextInputComponent('>', '', 0),
-        new SpatialComponent(0, 0, 0, 0));
+        new SpatialComponent(0, 0, 0, 0),
+        new StyleComponent(ORANGE_BRIGHT, BLACK));
     
     this.manager.add(
         terminalId,

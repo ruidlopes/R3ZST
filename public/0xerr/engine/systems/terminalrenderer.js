@@ -23,7 +23,6 @@ class TerminalRendererSystem extends System {
   terminalView() {
     return firstOf(this.manager.query()
         .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .first()
         .iterate(CompositeComponent, SpatialComponent, ActiveComponent));
   }
   
@@ -34,7 +33,6 @@ class TerminalRendererSystem extends System {
   textBuffer() {
     return firstOf(this.manager.query(this.terminalViewChildren())
         .filter(TextBufferComponent)
-        .first()
         .iterate(TextBufferComponent, SpatialComponent));
   }
   
@@ -66,14 +64,20 @@ class TerminalRendererSystem extends System {
     for (let yy = textBufferSpatial.height - 1;
          yy >= 0 && cursor >= 0;) {
       const line = textBufferLines[cursor];
-      const lineHeight = Math.ceil(line.length / textBufferSpatial.width);
+      const message = line.get('message');
+      const lineHeight = Math.ceil(message.length / textBufferSpatial.width);
+      
+      const attributes = line.get('attributes');
+      const foregroundColor = attributes.get('foregroundColor') || BLUE_BRIGHT;
+      const backgroundColor = attributes.get('backgroundColor') || BLACK;
       
       for (let lineY = 0; lineY < lineHeight; ++lineY) {
         const y = textBufferSpatial.y + yy + lineY - lineHeight + 1;
-        const text = line.substr(
+        const text = message.substr(
             lineY * textBufferSpatial.width,
             textBufferSpatial.width);
-        textBufferDraw.sprint(text, textBufferSpatial.x, y, BLUE_BRIGHT, BLACK);
+        textBufferDraw.sprint(text, textBufferSpatial.x, y,
+                              foregroundColor, backgroundColor);
       }
       
       yy -= lineHeight;

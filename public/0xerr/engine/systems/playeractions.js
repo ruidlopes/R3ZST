@@ -1,3 +1,4 @@
+import {ORANGE_FADED} from '../common/palette.js';
 import {PLAYER} from '../actions/qualifiers.js';
 import {Action, ActionRefreshEnum} from '../action.js';
 import {ActiveComponent} from '../components/active.js';
@@ -13,7 +14,7 @@ import {TextInputComponent} from '../components/textinput.js';
 import {TurnActionsComponent} from '../components/turnactions.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {ViewComponent, ViewType} from '../components/view.js';
-import {firstOf, isEmpty} from '../../stdlib/collections.js';
+import {firstOf, isEmpty, mapOf} from '../../stdlib/collections.js';
 import {ij, ijmap} from '../../injection/api.js';
 
 class PlayerActionsSystem extends System {
@@ -46,7 +47,6 @@ class PlayerActionsSystem extends System {
   
   textInput(id) {
     return firstOf(this.manager.query([id])
-        .first()
         .iterate(TextInputComponent))
         .get(TextInputComponent);
   }
@@ -67,7 +67,6 @@ class PlayerActionsSystem extends System {
   turnActionsComponent() {
     return firstOf(this.manager.query()
         .filter(TurnActionsComponent)
-        .first()
         .iterate(TurnActionsComponent))
         .get(TurnActionsComponent);
   }
@@ -109,7 +108,7 @@ class PlayerActionsSystem extends System {
     
     const textInput = this.textInput(id);
     const text = textInput.text.trim();
-    this.events.emit(EventType.LOG, `>${text}`);
+    this.events.emit(EventType.LOG, `>${text}`, mapOf('foregroundColor', ORANGE_FADED));
     
     if (text.length > 0) {
       const tokens = textInput.text.trim().split(/\s+/);

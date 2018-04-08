@@ -7,6 +7,7 @@ const BLUE_FADED  = new Color().setHSV(195, 1, 0.75).lock();
 const BLUE_FADED2  = new Color().setHSV(195, 1, 0.5).lock();
 
 const ORANGE_BRIGHT = new Color().setHSV(45, 1, 1).lock();
+const ORANGE_FADED = new Color().setHSV(45, 1, 0.75).lock();
 
 const RED_BRIGHT = new Color().setHSV(15, 1, 0.75).lock();
 
@@ -16,5 +17,6 @@ export {
   BLUE_FADED,
   BLUE_FADED2,
   ORANGE_BRIGHT,
+  ORANGE_FADED,
   RED_BRIGHT,
 };
