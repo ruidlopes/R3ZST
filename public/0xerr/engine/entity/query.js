@@ -9,13 +9,15 @@ class EntityQuery {
   }
   
   filter(type, cond = ALWAYS_TRUE) {
+    const ids = new Set();
     for (const id of this.ids) {
       const idHasType = this.components.has(type) &&
           this.components.get(type).has(id);
-      if (!(idHasType && cond(this.components.get(type).get(id)))) {
-        this.ids.delete(id);
+      if (idHasType && cond(this.components.get(type).get(id))) {
+        ids.add(id);
       }
     }
+    this.ids = ids;
     return this;
   }
   
