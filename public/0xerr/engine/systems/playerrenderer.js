@@ -41,8 +41,8 @@ class PlayerRendererSystem extends System {
     const playerSpatial = player.get(SpatialComponent);
     const velocity = player.get(VelocityComponent);
     
-    const fn_x = velocity.vx > 0 ? Math.floor : Math.ceil;
-    const fn_y = velocity.vy > 0 ? Math.floor : Math.ceil;
+    const fn_x = velocity.vx >= 0 ? Math.floor : Math.ceil;
+    const fn_y = velocity.vy >= 0 ? Math.floor : Math.ceil;
     
     const dx = fn_x(nodeSpatial.x + playerSpatial.x);
     const dy = fn_y(nodeSpatial.y + playerSpatial.y);

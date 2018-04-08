@@ -48,7 +48,7 @@ class NodeFactory {
         chip1,
         new ActiveComponent(false),
         new ChipComponent(ChipType.CPU, enumValue(ChipCpuVersion, 'RET.ARM R8')),
-        new SpatialComponent(4, 4, 12, 12),
+        new SpatialComponent(0, 0, 12, 12),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
         new CompositeComponent([sentry1]));
