@@ -41,10 +41,6 @@ class EntityQuery {
     }
   }
   
-  collect(...types) {
-    return [...this.iterate(...types)];
-  }
-  
   *entityView(id, ...types) {
     for (const type of types) {
       if (this.components.has(type) && this.components.get(type).has(id)) {

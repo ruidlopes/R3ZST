@@ -6,9 +6,8 @@ import {Keyboard} from '../../observers/keyboard.js';
 import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
 import {System} from '../system.js';
 import {ViewComponent, ViewType} from '../components/view.js';
+import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
-
-const VIEW_ORDER = [ViewType.HARDWARE, ViewType.TERMINAL];
 
 class ViewFocusSystem extends System {
   constructor(
@@ -22,10 +21,17 @@ class ViewFocusSystem extends System {
     this.shortcutNext = new KeyShortcut('TAB');
   }
   
-  views() {
+  view(type) {
+    return firstOf(this.entities.query()
+        .filter(ViewComponent, view => view.type == type)
+        .iterate(ViewComponent, ActiveComponent));
+  }
+  
+  isHardwareViewActive() {
     return this.entities.query()
-        .filter(ViewComponent)
-        .collect(ActiveComponent, ViewComponent);
+        .filter(ViewComponent, view => view.type == ViewType.HARDWARE)
+        .filter(ActiveComponent, component => component.active)
+        .count() == 1;
   }
   
   frame(delta) {
@@ -35,22 +41,12 @@ class ViewFocusSystem extends System {
   }
   
   next(delta) {
-    const views = this.views();
-    const current = views.find(
-        view => view.get(ActiveComponent).active);
-    const currentIndex = this.indexOf(current);
-    const nextIndex = (currentIndex + 1) % 2;
-    const next = views.find(
-        view => view.get(ViewComponent).type == VIEW_ORDER[nextIndex]);
-
-    current.get(ActiveComponent).active = false;
-    next.get(ActiveComponent).active = true;
-    
-    this.events.emit(EventType.VIEW_FOCUS, next.get(ViewComponent).type);
-  }
-  
-  indexOf(entityView) {
-    return VIEW_ORDER.indexOf(entityView.get(ViewComponent).type);
+    const hardwareActive = this.isHardwareViewActive();
+    this.view(ViewType.HARDWARE).get(ActiveComponent).active = !hardwareActive;
+    this.view(ViewType.TERMINAL).get(ActiveComponent).active = hardwareActive;
+    this.events.emit(
+        EventType.VIEW_FOCUS,
+        hardwareActive ? ViewType.TERMINAL : ViewType.HARDWARE);
   }
 }
 

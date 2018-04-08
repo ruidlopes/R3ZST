@@ -59,9 +59,9 @@ class PlayerActionsSystem extends System {
   }
   
   isPlayerTurn() {
-    return !isEmpty(this.manager.query()
+    return this.manager.query()
         .filter(TurnComponent, component => component.turn == TurnEnum.PLAYER)
-        .collect());
+        .count() == 1;
   }
   
   turnActionsComponent() {

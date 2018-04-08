@@ -26,22 +26,21 @@ class PlayerVelocitySystem extends System {
   }
   
   isHardwareViewActive() {
-    return !isEmpty(this.manager.query()
+    return this.manager.query()
         .filter(ViewComponent, view => view.type == ViewType.HARDWARE)
         .filter(ActiveComponent, component => component.active)
-        .collect());
+        .count() == 1;
   }
   
   isPlayerTurn() {
-    return !isEmpty(this.manager.query()
+    return this.manager.query()
         .filter(TurnComponent, component => component.turn == TurnEnum.PLAYER)
-        .collect());
+        .count() == 1;
   }
   
   playerVelocity() {
     return firstOf(this.manager.query()
         .filter(StealthComponent)
-        .first()
         .iterate(VelocityComponent))
         .get(VelocityComponent);
   }

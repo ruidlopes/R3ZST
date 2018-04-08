@@ -34,9 +34,9 @@ class RetsafeActionsSystem extends System {
   }
   
   isRetsafeTurn() {
-    return !isEmpty(this.manager.query()
+    return this.manager.query()
         .filter(TurnComponent, component => component.turn == TurnEnum.RETSAFE)
-        .collect());
+        .count() == 1;
   }
   
   frame(delta) {
