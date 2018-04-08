@@ -35,28 +35,30 @@ class SentryRendererSystem extends System {
   chips() {
     return this.manager.query(this.activeNodeCompositeIds())
         .filter(ChipComponent)
-        .iterate(CompositeComponent);
+        .iterate(CompositeComponent, SpatialComponent);
   }
   
-  *sentries() {
-    for (const chip of this.chips()) {
-      yield* this.manager.query(chip.get(CompositeComponent).ids)
-          .filter(SentryComponent)
-          .iterate(SpatialComponent, StyleComponent);
-    }
+  sentries(chip) {
+    return this.manager.query(chip.get(CompositeComponent).ids)
+        .filter(SentryComponent)
+        .iterate(SpatialComponent, StyleComponent);
   }
   
   frame(delta) {
     const nodeSpatial = this.activeNode().get(SpatialComponent);
     const draw = this.drawing.clipping(nodeSpatial);
     
-    for (const sentry of this.sentries()) {
-      const spatial = sentry.get(SpatialComponent);
-      const style = sentry.get(StyleComponent);
-      const dx = Math.floor(nodeSpatial.x + spatial.x);
-      const dy = Math.floor(nodeSpatial.y + spatial.y);
+    for (const chip of this.chips()) {
+      const chipSpatial = chip.get(SpatialComponent);
       
-      draw.putCxel(dx, dy, 0x73, style.foregroundColor, style.backgroundColor);
+      for (const sentry of this.sentries(chip)) {
+        const spatial = sentry.get(SpatialComponent);
+        const style = sentry.get(StyleComponent);
+        const dx = Math.floor(nodeSpatial.x + chipSpatial.x + spatial.x);
+        const dy = Math.floor(nodeSpatial.y + chipSpatial.y + spatial.y);
+
+        draw.putCxel(dx, dy, 0x73, style.foregroundColor, style.backgroundColor);
+      }
     }
   }
 }

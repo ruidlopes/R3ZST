@@ -8,6 +8,8 @@ import {EntityManager} from '../../entity/manager.js';
 import {NodeComponent} from '../../components/node.js';
 import {NodeSpec} from './nodespec.js';
 import {Random} from '../../../stdlib/random.js';
+import {SentryFactory} from './sentry.js';
+import {SentrySpec} from './sentryspec.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StyleComponent} from '../../components/style.js';
 import {ij} from '../../../injection/api.js';
@@ -17,10 +19,12 @@ class NodeFactory {
   constructor(
       entities = ij(EntityManager),
       random = ij(Random),
-      chipFactory = ij(ChipFactory, NETWORK)) {
+      chipFactory = ij(ChipFactory, NETWORK),
+      sentryFactory = ij(SentryFactory, NETWORK)) {
     this.entities = entities;
     this.random = random;
     this.chipFactory = chipFactory;
+    this.sentryFactory = sentryFactory;
   }
   
   make(type, overrides = new Map()) {
@@ -68,9 +72,41 @@ class NodeFactory {
       const cell = cells.indexOf(i);
       const cellY = Math.floor(cell / width);
       const cellX = cell % width;
+      
+      const cellWidth = 4;
+      const cellHeight = 4;
+      
       this.entities.add(
-        chipId,
-        new SpatialComponent(1 + cellX * 5, 1 + cellY * 5, 4, 4));
+          chipId,
+          new SpatialComponent(
+              1 + cellX * (cellWidth + 1),
+              1 + cellY * (cellHeight + 1),
+              cellWidth,
+              cellHeight)
+      );
+      
+      const chipType = chipTemplates[i];
+      const sentrySpec = SentrySpec.get(type).get(chipType);
+      const ratio = sentrySpec.get('ratio');
+      const sentryCount = this.random.channel(RNG_NETWORK)
+          .randomRangeInclusive(1, Math.floor(cellWidth * cellHeight * ratio));
+      
+      const sentryIds = [];
+      for (let i = 0; i < sentryCount; ++i) {
+        const sentryId = this.sentryFactory.make(sentrySpec);
+        const sentryY = Math.floor(i / cellHeight);
+        const sentryX = i % cellWidth;
+        
+        this.entities.add(
+            sentryId,
+            new SpatialComponent(sentryX, sentryY, 0, 0));
+        
+        sentryIds.push(sentryId);
+      }
+      
+      this.entities.add(
+          chipId,
+          new CompositeComponent(sentryIds));
     });
     
     const nodeId = overrides.has('nodeId') ?

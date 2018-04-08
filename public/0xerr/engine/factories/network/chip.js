@@ -2,7 +2,6 @@ import {BLACK, BLUE_BRIGHT} from '../../common/palette.js';
 import {RNG_NETWORK} from '../../common/randomchannels.js';
 import {ActiveComponent} from '../../components/active.js';
 import {ChipComponent, ChipType, ChipVersionMap} from '../../components/chip.js';
-import {CompositeComponent} from '../../components/composite.js';
 import {EntityManager} from '../../entity/manager.js';
 import {IdentifiedComponent} from '../../components/identified.js';
 import {IpComponent, NO_IP} from '../../components/ip.js';
@@ -30,8 +29,7 @@ class ChipFactory {
         new ActiveComponent(false),
         new ChipComponent(type, version),
         new StyleComponent(BLUE_BRIGHT, BLACK),
-        new IdentifiedComponent(false),
-        new CompositeComponent([]));
+        new IdentifiedComponent(false));
     
     switch (type) {
       case ChipType.CAM:

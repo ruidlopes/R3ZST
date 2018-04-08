@@ -4,6 +4,7 @@ import {ConnectionFactory} from './connection.js';
 import {Module} from '../../../injection/module.js';
 import {NodeFactory} from './node.js';
 import {PlayerFactory} from './player.js';
+import {SentryFactory} from './sentry.js';
 
 class NetworkModule extends Module {
   configure() {
@@ -11,6 +12,7 @@ class NetworkModule extends Module {
     this.bindClass(ConnectionFactory, NETWORK);
     this.bindClass(NodeFactory, NETWORK);
     this.bindClass(PlayerFactory, NETWORK);
+    this.bindClass(SentryFactory, NETWORK);
   }
 }
 
