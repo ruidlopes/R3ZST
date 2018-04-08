@@ -24,11 +24,6 @@ class EntityQuery {
     return this;
   }
   
-  first() {
-    this.ids = new Set([firstOf(this.ids)]);
-    return this;
-  }
-  
   count() {
     return this.ids.size;
   }

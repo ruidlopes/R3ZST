@@ -37,7 +37,6 @@ class ViewSpatialSystem extends System {
     
     const textBufferSpatial = firstOf(this.manager.query(ids)
         .filter(TextBufferComponent)
-        .first()
         .iterate(SpatialComponent))
         .get(SpatialComponent);
     
@@ -48,7 +47,6 @@ class ViewSpatialSystem extends System {
     
     const textInputSpatial = firstOf(this.manager.query(ids)
         .filter(TextInputComponent)
-        .first()
         .iterate(SpatialComponent))
         .get(SpatialComponent);
     

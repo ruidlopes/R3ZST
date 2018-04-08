@@ -49,8 +49,7 @@ class ConnectionFactory {
     
     return this.entities.query(chipIds)
             .filter(ChipComponent, chip => chip.type == ChipType.NIC)
-            .filter(IpComponent, component => sameElements(NO_IP, component.ip))
-            .first();
+            .filter(IpComponent, component => sameElements(NO_IP, component.ip));
   }
   
   connect(nic1, nic2) {

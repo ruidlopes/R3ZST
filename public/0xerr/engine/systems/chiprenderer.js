@@ -39,7 +39,6 @@ class ChipRendererSystem extends System {
     return firstOf(this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
-        .first()
         .iterate(SpatialComponent, CompositeComponent));
   }
   
