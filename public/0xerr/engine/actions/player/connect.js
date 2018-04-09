@@ -40,17 +40,17 @@ class ConnectAction extends Action {
   }
   
   connection() {
-    const activeChip = firstOf(this.activeChip());
+    const activeChipId = firstOf(this.activeChip()).id;
     return firstOf(this.entities.query()
         .filter(ConnectionComponent)
-        .filter(CompositeComponent, composite => composite.ids.includes(activeChip.id))
+        .filter(CompositeComponent, composite => composite.ids.includes(activeChipId))
         .iterate(ConnectionComponent, CompositeComponent));
   }
   
   destinationNic() {
     const connection = this.connection();
-    const activeChip = firstOf(this.activeChip());
     const composite = connection.get(CompositeComponent);
+    const activeChip = firstOf(this.activeChip());
     const position = composite.ids.indexOf(activeChip.id);
     const destination = composite.ids[1 - position];
     return firstOf(this.entities.query([destination])
@@ -98,24 +98,27 @@ class ConnectAction extends Action {
       return;
     }
     
-    const nic1 = firstOf(this.activeChip());
-    const nic2 = this.destinationNic();
-    
     this.activeNode().get(ActiveComponent).active = false;
-    nic1.get(ActiveComponent).active = false;
-    nic2.get(IdentifiedComponent).identified = true;
-    nic2.get(ActiveComponent).active = true;
+    const nic1 = firstOf(this.activeChip());
+    const nic1ActiveComponent = nic1.get(ActiveComponent);
     
+    const nic2 = this.destinationNic();
+    const nic2Id = nic2.id;
+    const nic2ActiveComponent = nic2.get(ActiveComponent);
     const nic2Spatial = nic2.get(SpatialComponent);
+    const targetIp = nic2.get(IpComponent).ip;
+    
+    nic2.get(IdentifiedComponent).identified = true;
+    this.destinationNodeActive(nic2Id).active = true;
+    
     const playerSpatial = this.playerSpatial();
     playerSpatial.x = nic2Spatial.x;
     playerSpatial.y = nic2Spatial.y;
     
-    this.destinationNodeActive(nic2.id).active = true;
+    nic1ActiveComponent.active = false;
+    nic2ActiveComponent.active = true;
     
     this.events.emit(EventType.NODE);
-    
-    const targetIp = nic2.get(IpComponent).ip;
     this.events.emit(EventType.LOG, `CONNECTED TO ${targetIp}.`);
   }
 }
