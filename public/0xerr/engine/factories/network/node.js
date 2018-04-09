@@ -12,6 +12,7 @@ import {SentryFactory} from './sentry.js';
 import {SentrySpec} from './sentryspec.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StyleComponent} from '../../components/style.js';
+import {VisitedComponent} from '../../components/visited.js';
 import {ij} from '../../../injection/api.js';
 import {mapOf, shuffle} from '../../../stdlib/collections.js';
 
@@ -120,13 +121,23 @@ class NodeFactory {
     const nodeId = overrides.has('nodeId') ?
         overrides.get('nodeId') :
         this.entities.nextId();
+    
+    const nodeWidth = 1 + 5 * width;
+    const nodeHeight = 1 + 5 * height;
+    const visited = new Array(nodeHeight + 2);
+    for (let i = 0; i < nodeHeight + 2; ++i) {
+      visited[i] = new Array(nodeWidth + 2);
+      visited[i].fill(0);
+    }
+    
     this.entities.add(
         nodeId,
         new ActiveComponent(false),
         new CompositeComponent(chipIds),
         new NodeComponent(type),
-        new SpatialComponent(0, 0, 1 + 5 * width, 1 + 5 * height),
-        new StyleComponent(BLUE_BRIGHT, BLACK));
+        new SpatialComponent(0, 0, nodeWidth, nodeHeight),
+        new StyleComponent(BLUE_BRIGHT, BLACK),
+        new VisitedComponent(visited));
     return nodeId;
   }
 }

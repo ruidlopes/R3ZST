@@ -14,6 +14,7 @@ import {RetCamStatusComponent, RetCamStatus} from '../../components/retcamstatus
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StealthComponent} from '../../components/stealth.js';
+import {VisitedComponent} from '../../components/visited.js';
 import {enumHas, enumLabel, enumOf, enumValue, firstOf} from '../../../stdlib/collections.js';
 import {ij, ijmap} from '../../../injection/api.js';
 
@@ -25,6 +26,7 @@ const DebugDirectives = enumOf(
     'NODE',
     'PLAYER',
     'SENTRIES',
+    'VISIT',
 );
 
 class DebugAction extends Action {
@@ -76,6 +78,9 @@ class DebugAction extends Action {
         break;
       case DebugDirectives.SENTRIES:
         this.debugSentries();
+        break;
+      case DebugDirectives.VISIT:
+        this.debugVisit();
         break;
     }
   }
@@ -164,7 +169,6 @@ class DebugAction extends Action {
     const activeNode = firstOf(this.entities.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
-        .first()
         .iterate(NodeComponent, SpatialComponent));
     
     const type = enumLabel(NodeType, activeNode.get(NodeComponent).type);
@@ -205,6 +209,18 @@ class DebugAction extends Action {
       this.events.emit(
           EventType.LOG,
           `SENTRY ${id}: ${capsStr}`);
+    }
+  }
+  
+  debugVisit() {
+    const visited = firstOf(this.entities.query()
+        .filter(NodeComponent)
+        .filter(ActiveComponent, component => component.active)
+        .iterate(VisitedComponent))
+        .get(VisitedComponent);
+    
+    for (let y = 0; y < visited.cells.length; ++y) {
+      visited.cells[y].fill(1.0);
     }
   }
 }

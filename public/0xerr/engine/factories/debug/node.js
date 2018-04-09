@@ -19,12 +19,22 @@ import {RetCamStatusComponent} from '../../components/retcamstatus.js';
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StyleComponent} from '../../components/style.js';
+import {VisitedComponent} from '../../components/visited.js';
 import {enumValue} from '../../../stdlib/collections.js';
 import {ij} from '../../../injection/api.js';
 
 class NodeFactory {
   constructor(manager = ij(EntityManager)) {
     this.manager = manager;
+  }
+  
+  makeVisited(width, height) {
+    const visited = new Array(height);
+    for (let i = 0; i < height; ++i) {
+      visited[i] = new Array(width);
+      visited[i].fill(0);
+    }
+    return visited;
   }
   
   make() {
@@ -34,7 +44,8 @@ class NodeFactory {
         new ActiveComponent(false),
         new NodeComponent(NodeType.WORKSTATION),
         new SpatialComponent(0, 0, 40, 20),
-        new StyleComponent(BLUE_BRIGHT, BLACK));
+        new StyleComponent(BLUE_BRIGHT, BLACK),
+        new VisitedComponent(this.makeVisited(42, 22)));
 
     const sentry1 = this.manager.nextId();
     this.manager.add(
@@ -85,7 +96,8 @@ class NodeFactory {
         new ActiveComponent(true),
         new NodeComponent(NodeType.FIREWALL),
         new SpatialComponent(0, 0, 50, 10),
-        new StyleComponent(BLUE_BRIGHT, BLACK));
+        new StyleComponent(BLUE_BRIGHT, BLACK),
+        new VisitedComponent(this.makeVisited(52, 12)));
     
     const chip4 = this.manager.nextId();
     this.manager.add(

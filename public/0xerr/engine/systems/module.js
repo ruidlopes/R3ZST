@@ -22,6 +22,7 @@ import {PlayerChipBoundsSystem} from './playerchipbounds.js';
 import {PlayerPositionSystem} from './playerposition.js';
 import {PlayerRendererSystem} from './playerrenderer.js';
 import {PlayerVelocitySystem} from './playervelocity.js';
+import {PlayerVisitedSystem} from './playervisited.js';
 import {RetsafeActionsSystem} from './retsafeactions.js';
 import {SentryRendererSystem} from './sentryrenderer.js';
 import {TerminalBufferSystem} from './terminalbuffer.js';
@@ -36,6 +37,7 @@ import {System} from '../system.js';
 import {VictorySystem} from './victory.js';
 import {ViewFocusSystem} from './viewfocus.js';
 import {ViewSpatialSystem} from './viewspatial.js';
+import {VisitedRendererSystem} from './visitedrenderer.js';
 
 class SystemsModule extends Module {
   configure() {
@@ -56,6 +58,7 @@ class SystemsModule extends Module {
     
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, CameraTransformSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerPositionSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerVisitedSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerChipBoundsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewSpatialSystem);
@@ -66,6 +69,7 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, ChipRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, SentryRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, PlayerRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, VisitedRendererSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TerminalRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TextInputRendererSystem);

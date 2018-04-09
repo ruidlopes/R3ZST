@@ -68,6 +68,10 @@ class Drawing {
     this.screen = screen;
   }
   
+  buffer() {
+    return this.screen;
+  }
+  
   clipping(clipping) {
     return new DrawingApi(this.screen, clipping);
   }
