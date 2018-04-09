@@ -105,9 +105,12 @@ function putCxel(buffer, x, y, charByte, foregroundColor, backgroundColor, clipp
   const endX = Math.min(clipEndX, x + 1);
   const endY = Math.min(clipEndY, y + 1);
   
+  const charOffset = buffer.chars.offset(x, y);
+  
   if (x >= 0 && x >= startX && x < endX &&
-      y >= 0 && y >= startY && y < endY) {
-    buffer.chars.data[buffer.chars.offset(x, y)] = charByte;
+      y >= 0 && y >= startY && y < endY &&
+      charOffset < buffer.chars.data.length) {
+    buffer.chars.data[charOffset] = charByte;
     buffer.foreground.data.set(foregroundColor.data, buffer.foreground.offset(x, y));
     buffer.background.data.set(backgroundColor.data, buffer.background.offset(x, y));
   }
