@@ -9,6 +9,7 @@ import {ViewComponent, ViewType} from '../components/view.js';
 import {VisitedComponent} from '../components/visited.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
+import {lerp} from '../../stdlib/math.js';
 
 class VisitedRendererSystem extends System {
   constructor(
@@ -63,13 +64,24 @@ class VisitedRendererSystem extends System {
           this.buffer.background.data.set(BLACK.data, backgroundOffset);
           this.buffer.chars.data[charsOffset] = hardwareActive ? 0xef : 0x00;
         } else {
-          this.buffer.foreground.data[foregroundOffset] *= visitedValue;
-          this.buffer.foreground.data[foregroundOffset + 1] *= visitedValue;
-          this.buffer.foreground.data[foregroundOffset + 2] *= visitedValue;
+          const br = BLACK.rgb.r;
+          const bg = BLACK.rgb.g;
+          const bb = BLACK.rgb.b;
+          const factor = 1.0 - visitedValue;
           
-          this.buffer.background.data[backgroundOffset] *= visitedValue;
-          this.buffer.background.data[backgroundOffset + 1] *= visitedValue;
-          this.buffer.background.data[backgroundOffset + 2] *= visitedValue;
+          this.buffer.foreground.data[foregroundOffset] =
+              lerp(visitedValue, this.buffer.foreground.data[foregroundOffset], br);
+          this.buffer.foreground.data[foregroundOffset + 1] =
+              lerp(visitedValue, this.buffer.foreground.data[foregroundOffset + 1], bg);
+          this.buffer.foreground.data[foregroundOffset + 2] =
+              lerp(visitedValue, this.buffer.foreground.data[foregroundOffset + 2], bb);
+          
+          this.buffer.background.data[backgroundOffset] =
+              lerp(visitedValue, this.buffer.background.data[backgroundOffset], br);
+          this.buffer.background.data[backgroundOffset + 1] =
+              lerp(visitedValue, this.buffer.background.data[backgroundOffset + 1], bg);
+          this.buffer.background.data[backgroundOffset + 2] =
+              lerp(visitedValue, this.buffer.background.data[backgroundOffset + 2], bb);
         }
       }
     }

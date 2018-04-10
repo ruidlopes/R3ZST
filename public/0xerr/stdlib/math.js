@@ -4,7 +4,9 @@ function clamp(value, min, max) {
 
 // value -> [0,1]
 function lerp(value, min, max) {
-  return min + value * (max - min);
+  const trueMin = Math.min(min, max);
+  const trueMax = Math.max(min, max);
+  return trueMin + value * (trueMax - trueMin);
 }
 
 function nextPow2(f) {

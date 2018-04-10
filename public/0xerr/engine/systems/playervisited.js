@@ -9,8 +9,8 @@ import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 import {lerp} from '../../stdlib/math.js';
 
-const MAX_FOV_DISTANCE = 4.5;
-const MIN_FOV = 0.4;
+const MAX_FOV_DISTANCE = 5.5;
+const MIN_FOV = 0.2;
 const MAX_FOV = 1.0;
 
 class PlayerVisitedSystem extends System {
@@ -52,7 +52,7 @@ class PlayerVisitedSystem extends System {
           row[x] = MIN_FOV;
         } else if (distance <= MAX_FOV_DISTANCE) {
           const factor = distance / MAX_FOV_DISTANCE;
-          row[x] = lerp(factor, MIN_FOV, MAX_FOV);
+          row[x] = lerp(1.0 - factor, MIN_FOV, MAX_FOV);
         }
       }
     }
