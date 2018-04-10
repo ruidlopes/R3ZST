@@ -129,7 +129,7 @@ class StatusRendererSystem extends System {
   
   renderDeckStats(delta, spatial) {
     const dx = spatial.x + 2;
-    let dy = spatial.y + 9;
+    let dy = spatial.y + 14;
     
     const draw = this.drawing.clipping(spatial);
     draw.sprint('SCRIPT DECK', dx, dy++, BLUE_BRIGHT, BLACK);
@@ -152,7 +152,7 @@ class StatusRendererSystem extends System {
   
   renderNodeStats(delta, spatial) {
     const dx = spatial.x + 2;
-    let dy = spatial.y + 25;
+    let dy = spatial.y + 9;
     
     const draw = this.drawing.clipping(spatial);
     const type = this.activeNode().get(NodeComponent).type;
