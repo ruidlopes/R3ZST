@@ -8,6 +8,7 @@ import {DeckComponent} from '../../components/deck.js';
 import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
+import {IdentifiedComponent} from '../../components/identified.js';
 import {IpComponent} from '../../components/ip.js';
 import {NodeComponent, NodeType} from '../../components/node.js';
 import {RetCamStatusComponent, RetCamStatus} from '../../components/retcamstatus.js';
@@ -23,6 +24,7 @@ const DebugDirectives = enumOf(
     'CHIP',
     'CONNECTIONS',
     'DECK',
+    'IDENTIFY',
     'NODE',
     'PLAYER',
     'SENTRIES',
@@ -69,6 +71,9 @@ class DebugAction extends Action {
         break;
       case DebugDirectives.DECK:
         this.debugDeck();
+        break;
+      case DebugDirectives.IDENTIFY:
+        this.debugIdentify();
         break;
       case DebugDirectives.NODE:
         this.debugNode();
@@ -165,17 +170,33 @@ class DebugAction extends Action {
     }
   }
   
+  debugIdentify() {
+    const activeNode = firstOf(this.entities.query()
+        .filter(NodeComponent)
+        .filter(ActiveComponent, component => component.active)
+        .iterate(CompositeComponent));
+    
+    const ids = activeNode.get(CompositeComponent).ids;
+    const chips = this.entities.query(ids)
+        .filter(IdentifiedComponent)
+        .iterate(IdentifiedComponent);
+    
+    for (const chip of chips) {
+      chip.get(IdentifiedComponent).identified = true;
+    }
+  }
+  
   debugNode() {
     const activeNode = firstOf(this.entities.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
         .iterate(NodeComponent, SpatialComponent));
     
+    const spatial = activeNode.get(SpatialComponent);
     const type = enumLabel(NodeType, activeNode.get(NodeComponent).type);
     this.events.emit(
         EventType.LOG, `TYPE: ${type}`);
-    
-    const spatial = activeNode.get(SpatialComponent);
+
     const x = spatial.x.toFixed(2);
     const y = spatial.y.toFixed(2);
     this.events.emit(
