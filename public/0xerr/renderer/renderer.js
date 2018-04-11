@@ -86,23 +86,28 @@ class Renderer {
   }
   
   resize(width, height) {
+    const dprWidth = width * (window.devicePixelRatio || 1);
+    const dprHeight = height * (window.devicePixelRatio || 1)
     const cw = this.gl.canvas.width;
     const ch = this.gl.canvas.height;
-    if (cw != width || ch != height) {
+    const willResize = cw != width || ch != height;
+    
+    if (willResize) {
       this.gl.canvas.style.width = width + 'px';
       this.gl.canvas.style.height = height + 'px';
-      this.gl.canvas.width = width * (window.devicePixelRatio || 1);
-      this.gl.canvas.height = height * (window.devicePixelRatio || 1);
+      this.gl.canvas.width = dprWidth;
+      this.gl.canvas.height = dprHeight;
       
       this.dom.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+      this.matrix = mat3.projection(this.dom.width, this.dom.height);
     }
     
-    const cols = Math.floor(cw / CHAR_SIZE);
-    const rows = Math.floor(ch / CHAR_SIZE);
-    this.mesh.resize(cols, rows, CHAR_SIZE);
-    this.fontTexCoords = new Float32Array(this.mesh.coordCount());
-    
-    this.matrix = mat3.projection(this.dom.width, this.dom.height);
+    if (willResize || !this.fontTexCoords) {
+      const cols = Math.floor(cw / CHAR_SIZE);
+      const rows = Math.floor(ch / CHAR_SIZE);
+      this.mesh.resize(cols, rows, CHAR_SIZE);
+      this.fontTexCoords = new Float32Array(this.mesh.coordCount());
+    }
   }
   
   renderScreen(scr) {
