@@ -190,19 +190,20 @@ class StatusRendererSystem extends System {
     let dy = spatial.y + 18;
     
     const draw = this.drawing.clipping(spatial);
-    const deck = this.deck().items.entries();
-    for (const [name, stats] of deck) {
-      const action = this.actions.get(name);
+    const deck = this.deck().items;
+    for (const key of deck.keys()) {
+      const action = this.actions.get(key);
       if (action.hidden) {
         continue;
       }
+      const stats = deck.get(key);
       const refresh = stats == Infinity ? '-' : ActionRefreshIcon.get(action.refresh);
       const count = stats == Infinity ? '-' : String(stats);
       const cycles = String(action.cycles);
       draw.sprint(refresh, dx, ++dy, BLACK, ORANGE_BRIGHT)
           .sprint(count, dx + 1, dy, BLACK, BLUE_BRIGHT)
           .sprint(cycles, dx + 2, dy, BLACK, ORANGE_BRIGHT)
-          .sprint(name, dx + 4, dy, ORANGE_BRIGHT, BLACK);
+          .sprint(key, dx + 4, dy, ORANGE_BRIGHT, BLACK);
     }
   }
   
