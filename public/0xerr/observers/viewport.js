@@ -52,8 +52,11 @@ class Viewport extends Observer {
   }
   
   resizeBuffer(buffer) {
-    if (buffer.width != this.width || buffer.height != this.height) {
-      buffer.resize(this.width, this.height);
+    const width = this.width;
+    const height = this.height;
+    
+    if (buffer.width != width || buffer.height != height) {
+      buffer.resize(width, height);
     }
   }
   
