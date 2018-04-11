@@ -56,8 +56,8 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_INPUT, TextInputSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_INPUT, PlayerVelocitySystem);
     
-    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, CameraTransformSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerPositionSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, CameraTransformSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerVisitedSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerChipBoundsSystem);
