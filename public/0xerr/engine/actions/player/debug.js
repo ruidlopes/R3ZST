@@ -109,8 +109,8 @@ class DebugAction extends Action {
   
   debugChip() {
     const chip = firstOf(this.entities.query()
-        .filter(ChipComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(ChipComponent)
         .iterate(ChipComponent, SpatialComponent));
     
     if (!chip) {
@@ -147,9 +147,8 @@ class DebugAction extends Action {
   }
   
   debugDeck() {
-    const deck = firstOf(this.entities.query()
-        .filter(DeckComponent)
-        .iterate(DeckComponent))
+    const deck = this.entities.query()
+        .head(DeckComponent)
         .get(DeckComponent);
     
     for (const [key, stats] of deck.items.entries()) {
@@ -172,8 +171,8 @@ class DebugAction extends Action {
   
   debugIdentify() {
     const activeNode = firstOf(this.entities.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(CompositeComponent));
     
     const ids = activeNode.get(CompositeComponent).ids;
@@ -188,8 +187,8 @@ class DebugAction extends Action {
   
   debugNode() {
     const activeNode = firstOf(this.entities.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(NodeComponent, SpatialComponent));
     
     const spatial = activeNode.get(SpatialComponent);
@@ -204,9 +203,8 @@ class DebugAction extends Action {
   }
   
   debugPlayer() {
-    const playerSpatial = firstOf(this.entities.query()
-        .filter(StealthComponent)
-        .iterate(SpatialComponent))
+    const playerSpatial = this.entities.query()
+        .head(StealthComponent, SpatialComponent)
         .get(SpatialComponent);
 
     const x = playerSpatial.x.toFixed(2);
@@ -235,8 +233,8 @@ class DebugAction extends Action {
   
   debugVisit() {
     const visited = firstOf(this.entities.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(VisitedComponent))
         .get(VisitedComponent);
     

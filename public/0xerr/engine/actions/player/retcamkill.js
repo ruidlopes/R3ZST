@@ -23,8 +23,8 @@ class RetCamKillAction extends Action {
   
   activeChip() {
     return this.entities.query()
-        .filter(ChipComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(ChipComponent)
         .iterate(ChipComponent, ActiveComponent, IdentifiedComponent, RetCamStatusComponent);
   }
   

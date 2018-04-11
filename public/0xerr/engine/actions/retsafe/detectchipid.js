@@ -23,8 +23,8 @@ class DetectChipIdAction extends Action {
   
   activeNodeCompositeIds() {
     return firstOf(this.manager.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(CompositeComponent))
         .get(CompositeComponent).ids;
   }

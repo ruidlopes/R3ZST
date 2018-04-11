@@ -21,8 +21,8 @@ class PlayerVisitedSystem extends System {
   
   activeNodeVisited() {
     return firstOf(this.entities.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(VisitedComponent))
         .get(VisitedComponent);
   }

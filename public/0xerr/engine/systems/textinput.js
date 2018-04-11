@@ -32,8 +32,8 @@ class TextInputSystem extends System {
   
   activeTextInputEntity() {
     return firstOf(this.entities.query()
-        .filter(TextInputComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(TextInputComponent)
         .iterate(TextInputComponent));
   }
   

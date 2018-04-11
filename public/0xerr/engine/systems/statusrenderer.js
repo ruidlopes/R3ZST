@@ -88,15 +88,15 @@ class StatusRendererSystem extends System {
   
   activeNode() {
     return firstOf(this.manager.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(NodeComponent, CompositeComponent));
   }
   
   activeChip() {
     return firstOf(this.manager.query()
-        .filter(ChipComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(ChipComponent)
         .iterate(
             ChipComponent,
             IdentifiedComponent,

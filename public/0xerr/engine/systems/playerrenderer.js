@@ -20,8 +20,8 @@ class PlayerRendererSystem extends System {
   
   activeNodeSpatial() {
     return firstOf(this.manager.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(SpatialComponent))
         .get(SpatialComponent);
   }

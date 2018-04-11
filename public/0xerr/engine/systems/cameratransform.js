@@ -16,8 +16,8 @@ class CameraTransformSystem extends System {
   
   activeNodeSpatial() {
     return firstOf(this.entities.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(SpatialComponent))
         .get(SpatialComponent);
   }
