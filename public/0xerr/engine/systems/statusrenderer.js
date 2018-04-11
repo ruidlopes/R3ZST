@@ -104,13 +104,17 @@ class StatusRendererSystem extends System {
             RetCamStatusComponent));
   }
   
-  renderFrame(delta, spatial) {
+  renderFrame(x, y, width, height, title) {
     this.drawing.absolute()
-        .box(spatial.x, spatial.y, spatial.width, spatial.height,
-            BoxType.SINGLE, BLUE_BRIGHT, BLACK)
-        .rect(spatial.x + 1, spatial.y + 1, spatial.width - 2, spatial.height - 2,
-            0x00, BLUE_BRIGHT, BLACK)
-        .sprint('STATUS', spatial.x + 2, spatial.y, BLUE_BRIGHT, BLACK);
+        .rect(x, y, width, height, 0x00, BLUE_BRIGHT, BLACK)
+        .box(x, y, width, height, BoxType.SINGLE, BLUE_BRIGHT, BLACK)
+        .sprint(title, x + 2, y, BLUE_BRIGHT, BLACK);
+  }
+  
+  renderFrames(delta, spatial) {
+    this.renderFrame(spatial.x, 0, spatial.width, 9, 'STATUS');
+    this.renderFrame(spatial.x, 9, spatial.width, 8, 'NODE/CHIP');
+    this.renderFrame(spatial.x, 17, spatial.width, spatial.height - 17, 'DECK'); 
   }
   
   renderGameStats(delta, spatial) {
@@ -127,32 +131,9 @@ class StatusRendererSystem extends System {
         .sprint('\xfe'.repeat(this.cycles()), dx + 10, dy + 4, ORANGE_BRIGHT, BLACK);
   }
   
-  renderDeckStats(delta, spatial) {
-    const dx = spatial.x + 2;
-    let dy = spatial.y + 14;
-    
-    const draw = this.drawing.clipping(spatial);
-    draw.sprint('SCRIPT DECK', dx, dy++, BLUE_BRIGHT, BLACK);
-    
-    const deck = this.deck().items.entries();
-    for (const [name, stats] of deck) {
-      const action = this.actions.get(name);
-      if (action.hidden) {
-        continue;
-      }
-      const refresh = stats == Infinity ? '-' : ActionRefreshIcon.get(action.refresh);
-      const count = stats == Infinity ? '-' : String(stats);
-      const cycles = String(action.cycles);
-      draw.sprint(refresh, dx, ++dy, BLACK, ORANGE_BRIGHT)
-          .sprint(count, dx + 1, dy, BLACK, BLUE_BRIGHT)
-          .sprint(cycles, dx + 2, dy, BLACK, ORANGE_BRIGHT)
-          .sprint(name, dx + 4, dy, ORANGE_BRIGHT, BLACK);
-    }
-  }
-  
   renderNodeStats(delta, spatial) {
     const dx = spatial.x + 2;
-    let dy = spatial.y + 9;
+    let dy = spatial.y + 10;
     
     const draw = this.drawing.clipping(spatial);
     const type = this.activeNode().get(NodeComponent).type;
@@ -204,12 +185,33 @@ class StatusRendererSystem extends System {
     }
   }
   
+  renderDeckStats(delta, spatial) {
+    const dx = spatial.x + 2;
+    let dy = spatial.y + 18;
+    
+    const draw = this.drawing.clipping(spatial);
+    const deck = this.deck().items.entries();
+    for (const [name, stats] of deck) {
+      const action = this.actions.get(name);
+      if (action.hidden) {
+        continue;
+      }
+      const refresh = stats == Infinity ? '-' : ActionRefreshIcon.get(action.refresh);
+      const count = stats == Infinity ? '-' : String(stats);
+      const cycles = String(action.cycles);
+      draw.sprint(refresh, dx, ++dy, BLACK, ORANGE_BRIGHT)
+          .sprint(count, dx + 1, dy, BLACK, BLUE_BRIGHT)
+          .sprint(cycles, dx + 2, dy, BLACK, ORANGE_BRIGHT)
+          .sprint(name, dx + 4, dy, ORANGE_BRIGHT, BLACK);
+    }
+  }
+  
   frame(delta) {
     const spatial = this.statusViewSpatial();
-    this.renderFrame(delta, spatial);
+    this.renderFrames(delta, spatial);
     this.renderGameStats(delta, spatial);
-    this.renderDeckStats(delta, spatial);
     this.renderNodeStats(delta, spatial);
+    this.renderDeckStats(delta, spatial);
   }
 }
 
