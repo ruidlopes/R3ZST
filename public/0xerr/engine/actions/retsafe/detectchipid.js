@@ -25,7 +25,6 @@ class DetectChipIdAction extends Action {
     return firstOf(this.manager.query()
         .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
-        .first()
         .iterate(CompositeComponent))
         .get(CompositeComponent).ids;
   }
@@ -37,18 +36,14 @@ class DetectChipIdAction extends Action {
   }
   
   turnActionsComponent() {
-    return firstOf(this.manager.query()
-        .filter(TurnActionsComponent)
-        .first()
-        .iterate(TurnActionsComponent))
+    return this.manager.query()
+        .head(TurnActionsComponent)
         .get(TurnActionsComponent);
   }
   
   stealthComponent() {
-    return firstOf(this.manager.query()
-        .filter(StealthComponent)
-        .first()
-        .iterate(StealthComponent))
+    return this.manager.query()
+        .head(StealthComponent)
         .get(StealthComponent);
   }
   
