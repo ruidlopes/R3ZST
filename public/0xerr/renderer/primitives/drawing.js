@@ -10,8 +10,8 @@ function rect(buffer, x, y, width, height, charByte, foregroundColor, background
   
   const startX = Math.max(x, clipX, 0);
   const startY = Math.max(y, clipY, 0);
-  const endX = Math.min(clipEndX, x + width);
-  const endY = Math.min(clipEndY, y + height);
+  const endX = Math.max(0, Math.min(clipEndX, x + width));
+  const endY = Math.max(0, Math.min(clipEndY, y + height));
   
   for (let yy = startY; yy < endY; ++yy) {
     buffer.chars.data.fill(
@@ -45,7 +45,7 @@ function vline(buffer, x, y, height, charByte, foregroundColor, backgroundColor,
   }
   
   const startY = Math.max(y, clipY, 0);
-  const endY = Math.min(clipEndY, y + height);
+  const endY = Math.max(0, Math.min(clipEndY, y + height));
   
   for (let yy = startY; yy < endY; ++yy) {
     buffer.chars.data[buffer.chars.offset(x, yy)] = charByte;
@@ -73,7 +73,7 @@ function hline(buffer, x, y, width, charByte, foregroundColor, backgroundColor, 
   }
   
   const startX = Math.max(x, clipX, 0);
-  const endX = Math.min(clipEndX, x + width);
+  const endX = Math.max(0, Math.min(clipEndX, x + width));
   
   buffer.chars.data.fill(
       charByte,
