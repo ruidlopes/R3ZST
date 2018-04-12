@@ -7,7 +7,6 @@ import {StealthComponent, STEALTH_MAX} from '../components/stealth.js';
 import {System} from '../system.js';
 import {TurnEnum} from '../components/turn.js';
 import {clamp} from '../../stdlib/math.js';
-import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class GameEndingSystem extends System {
@@ -27,10 +26,8 @@ class GameEndingSystem extends System {
   }
   
   stealthComponent() {
-    return firstOf(this.entities.query()
-        .filter(StealthComponent)
-        .first()
-        .iterate(StealthComponent))
+    return this.entities.query()
+        .head(StealthComponent)
         .get(StealthComponent);
   }
   
