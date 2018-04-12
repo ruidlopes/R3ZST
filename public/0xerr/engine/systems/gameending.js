@@ -5,6 +5,7 @@ import {EventType} from '../event/type.js';
 import {RetCamStatusComponent, RetCamStatus} from '../components/retcamstatus.js';
 import {StealthComponent, STEALTH_MAX} from '../components/stealth.js';
 import {System} from '../system.js';
+import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {clamp} from '../../stdlib/math.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
@@ -20,6 +21,9 @@ class GameEndingSystem extends System {
     this.events.subscribe(
         EventType.STEALTH_UPDATE,
         (delta) => this.updateStealth(delta));
+    this.events.subscribe(
+        EventType.END_TURN,
+        (turn) => this.turnEnd(turn));
   }
   
   stealthComponent() {
@@ -47,7 +51,11 @@ class GameEndingSystem extends System {
     }
   }
   
-  frame(delta) {
+  turnEnd(turn) {
+    if (turn != TurnEnum.RETSAFE) {
+      return;
+    }
+    
     if (this.notDisconnectedRetCamCount() == 0) {
       this.events.emit(EventType.VICTORY);
     }
