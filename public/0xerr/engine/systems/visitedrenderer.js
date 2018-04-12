@@ -11,6 +11,10 @@ import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 import {lerp} from '../../stdlib/math.js';
 
+const br = BLACK.rgb.r;
+const bg = BLACK.rgb.g;
+const bb = BLACK.rgb.b;
+
 class VisitedRendererSystem extends System {
   constructor(
       entities = ij(EntityManager),
@@ -28,8 +32,8 @@ class VisitedRendererSystem extends System {
   
   activeNode() {
     return firstOf(this.entities.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(SpatialComponent, VisitedComponent));
   }
   
@@ -45,12 +49,14 @@ class VisitedRendererSystem extends System {
     const visited = activeNode.get(VisitedComponent).cells;
     
     for (let y = 0; y < spatial.height + 2; ++y) {
+      const yy = Math.floor(spatial.y) + y - 1;
+      if (yy < hardwareY || yy >= hardwareY + hardwareSpatial.height) {
+        continue
+      }
+      
       for (let x = 0; x < spatial.width + 2; ++x) {
         const xx = Math.floor(spatial.x) + x - 1;
-        const yy = Math.floor(spatial.y) + y - 1;
-        
-        if (xx < hardwareX || xx >= hardwareX + hardwareSpatial.width ||
-            yy < hardwareY || yy >= hardwareY + hardwareSpatial.height) {
+        if (xx < hardwareX || xx >= hardwareX + hardwareSpatial.width) {
           continue;
         }
         
@@ -64,11 +70,6 @@ class VisitedRendererSystem extends System {
           this.buffer.background.data.set(BLACK.data, backgroundOffset);
           this.buffer.chars.data[charsOffset] = hardwareActive ? 0xef : 0x00;
         } else {
-          const br = BLACK.rgb.r;
-          const bg = BLACK.rgb.g;
-          const bb = BLACK.rgb.b;
-          const factor = 1.0 - visitedValue;
-          
           this.buffer.foreground.data[foregroundOffset] =
               lerp(visitedValue, this.buffer.foreground.data[foregroundOffset], br);
           this.buffer.foreground.data[foregroundOffset + 1] =

@@ -17,6 +17,7 @@ import {GameEndingSystem} from './gameending.js';
 import {HardwareRendererSystem} from './hardwarerenderer.js';
 import {Module} from '../../injection/module.js';
 import {NodeRendererSystem} from './noderenderer.js';
+import {NodeTransitionSystem} from './nodetransition.js';
 import {PlayerActionsSystem} from './playeractions.js';
 import {PlayerChipBoundsSystem} from './playerchipbounds.js';
 import {PlayerPositionSystem} from './playerposition.js';
@@ -70,6 +71,7 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, SentryRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, PlayerRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, VisitedRendererSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_RENDER, NodeTransitionSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TerminalRendererSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_RENDER, TextInputRendererSystem);
