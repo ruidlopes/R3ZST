@@ -5,7 +5,7 @@ import {EventType} from '../event/type.js';
 import {RetCamStatusComponent, RetCamStatus} from '../components/retcamstatus.js';
 import {StealthComponent, STEALTH_MAX} from '../components/stealth.js';
 import {System} from '../system.js';
-import {TurnComponent, TurnEnum} from '../components/turn.js';
+import {TurnEnum} from '../components/turn.js';
 import {clamp} from '../../stdlib/math.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
