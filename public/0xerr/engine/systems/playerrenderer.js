@@ -1,4 +1,4 @@
-import {BLACK, ORANGE_BRIGHT} from '../common/palette.js';
+import {BLACK, HIGHLIGHT_BRIGHT} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
@@ -40,7 +40,7 @@ class PlayerRendererSystem extends System {
     const dy = Math.floor(nodeSpatial.y + playerSpatial.y);
     
     this.drawing.clipping(nodeSpatial)
-        .putCxel(dx, dy, 0x40, ORANGE_BRIGHT, BLACK);
+        .putCxel(dx, dy, 0x40, HIGHLIGHT_BRIGHT, BLACK);
   }
 }
 

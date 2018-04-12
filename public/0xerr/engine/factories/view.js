@@ -1,4 +1,4 @@
-import {BLACK, ORANGE_BRIGHT} from '../common/palette.js';
+import {BLACK, HIGHLIGHT_BRIGHT} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {CompositeComponent} from '../components/composite.js';
 import {EntityManager} from '../entity/manager.js';
@@ -41,7 +41,7 @@ class ViewFactory {
         new ActiveComponent(false),
         new TextInputComponent('>', '', 0),
         new SpatialComponent(0, 0, 0, 0),
-        new StyleComponent(ORANGE_BRIGHT, BLACK));
+        new StyleComponent(HIGHLIGHT_BRIGHT, BLACK));
     
     this.manager.add(
         terminalId,

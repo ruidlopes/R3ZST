@@ -3,7 +3,7 @@ import {
     BLUE_BRIGHT,
     BLUE_FADED,
     BLUE_FADED2,
-    ORANGE_BRIGHT,
+    HIGHLIGHT_BRIGHT,
 } from '../common/palette.js';
 import {PLAYER} from '../actions/qualifiers.js';
 import {Action, ActionRefreshEnum} from '../action.js';
@@ -124,11 +124,11 @@ class StatusRendererSystem extends System {
     const turn = enumLabel(TurnEnum, this.turn());
     this.drawing.clipping(spatial)
         .sprint('TURN', dx, dy, BLUE_BRIGHT, BLACK)
-        .sprint(turn, dx + 9, dy, ORANGE_BRIGHT, BLACK)
+        .sprint(turn, dx + 9, dy, HIGHLIGHT_BRIGHT, BLACK)
         .sprint('STEALTH  [          ]', dx, dy + 2, BLUE_BRIGHT, BLACK)
-        .sprint('\xfe'.repeat(this.stealth()), dx + 10, dy + 2, ORANGE_BRIGHT, BLACK)
+        .sprint('\xfe'.repeat(this.stealth()), dx + 10, dy + 2, HIGHLIGHT_BRIGHT, BLACK)
         .sprint('CYCLES   [          ]', dx, dy + 4, BLUE_BRIGHT, BLACK)
-        .sprint('\xfe'.repeat(this.cycles()), dx + 10, dy + 4, ORANGE_BRIGHT, BLACK);
+        .sprint('\xfe'.repeat(this.cycles()), dx + 10, dy + 4, HIGHLIGHT_BRIGHT, BLACK);
   }
   
   renderNodeStats(delta, spatial) {
@@ -148,39 +148,39 @@ class StatusRendererSystem extends System {
       case ChipType.BIOS:
         const biosVersion = enumLabel(ChipBiosVersion, component.version);
         draw.sprint('NODE', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(enumLabel(NodeType, type), dx + 8, dy, ORANGE_BRIGHT, BLACK)
+            .sprint(enumLabel(NodeType, type), dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK)
             .sprint('BIOS', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(biosVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+            .sprint(biosVersion, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
         break;
 
       case ChipType.CAM:
         const camVersion = enumLabel(ChipCamVersion, component.version);
         const status = enumLabel(RetCamStatus, chip.get(RetCamStatusComponent).status);
         draw.sprint('CAMERA', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(camVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK)
+            .sprint(camVersion, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK)
             .sprint('STATUS', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(status, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+            .sprint(status, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
         break;
 
       case ChipType.CPU:
         const cpuVersion = enumLabel(ChipCpuVersion, component.version);
         draw.sprint('CPU', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(cpuVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+            .sprint(cpuVersion, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
         break;
 
       case ChipType.MEM:
         const memVersion = enumLabel(ChipMemVersion, component.version);
         draw.sprint('RAM', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(memVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+            .sprint(memVersion, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
         break;
 
       case ChipType.NIC:
         const nicVersion = enumLabel(ChipNicVersion, component.version);
         const ip = chip.get(IpComponent).ip.join('.');
         draw.sprint('NIC', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(nicVersion, dx + 8, dy, ORANGE_BRIGHT, BLACK)
+            .sprint(nicVersion, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK)
             .sprint('IP', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(ip, dx + 8, dy, ORANGE_BRIGHT, BLACK);
+            .sprint(ip, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
         break;
     }
   }
@@ -200,10 +200,10 @@ class StatusRendererSystem extends System {
       const refresh = stats == Infinity ? '-' : ActionRefreshIcon.get(action.refresh);
       const count = stats == Infinity ? '-' : String(stats);
       const cycles = String(action.cycles);
-      draw.sprint(refresh, dx, ++dy, BLACK, ORANGE_BRIGHT)
+      draw.sprint(refresh, dx, ++dy, BLACK, HIGHLIGHT_BRIGHT)
           .sprint(count, dx + 1, dy, BLACK, BLUE_BRIGHT)
-          .sprint(cycles, dx + 2, dy, BLACK, ORANGE_BRIGHT)
-          .sprint(key, dx + 4, dy, ORANGE_BRIGHT, BLACK);
+          .sprint(cycles, dx + 2, dy, BLACK, HIGHLIGHT_BRIGHT)
+          .sprint(key, dx + 4, dy, HIGHLIGHT_BRIGHT, BLACK);
     }
   }
   
