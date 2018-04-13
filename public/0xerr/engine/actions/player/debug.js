@@ -11,6 +11,7 @@ import {EventType} from '../../event/type.js';
 import {IdentifiedComponent} from '../../components/identified.js';
 import {IpComponent} from '../../components/ip.js';
 import {NodeComponent, NodeType} from '../../components/node.js';
+import {Random} from '../../../stdlib/random.js';
 import {RetCamStatusComponent, RetCamStatus} from '../../components/retcamstatus.js';
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
 import {SpatialComponent} from '../../components/spatial.js';
@@ -27,6 +28,7 @@ const DebugDirectives = enumOf(
     'IDENTIFY',
     'NODE',
     'PLAYER',
+    'SEED',
     'SENTRIES',
     'VISIT',
 );
@@ -35,11 +37,13 @@ class DebugAction extends Action {
   constructor(
       entities = ij(EntityManager),
       events = ij(EventManager),
-      actions = ijmap(Action, PLAYER)) {
+      actions = ijmap(Action, PLAYER),
+      random = ij(Random)) {
     super();
     this.entities = entities;
     this.events = events;
     this.actions = actions;
+    this.random = random;
     
     this.cycles = 0;
     this.hidden = true;
@@ -80,6 +84,9 @@ class DebugAction extends Action {
         break;
       case DebugDirectives.PLAYER:
         this.debugPlayer();
+        break;
+      case DebugDirectives.SEED:
+        this.debugSeed();
         break;
       case DebugDirectives.SENTRIES:
         this.debugSentries();
@@ -210,6 +217,10 @@ class DebugAction extends Action {
     const x = playerSpatial.x.toFixed(2);
     const y = playerSpatial.y.toFixed(2);
     this.events.emit(EventType.LOG,`@ ${x}, ${y}`);
+  }
+  
+  debugSeed() {
+    this.events.emit(EventType.LOG, String(this.random.rawSeed));
   }
   
   debugSentries() {

@@ -75,6 +75,7 @@ class Random {
   constructor(seed) {
     this.generator = new RandomXorWow(seed);
     this.channels = new Map();
+    this.rawSeed = undefined;
   }
   
   setSeed(seed) {
@@ -83,7 +84,9 @@ class Random {
   }
   
   setRawSeed(rawSeed) {
+    this.rawSeed = rawSeed;
     const seedNumber = Number(rawSeed);
+    
     if (isNaN(seedNumber) || String(seedNumber) != rawSeed) {
       const buffer = new ArrayBuffer(20);
       const seedBase = new Uint8Array(buffer);

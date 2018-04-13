@@ -95,7 +95,7 @@ class BootSystem extends System {
     this.gameFactory.make();
     this.viewFactory.make();
     
-    const rawSeed = params.get('SEED') || '';
+    const rawSeed = params.has('SEED') ? params.get('SEED') : Date.now();
     if (rawSeed == 'DEBUG') {
       this.debugDeckFactory.make();
       this.debugNodeFactory.make();
