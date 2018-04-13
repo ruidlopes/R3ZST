@@ -71,9 +71,9 @@ class DetectChipIdAction extends Action {
       
       const hitPoints = sentryCount * chipIdActionsCount;
       if (hitPoints > 0) {
-        this.events.emit(EventType.STEALTH_UPDATE, -hitPoints);
         this.events.emit(
             EventType.LOG, `DETECTED ${chipIdActionsCount} CHIPID ACTION(S).`);
+        this.events.emit(EventType.STEALTH_UPDATE, -hitPoints);
       }
     }
   }
