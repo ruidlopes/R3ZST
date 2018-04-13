@@ -1,4 +1,4 @@
-import {BLACK, BLUE_FADED2} from '../common/palette.js';
+import {BLACK, BLUE_FADED2, BLUE_FADED3} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityManager} from '../entity/manager.js';
@@ -66,9 +66,11 @@ class VisitedRendererSystem extends System {
         
         const visitedValue = visited[y][x];
         if (visitedValue == 0) {
-          this.buffer.foreground.data.set(BLUE_FADED2.data, foregroundOffset);
+          this.buffer.foreground.data.set(
+              hardwareActive ? BLUE_FADED2.data : BLUE_FADED3.data,
+              foregroundOffset);
           this.buffer.background.data.set(BLACK.data, backgroundOffset);
-          this.buffer.chars.data[charsOffset] = hardwareActive ? 0xef : 0x00;
+          this.buffer.chars.data[charsOffset] = 0xef;
         } else {
           this.buffer.foreground.data[foregroundOffset] =
               lerp(visitedValue, this.buffer.foreground.data[foregroundOffset], br);
