@@ -50,6 +50,8 @@ class StatusRendererSystem extends System {
     this.manager = manager;
     this.actions = actions;
     this.drawing = drawing;
+
+    this.clipper = {x: 0, y: 0, width: 0, height: 0};
   }
   
   statusViewSpatial() {
@@ -112,9 +114,9 @@ class StatusRendererSystem extends System {
   }
   
   renderFrames(delta, spatial) {
-    this.renderFrame(spatial.x, 0, spatial.width, 9, 'STATUS');
+    this.renderFrame(spatial.x, 0, spatial.width, 9, 'GAME');
     this.renderFrame(spatial.x, 9, spatial.width, 8, 'NODE/CHIP');
-    this.renderFrame(spatial.x, 17, spatial.width, spatial.height - 17, 'DECK'); 
+    this.renderFrame(spatial.x, 17, spatial.width, spatial.height - 17, 'SCRIPT DECK'); 
   }
   
   renderGameStats(delta, spatial) {
@@ -209,10 +211,15 @@ class StatusRendererSystem extends System {
   
   frame(delta) {
     const spatial = this.statusViewSpatial();
+    this.clipper.x = spatial.x;
+    this.clipper.y = spatial.y;
+    this.clipper.width = spatial.width - 4;
+    this.clipper.height = spatial.height;
+    
     this.renderFrames(delta, spatial);
-    this.renderGameStats(delta, spatial);
-    this.renderNodeStats(delta, spatial);
-    this.renderDeckStats(delta, spatial);
+    this.renderGameStats(delta, this.clipper);
+    this.renderNodeStats(delta, this.clipper);
+    this.renderDeckStats(delta, this.clipper);
   }
 }
 
