@@ -1,6 +1,6 @@
-import {Action} from '../../action.js';
 import {ActiveComponent} from '../../components/active.js';
 import {ChipComponent, ChipType} from '../../components/chip.js';
+import {ChipScriptAction} from './base/chipscript.js';
 import {CompositeComponent} from '../../components/composite.js';
 import {ConnectionComponent} from '../../components/connection.js';
 import {EntityManager} from '../../entity/manager.js';
@@ -11,17 +11,14 @@ import {IpComponent} from '../../components/ip.js';
 import {NodeComponent} from '../../components/node.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StealthComponent} from '../../components/stealth.js';
-import {firstOf, isEmpty, sameElements} from '../../../stdlib/collections.js';
+import {firstOf} from '../../../stdlib/collections.js';
 import {ij} from '../../../injection/api.js';
 
-class ConnectAction extends Action {
+class ConnectAction extends ChipScriptAction {
   constructor(
       entities = ij(EntityManager),
       events = ij(EventManager)) {
-    super();
-    this.entities = entities;
-    this.events = events;
-    
+    super(entities, events, ChipType.NIC);
     this.cycles = 4;
   }
   
@@ -33,14 +30,11 @@ class ConnectAction extends Action {
   }
   
   activeChip() {
-    return this.entities.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(ChipComponent)
-        .iterate(ChipComponent, ActiveComponent, IdentifiedComponent, IpComponent);
+    return this.activeChipWithComponents(IpComponent);
   }
   
   connection() {
-    const activeChipId = firstOf(this.activeChip()).id;
+    const activeChipId = this.activeChip().id;
     return firstOf(this.entities.query()
         .filter(ConnectionComponent)
         .filter(CompositeComponent, composite => composite.ids.includes(activeChipId))
@@ -50,8 +44,7 @@ class ConnectAction extends Action {
   destinationNic() {
     const connection = this.connection();
     const composite = connection.get(CompositeComponent);
-    const activeChip = firstOf(this.activeChip());
-    const position = composite.ids.indexOf(activeChip.id);
+    const position = composite.ids.indexOf(this.activeChip().id);
     const destination = composite.ids[1 - position];
     return firstOf(this.entities.query([destination])
         .iterate(ActiveComponent, IdentifiedComponent, SpatialComponent, IpComponent));
@@ -72,25 +65,6 @@ class ConnectAction extends Action {
         .get(SpatialComponent);
   }
   
-  constraints() {
-    if (isEmpty(this.activeChip())) {
-      this.events.emit(EventType.LOG, 'NO NIC CHIP IN RANGE.');
-      return false;
-    }
-    
-    const activeChip = firstOf(this.activeChip());
-    if (!activeChip.get(IdentifiedComponent).identified) {
-      this.events.emit(EventType.LOG, 'UNIDENTIFIED CHIP.');
-      return false;
-    }
-    if (activeChip.get(ChipComponent).type != ChipType.NIC) {
-      this.events.emit(EventType.LOG, 'INVALID CHIP.');
-      return false;
-    }
-    
-    return true;
-  }
-  
   start() {
     this.events.emit(EventType.LOG, 'CONNECTING...');
     if (!this.connection()) {
@@ -99,7 +73,7 @@ class ConnectAction extends Action {
     }
     
     this.activeNode().get(ActiveComponent).active = false;
-    const nic1 = firstOf(this.activeChip());
+    const nic1 = this.activeChip();
     const nic1ActiveComponent = nic1.get(ActiveComponent);
     
     const nic2 = this.destinationNic();
