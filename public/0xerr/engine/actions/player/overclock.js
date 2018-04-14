@@ -18,9 +18,9 @@ class OverclockAction extends ChipScriptAction {
     
     this.handler = undefined;
     this.events.subscribe(
-        EventType.END_TURN, () => this.turnEnd());
+        EventType.END_TURN, () => this.end());
     this.events.subscribe(
-        EventType.NODE, () => this.turnEnd());
+        EventType.NODE, () => this.end());
   }
   
   start() {
@@ -36,7 +36,7 @@ class OverclockAction extends ChipScriptAction {
     return Math.ceil(cycles / 2);
   }
   
-  turnEnd() {
+  end() {
     if (this.handler) {
       this.handler.unsubscribe();
       this.handler = undefined;
