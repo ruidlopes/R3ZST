@@ -11,7 +11,7 @@ const HIGHLIGHT_BRIGHT = new Color().setHSV(145, 1, 1).lock();
 const HIGHLIGHT_FADED = new Color().setHSV(145, 1, 0.75).lock();
 
 const RED_BRIGHT = new Color().setHSV(15, 1, 0.75).lock();
-const RED_MAGENTA_BRIGHT = new Color().setHSV(315, 1, 0.75).lock();
+const RED_MAGENTA_BRIGHT = new Color().setHSV(330, 1, 1).lock();
 
 export {
   BLACK,
