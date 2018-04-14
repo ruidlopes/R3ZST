@@ -4,20 +4,22 @@ import {
     BLUE_FADED,
     BLUE_FADED2,
     HIGHLIGHT_BRIGHT,
+    RED_MAGENTA_BRIGHT,
 } from '../common/palette.js';
 import {PLAYER} from '../actions/qualifiers.js';
 import {Action, ActionRefreshEnum} from '../action.js';
 import {ActiveComponent} from '../components/active.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
 import {
-  ChipComponent,
-  ChipType,
-  ChipBiosVersion,
-  ChipCamVersion,
-  ChipCpuVersion,
-  ChipMemVersion,
-  ChipNicVersion,
+    ChipComponent,
+    ChipType,
+    ChipBiosVersion,
+    ChipCamVersion,
+    ChipCpuVersion,
+    ChipMemVersion,
+    ChipNicVersion,
 } from '../components/chip.js';
+import {ChipScriptAction, ANY_CHIP} from '../actions/player/base/chipscript.js';
 import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
 import {DeckComponent} from '../components/deck.js';
@@ -36,9 +38,18 @@ import {enumLabel, firstOf, mapOf} from '../../stdlib/collections.js';
 import {ij, ijmap} from '../../injection/api.js';
 
 const ActionRefreshIcon = mapOf(
-  ActionRefreshEnum.TURN, 'T',
-  ActionRefreshEnum.NODE, 'N',
-  ActionRefreshEnum.ZERO, 'Z',
+    ActionRefreshEnum.TURN, 'T',
+    ActionRefreshEnum.NODE, 'N',
+    ActionRefreshEnum.ZERO, '0',
+);
+
+const ActionChipIcon = mapOf(
+  ChipType.BIOS, 'B',
+  ChipType.CAM, 'C',
+  ChipType.CPU, 'P',
+  ChipType.MEM, 'M',
+  ChipType.NIC, 'N',
+  ANY_CHIP, '*',
 );
 
 class StatusRendererSystem extends System {
@@ -114,12 +125,12 @@ class StatusRendererSystem extends System {
   }
   
   renderFrames(delta, spatial) {
-    this.renderFrame(spatial.x, 0, spatial.width, 9, 'GAME');
+    this.renderFrame(spatial.x, 0, spatial.width, 9, 'RUN');
     this.renderFrame(spatial.x, 9, spatial.width, 8, 'NODE/CHIP');
     this.renderFrame(spatial.x, 17, spatial.width, spatial.height - 17, 'SCRIPT DECK'); 
   }
   
-  renderGameStats(delta, spatial) {
+  renderRunStats(delta, spatial) {
     const dx = spatial.x + 2;
     const dy = spatial.y + 2;
     
@@ -157,11 +168,15 @@ class StatusRendererSystem extends System {
 
       case ChipType.CAM:
         const camVersion = enumLabel(ChipCamVersion, component.version);
-        const status = enumLabel(RetCamStatus, chip.get(RetCamStatusComponent).status);
+        const status = chip.get(RetCamStatusComponent).status;
+        const statusLabel = enumLabel(RetCamStatus, status);
+        const statusColor = status == RetCamStatus.DISCONNECTED ?
+            RED_MAGENTA_BRIGHT :
+            BLUE_BRIGHT;
         draw.sprint('CAMERA', dx, ++dy, BLUE_BRIGHT, BLACK)
             .sprint(camVersion, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK)
             .sprint('STATUS', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(status, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
+            .sprint(statusLabel, dx + 8, dy, statusColor, BLACK);
         break;
 
       case ChipType.CPU:
@@ -199,13 +214,17 @@ class StatusRendererSystem extends System {
         continue;
       }
       const stats = deck.get(key);
+      const chip = action instanceof ChipScriptAction ?
+          ActionChipIcon.get(action.chipType) :
+          '-';
       const refresh = stats == Infinity ? '-' : ActionRefreshIcon.get(action.refresh);
       const count = stats == Infinity ? '-' : String(stats);
       const cycles = String(action.cycles);
-      draw.sprint(refresh, dx, ++dy, BLACK, HIGHLIGHT_BRIGHT)
-          .sprint(count, dx + 1, dy, BLACK, BLUE_BRIGHT)
-          .sprint(cycles, dx + 2, dy, BLACK, HIGHLIGHT_BRIGHT)
-          .sprint(key, dx + 4, dy, HIGHLIGHT_BRIGHT, BLACK);
+      draw.sprint(chip, dx, ++dy, BLACK, BLUE_BRIGHT)
+          .sprint(refresh, dx + 1, dy, BLACK, HIGHLIGHT_BRIGHT)
+          .sprint(count, dx + 2, dy, BLACK, BLUE_BRIGHT)
+          .sprint(cycles, dx + 3, dy, BLACK, HIGHLIGHT_BRIGHT)
+          .sprint(key, dx + 5, dy, HIGHLIGHT_BRIGHT, BLACK);
     }
   }
   
@@ -217,7 +236,7 @@ class StatusRendererSystem extends System {
     this.clipper.height = spatial.height;
     
     this.renderFrames(delta, spatial);
-    this.renderGameStats(delta, this.clipper);
+    this.renderRunStats(delta, this.clipper);
     this.renderNodeStats(delta, this.clipper);
     this.renderDeckStats(delta, this.clipper);
   }

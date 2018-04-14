@@ -1,4 +1,4 @@
-import {Action, ActionRefreshEnum} from '../../action.js';
+import {ActionRefreshEnum} from '../../action.js';
 import {ActiveComponent} from '../../components/active.js';
 import {
   ChipComponent,
@@ -9,46 +9,35 @@ import {
   ChipMemVersion,
   ChipNicVersion,
 } from '../../components/chip.js';
+import {ChipScriptAction} from './base/chipscript.js';
 import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {IdentifiedComponent} from '../../components/identified.js';
-import {enumLabel, firstOf, isEmpty} from '../../../stdlib/collections.js';
+import {enumLabel} from '../../../stdlib/collections.js';
 import {ij} from '../../../injection/api.js';
 
-class ChipIdAction extends Action {
+class ChipIdAction extends ChipScriptAction {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
       events = ij(EventManager)) {
-    super();
-    this.manager = manager;
-    this.events = events;
-    
+    super(entities, events);
     this.cycles = 1;
     this.limit = 3;
     this.refresh = ActionRefreshEnum.NODE;
   }
   
-  activeChip() {
-    return this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(ChipComponent)
-        .iterate(ChipComponent, ActiveComponent, IdentifiedComponent);
-  }
-  
   constraints() {
-    if (isEmpty(this.activeChip()) ||
-        !firstOf(this.activeChip()).get(ActiveComponent).active) {
-      this.events.emit(
-          EventType.LOG,
-          'NO CHIP IN RANGE.');
+    const activeChip = this.activeChip();
+    if (!activeChip || !activeChip.get(ActiveComponent).active) {
+      this.events.emit(EventType.LOG, 'NO CHIP IN RANGE.');
       return false;
     }
     return true;
   }
   
   start() {
-    const chip = firstOf(this.activeChip());
+    const chip = this.activeChip();
     chip.get(IdentifiedComponent).identified = true;
     
     const type = chip.get(ChipComponent).type;
