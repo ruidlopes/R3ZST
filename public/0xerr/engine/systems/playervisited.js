@@ -9,8 +9,8 @@ import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 import {lerp} from '../../stdlib/math.js';
 
-const MAX_FOV_DISTANCE = 5.5;
-const MIN_FOV = 0.2;
+const MAX_FOV_DISTANCE = 5;
+const MIN_FOV = 0.3;
 const MAX_FOV = 1.0;
 
 class PlayerVisitedSystem extends System {
