@@ -1,4 +1,4 @@
-import {RED_BRIGHT} from '../common/palette.js';
+import {RED_MAGENTA_BRIGHT} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
 import {ChipComponent, ChipType} from '../components/chip.js';
@@ -37,8 +37,8 @@ class ChipRendererSystem extends System {
   
   activeNode() {
     return firstOf(this.manager.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(SpatialComponent, CompositeComponent));
   }
   
@@ -104,7 +104,7 @@ class ChipRendererSystem extends System {
       case ChipType.CAM:
         const status = chip.get(RetCamStatusComponent).status;
         const foreground = status == RetCamStatus.DISCONNECTED ?
-            RED_BRIGHT :
+            RED_MAGENTA_BRIGHT :
             style.foregroundColor;
         draw.box(dx, dy, spatial.width, spatial.height,
                  BoxType.DOUBLE, foreground, style.backgroundColor);
