@@ -4,9 +4,9 @@ import {ChipIdAction} from './chipid.js';
 import {ConnectAction} from './connect.js';
 import {DebugAction} from './debug.js';
 import {EndTurnAction} from './endturn.js';
+import {KillCamAction} from './killcam.js';
 import {OverclockAction} from './overclock.js';
 import {RefreshAction} from './refresh.js';
-import {RetCamKillAction} from './retcamkill.js';
 import {Module} from '../../../injection/module.js';
 
 class PlayerActionsModule extends Module {
@@ -15,9 +15,9 @@ class PlayerActionsModule extends Module {
     this.bindClassIntoMap(Action, PLAYER, 'CONNECT', ConnectAction);
     this.bindClassIntoMap(Action, PLAYER, 'DEBUG', DebugAction);
     this.bindClassIntoMap(Action, PLAYER, 'ENDTURN', EndTurnAction);
+    this.bindClassIntoMap(Action, PLAYER, 'KILLCAM', KillCamAction);
     this.bindClassIntoMap(Action, PLAYER, 'OVERCLOCK', OverclockAction);
     this.bindClassIntoMap(Action, PLAYER, 'REFRESH', RefreshAction);
-    this.bindClassIntoMap(Action, PLAYER, 'RETCAMKILL', RetCamKillAction);
   }
 }
 

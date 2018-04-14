@@ -6,13 +6,11 @@ import {EventType} from '../../event/type.js';
 import {RetCamStatusComponent, RetCamStatus} from '../../components/retcamstatus.js';
 import {ij} from '../../../injection/api.js';
 
-class RetCamKillAction extends ChipScriptAction {
+class KillCamAction extends ChipScriptAction {
   constructor(
       entities = ij(EntityManager),
       events = ij(EventManager)) {
     super(entities, events, ChipType.CAM);
-    
-    this.command = 'RETCAMKILL';
     this.cycles = 2;
   }
   
@@ -26,4 +24,4 @@ class RetCamKillAction extends ChipScriptAction {
   }
 }
 
-export {RetCamKillAction};
+export {KillCamAction};
