@@ -7,7 +7,7 @@ import {System} from '../system.js';
 import {VisitedComponent} from '../components/visited.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
-import {lerp} from '../../stdlib/math.js';
+import {trigerp} from '../../stdlib/math.js';
 
 const MAX_FOV_DISTANCE = 5;
 const MIN_FOV = 0.3;
@@ -52,7 +52,7 @@ class PlayerVisitedSystem extends System {
           row[x] = MIN_FOV;
         } else if (distance <= MAX_FOV_DISTANCE) {
           const factor = distance / MAX_FOV_DISTANCE;
-          row[x] = lerp(1.0 - factor, MIN_FOV, MAX_FOV);
+          row[x] = trigerp(1.0 - factor, MIN_FOV, MAX_FOV);
         }
       }
     }
