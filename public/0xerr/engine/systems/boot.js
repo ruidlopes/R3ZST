@@ -20,6 +20,8 @@ import {Viewport} from '../../observers/viewport.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
+const BOOT_TIMEOUT_MS = 5 * 1000;
+
 class BootSystem extends System {
   constructor(
       entities = ij(EntityManager),
@@ -54,6 +56,7 @@ class BootSystem extends System {
     this.debugPlayerFactory = debugPlayerFactory;
     
     this.booting = false;
+    this.bootTimer = BOOT_TIMEOUT_MS;
     this.events.subscribe(
         EventType.BOOT,
         () => this.boot());
@@ -66,6 +69,7 @@ class BootSystem extends System {
   
   boot() {
     this.booting = true;
+    this.bootTimer = BOOT_TIMEOUT_MS;
     this.entities.clear();
     this.createPrompt();
   }
@@ -76,7 +80,7 @@ class BootSystem extends System {
         this.bootInputId,
         new TextInputComponent('BOOT>'),
         new ActiveComponent(true),
-        new SpatialComponent(0, 1, 50, 1));
+        new SpatialComponent(0, 2, 50, 1));
   }
   
   bootInput() {
@@ -87,10 +91,15 @@ class BootSystem extends System {
   
   handleBootInput() {
     const textInput = this.bootInput().get(TextInputComponent).text.trim();
-    const tokens = textInput.split(/\s+/);
+    this.createNetwork(textInput);
+  }
+  
+  createNetwork(input = '') {
+    const tokens = input.split(/\s+/);
     const params = new Map(tokens.map(token => token.split('=')));
     
     this.booting = false;
+    this.bootTimer = BOOT_TIMEOUT_MS;
     this.entities.clear();
     this.gameFactory.make();
     this.viewFactory.make();
@@ -117,12 +126,23 @@ class BootSystem extends System {
       return;
     }
     
+    this.bootTimer = Math.max(0, this.bootTimer - delta);
+    const seconds = Math.ceil(this.bootTimer / 1000);
+    
+    if (seconds == 0) {
+      this.createNetwork();
+      return;
+    }
+    
+    const timeUnit = seconds != 1 ? 'SECONDS' : 'SECOND';
+    
     const width = this.viewport.screenWidth();
     const height = this.viewport.screenHeight();
     
     this.drawing.absolute()
         .rect(0, 0, width, height, 0x20, BLUE_BRIGHT, BLACK)
-        .sprint('WELCOME TO RETSAFE.', 0, 0, BLUE_BRIGHT, BLACK);
+        .sprint('WELCOME TO RETSAFE.', 0, 0, BLUE_BRIGHT, BLACK)
+        .sprint(`AUTO-BOOTING IN ${seconds} ${timeUnit}.`, 0, 1, BLUE_BRIGHT, BLACK);
     
     this.bootInput().get(SpatialComponent).width = width;
   }
