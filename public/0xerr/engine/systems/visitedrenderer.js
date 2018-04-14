@@ -73,18 +73,18 @@ class VisitedRendererSystem extends System {
           this.buffer.chars.data[charsOffset] = 0xef;
         } else {
           this.buffer.foreground.data[foregroundOffset] =
-              lerp(visitedValue, this.buffer.foreground.data[foregroundOffset], br);
+              lerp(visitedValue, br, this.buffer.foreground.data[foregroundOffset]);
           this.buffer.foreground.data[foregroundOffset + 1] =
-              lerp(visitedValue, this.buffer.foreground.data[foregroundOffset + 1], bg);
+              lerp(visitedValue, bg, this.buffer.foreground.data[foregroundOffset + 1]);
           this.buffer.foreground.data[foregroundOffset + 2] =
-              lerp(visitedValue, this.buffer.foreground.data[foregroundOffset + 2], bb);
+              lerp(visitedValue, bb, this.buffer.foreground.data[foregroundOffset + 2]);
           
           this.buffer.background.data[backgroundOffset] =
-              lerp(visitedValue, this.buffer.background.data[backgroundOffset], br);
+              lerp(visitedValue, br, this.buffer.background.data[backgroundOffset]);
           this.buffer.background.data[backgroundOffset + 1] =
-              lerp(visitedValue, this.buffer.background.data[backgroundOffset + 1], bg);
+              lerp(visitedValue, bg, this.buffer.background.data[backgroundOffset + 1]);
           this.buffer.background.data[backgroundOffset + 2] =
-              lerp(visitedValue, this.buffer.background.data[backgroundOffset + 2], bb);
+              lerp(visitedValue, bb, this.buffer.background.data[backgroundOffset + 2]);
         }
       }
     }
