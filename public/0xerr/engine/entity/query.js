@@ -6,12 +6,20 @@ import {firstOf} from '../../stdlib/collections.js';
 const EntityViewTemplate = new EntityView();
 
 class EntityQuery {
-  constructor(components, ids) {
+  constructor(components, ids, fastFiltering) {
     this.components = components;
     this.ids = ids;
+    this.fastFiltering = fastFiltering;
   }
   
   filter(type, cond = ALWAYS_TRUE) {
+    if (this.fastFiltering && cond == ALWAYS_TRUE) {
+      this.fastFiltering = false;
+      this.ids = new Set(this.components.get(type).keys());
+      return this;
+    }
+    this.fastFiltering = false;
+    
     const ids = new Set();
     for (const id of this.ids) {
       const idHasType = this.components.has(type) &&
@@ -39,7 +47,7 @@ class EntityQuery {
   }
   
   *iterate(...types) {
-    for (const id of this.ids.values()) {
+    for (const id of this.ids) {
       yield EntityViewTemplate.mutate(id, this.entityView(id, types));
     }
   }
