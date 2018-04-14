@@ -5,6 +5,7 @@ const EventType = enumOf(
   'ACTION_DONE',
   'BOOT',
   'CONNECTED',
+  'CYCLES',
   'DISCONNECTED',
   'END_TURN',
   'LOG',

@@ -31,8 +31,8 @@ class ChipIdAction extends Action {
   
   activeChip() {
     return this.manager.query()
-        .filter(ChipComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(ChipComponent)
         .iterate(ChipComponent, ActiveComponent, IdentifiedComponent);
   }
   

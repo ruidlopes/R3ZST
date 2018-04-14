@@ -27,15 +27,15 @@ class ConnectAction extends Action {
   
   activeNode() {
     return firstOf(this.entities.query()
-        .filter(NodeComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(NodeComponent)
         .iterate(ActiveComponent));
   }
   
   activeChip() {
     return this.entities.query()
-        .filter(ChipComponent)
         .filter(ActiveComponent, component => component.active)
+        .filter(ChipComponent)
         .iterate(ChipComponent, ActiveComponent, IdentifiedComponent, IpComponent);
   }
   

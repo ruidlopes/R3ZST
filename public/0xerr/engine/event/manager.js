@@ -1,3 +1,5 @@
+import {EventHandler} from './handler.js';
+
 class EventManager {
   constructor() {
     this.handlers = new Map();
@@ -8,6 +10,7 @@ class EventManager {
       this.handlers.set(event, new Set());
     }
     this.handlers.get(event).add(handler);
+    return new EventHandler(event, handler, this);
   }
   
   unsubscribe(event, handler) {
@@ -18,8 +21,9 @@ class EventManager {
   
   once(event, handler) {
     const onceHandler = (...params) => {
-      handler(...params);
+      const ret = handler(...params);
       this.unsubscribe(event, onceHandler);
+      return ret;
     };
     this.subscribe(event, onceHandler);
   }
@@ -30,6 +34,15 @@ class EventManager {
     }
     for (const handler of this.handlers.get(event)) {
       handler(...params);
+    }
+  }
+  
+  *emitAndEval(event, ...params) {
+    if (!this.handlers.has(event)) {
+      return;
+    }
+    for (const handler of this.handlers.get(event)) {
+      yield handler(...params);
     }
   }
 }

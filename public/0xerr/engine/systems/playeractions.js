@@ -122,9 +122,19 @@ class PlayerActionsSystem extends System {
         const count = deck.get(command);
         
         if (count == Infinity || count > 0) {
-          if (cyclesComponent.cycles >= action.cycles) {
+          const mutators = this.events.emitAndEval(EventType.CYCLES, action);
+          let cycles = action.cycles;
+          for (const mutator of mutators) {
+            const value = mutator(cycles);
+            if (value !== undefined) {
+              cycles = value;
+            }
+          }
+          cycles = Math.max(0, cycles);
+          
+          if (cyclesComponent.cycles >= cycles) {
             if (action.constraints(...params)) {
-              cyclesComponent.cycles -= action.cycles;
+              cyclesComponent.cycles -= cycles;
               this.queuedActions.add(action);
               this.recordAction(command, ...params);
               if (count != Infinity) {
