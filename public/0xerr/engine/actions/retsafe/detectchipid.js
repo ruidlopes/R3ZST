@@ -5,7 +5,6 @@ import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {SentryComponent, SentryCapabilities, SentryState} from '../../components/sentry.js';
-import {StealthComponent, STEALTH_MAX} from '../../components/stealth.js';
 import {TurnActionsComponent} from '../../components/turnactions.js';
 import {firstOf} from '../../../stdlib/collections.js';
 import {ij} from '../../../injection/api.js';
@@ -29,12 +28,6 @@ class DetectChipIdAction extends Action {
     return this.entities.query()
         .head(TurnActionsComponent)
         .get(TurnActionsComponent);
-  }
-  
-  stealthComponent() {
-    return this.entities.query()
-        .head(StealthComponent)
-        .get(StealthComponent);
   }
   
   start() {
