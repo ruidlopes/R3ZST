@@ -22,18 +22,13 @@ class SentryRendererSystem extends System {
     this.drawing = drawing;
   }
   
-  activeNode() {
-    return firstOf(this.lib.activeNode().iterate(SpatialComponent, CompositeComponent));
-  }
-  
-  activeNodeCompositeIds() {
-    return this.activeNode().get(CompositeComponent).ids;
+  activeNodeSpatial() {
+    return firstOf(this.lib.activeNode().iterate(SpatialComponent))
+        .get(SpatialComponent);
   }
   
   chips() {
-    return this.entities.query(this.activeNodeCompositeIds())
-        .filter(ChipComponent)
-        .iterate(CompositeComponent, SpatialComponent);
+    return this.lib.activeNodeChips().iterate(CompositeComponent, SpatialComponent);
   }
   
   sentries(chip) {
@@ -43,7 +38,7 @@ class SentryRendererSystem extends System {
   }
   
   frame(delta) {
-    const nodeSpatial = this.activeNode().get(SpatialComponent);
+    const nodeSpatial = this.activeNodeSpatial();
     const draw = this.drawing.clipping(nodeSpatial);
     
     for (const chip of this.chips()) {

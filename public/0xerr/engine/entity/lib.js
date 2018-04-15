@@ -1,13 +1,17 @@
 import {
     ENTITY_ACTIVE_NODE,
+    ENTITY_ACTIVE_NODE_CHIPS,
     ENTITY_TERMINAL_VIEW,
     ENTITY_HARDWARE_VIEW,
 } from './keys.js';
 import {ActiveComponent} from '../components/active.js';
 import {CacheScope} from './cache.js';
+import {ChipComponent} from '../components/chip.js';
+import {CompositeComponent} from '../components/composite.js';
 import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {ViewComponent, ViewType} from '../components/view.js';
+import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class EntityLib {
@@ -23,6 +27,15 @@ class EntityLib {
             .filter(ActiveComponent, component => component.active)
             .filter(NodeComponent)
             .lock());
+  }
+  
+  activeNodeChips() {
+    const ids = firstOf(this.activeNode().iterate(CompositeComponent))
+        .get(CompositeComponent).ids;
+    return this.entities.cached(
+        CacheScope.FRAME,
+        ENTITY_ACTIVE_NODE_CHIPS,
+        () => this.entities.query(ids).filter(ChipComponent).lock());
   }
   
   terminalView() {

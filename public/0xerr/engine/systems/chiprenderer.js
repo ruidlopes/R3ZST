@@ -1,17 +1,13 @@
 import {RED_MAGENTA_BRIGHT} from '../common/palette.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
 import {ChipComponent, ChipType} from '../components/chip.js';
-import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityLib} from '../entity/lib.js';
-import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
-import {NodeComponent} from '../components/node.js';
 import {RetCamStatusComponent, RetCamStatus} from '../components/retcamstatus.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
 import {System} from '../system.js';
-import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
@@ -19,11 +15,9 @@ const CPU_SMALL_CHARS = [0x00, 0x00, 0x00, 0x00, 0x8c, 0x8e, 0x8d, 0x8f];
 
 class ChipRendererSystem extends System {
   constructor(
-      entities = ij(EntityManager),
       lib = ij(EntityLib),
       drawing = ij(Drawing)) {
     super();
-    this.entities = entities;
     this.lib = lib;
     this.drawing = drawing;
         
@@ -35,17 +29,13 @@ class ChipRendererSystem extends System {
         .get(SpatialComponent);
   }
   
-  activeNodeComponent(component) {
-    return firstOf(this.lib.activeNode().iterate(component)).get(component);
-  }
-  
-  activeNodeCompositeIds() {
-    return this.activeNodeComponent(CompositeComponent).ids;
+  activeNodeSpatial() {
+    return firstOf(this.lib.activeNode().iterate(SpatialComponent))
+        .get(SpatialComponent);
   }
   
   chips() {
-    return this.entities.query(this.activeNodeCompositeIds())
-        .filter(ChipComponent)
+    return this.lib.activeNodeChips()
         .iterate(
             ChipComponent,
             SpatialComponent,
@@ -55,7 +45,7 @@ class ChipRendererSystem extends System {
   }
   
   frame(delta) {
-    const nodeSpatial = this.activeNodeComponent(SpatialComponent);
+    const nodeSpatial = this.activeNodeSpatial();
     const viewSpatial = this.hardwareViewSpatial();
     this.clipped.x = Math.floor(nodeSpatial.x);
     this.clipped.y = Math.floor(nodeSpatial.y);

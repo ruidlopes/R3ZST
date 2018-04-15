@@ -1,15 +1,12 @@
 import {ActiveComponent} from '../components/active.js';
 import {ChipComponent} from '../components/chip.js';
-import {CompositeComponent} from '../components/composite.js';
 import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
-import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
-import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class PlayerChipBoundsSystem extends System {
@@ -23,17 +20,8 @@ class PlayerChipBoundsSystem extends System {
     this.events = events;
   }
   
-  activeNode() {
-    return firstOf(this.lib.activeNode().iterate(SpatialComponent, CompositeComponent));
-  }
-  
-  activeNodeCompositeIds() {
-    return this.activeNode().get(CompositeComponent).ids;
-  }
-  
   chips() {
-    return this.entities.query(this.activeNodeCompositeIds())
-        .filter(ChipComponent)
+    return this.lib.activeNodeChips()
         .iterate(ChipComponent, SpatialComponent, ActiveComponent);
   }
   
