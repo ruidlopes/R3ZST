@@ -1,6 +1,7 @@
 import {ActiveComponent} from '../components/active.js';
 import {ChipComponent} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
@@ -13,18 +14,17 @@ import {ij} from '../../injection/api.js';
 
 class PlayerChipBoundsSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       events = ij(EventManager)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
     this.events = events;
   }
   
   activeNode() {
-    return firstOf(this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(SpatialComponent, CompositeComponent));
+    return firstOf(this.lib.activeNode().iterate(SpatialComponent, CompositeComponent));
   }
   
   activeNodeCompositeIds() {
@@ -32,13 +32,13 @@ class PlayerChipBoundsSystem extends System {
   }
   
   chips() {
-    return this.manager.query(this.activeNodeCompositeIds())
+    return this.entities.query(this.activeNodeCompositeIds())
         .filter(ChipComponent)
         .iterate(ChipComponent, SpatialComponent, ActiveComponent);
   }
   
   playerSpatial() {
-    return this.manager.query()
+    return this.entities.query()
         .head(StealthComponent, SpatialComponent)
         .get(SpatialComponent);
   }

@@ -7,7 +7,7 @@ import {
   DISCONNECTED,
   VICTORY,
 } from './systems/qualifiers.js';
-
+import {EntityManager} from './entity/manager.js';
 import {EventManager} from './event/manager.js';
 import {EventType} from './event/type.js';
 import {Scene} from './scene.js';
@@ -24,6 +24,7 @@ const States = enumOf(
 
 class MainScene extends Scene {
   constructor(
+      entities = ij(EntityManager),
       events = ij(EventManager),
       bootSystems = ijset(System, BOOT),
       globalSystems = ijset(System, MAIN_SCENE_GLOBAL),
@@ -35,6 +36,8 @@ class MainScene extends Scene {
   ) {
     super();
     
+    this.entities = entities;
+        
     this.events = events;
     this.events.subscribe(
         EventType.BOOT,
@@ -70,6 +73,8 @@ class MainScene extends Scene {
   }
   
   gameLoop(delta) {
+    this.entities.cache.clear();
+    
     this.systemClusterFrame(this.globalSystems, delta);
     this.systemClusterFrame(this.inputSystems, delta);
     this.systemClusterFrame(this.updateSystems, delta);

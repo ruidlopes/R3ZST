@@ -1,7 +1,7 @@
-import {ActiveComponent} from '../components/active.js';
 import {ChipComponent} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {SentryComponent} from '../components/sentry.js';
@@ -13,18 +13,17 @@ import {ij} from '../../injection/api.js';
 
 class SentryRendererSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       drawing = ij(Drawing)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
     this.drawing = drawing;
   }
   
   activeNode() {
-    return firstOf(this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(SpatialComponent, CompositeComponent));
+    return firstOf(this.lib.activeNode().iterate(SpatialComponent, CompositeComponent));
   }
   
   activeNodeCompositeIds() {
@@ -32,13 +31,13 @@ class SentryRendererSystem extends System {
   }
   
   chips() {
-    return this.manager.query(this.activeNodeCompositeIds())
+    return this.entities.query(this.activeNodeCompositeIds())
         .filter(ChipComponent)
         .iterate(CompositeComponent, SpatialComponent);
   }
   
   sentries(chip) {
-    return this.manager.query(chip.get(CompositeComponent).ids)
+    return this.entities.query(chip.get(CompositeComponent).ids)
         .filter(SentryComponent)
         .iterate(SpatialComponent, StyleComponent);
   }

@@ -1,6 +1,6 @@
 import {ALWAYS_TRUE} from '../../stdlib/functions.js';
 import {EntityView} from './view.js';
-import {assertEquals} from '../../stdlib/asserts.js';
+import {assertEquals, assertFalse} from '../../stdlib/asserts.js';
 import {firstOf} from '../../stdlib/collections.js';
 
 const EntityViewTemplate = new EntityView();
@@ -10,9 +10,12 @@ class EntityQuery {
     this.components = components;
     this.ids = ids;
     this.fastFiltering = fastFiltering;
+    this.locked = false;
   }
   
   filter(type, cond = ALWAYS_TRUE) {
+    assertFalse(this.locked);
+    
     if (this.fastFiltering && cond == ALWAYS_TRUE) {
       this.fastFiltering = false;
       this.ids = new Set(this.components.get(type).keys());
@@ -30,6 +33,11 @@ class EntityQuery {
       }
     }
     this.ids = ids;
+    return this;
+  }
+  
+  lock() {
+    this.locked = true;
     return this;
   }
   

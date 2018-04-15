@@ -1,4 +1,4 @@
-import {ActiveComponent} from '../components/active.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
@@ -11,21 +11,21 @@ import {ij} from '../../injection/api.js';
 
 
 class PlayerPositionSystem extends System {
-  constructor(manager = ij(EntityManager)) {
+  constructor(
+      entities = ij(EntityManager),
+      lib = ij(EntityLib)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
   }
   
   activeNodeSpatial() {
-    return firstOf(this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(SpatialComponent))
+    return firstOf(this.lib.activeNode().iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   
   player() {
-    return this.manager.query()
+    return this.entities.query()
         .head(StealthComponent, SpatialComponent, VelocityComponent);
   }
   

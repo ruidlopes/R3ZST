@@ -1,6 +1,6 @@
 import {BLACK, HIGHLIGHT_BRIGHT} from '../common/palette.js';
-import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
@@ -11,23 +11,22 @@ import {ij} from '../../injection/api.js';
 
 class PlayerRendererSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       drawing = ij(Drawing)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
     this.drawing = drawing;
   }
   
   activeNodeSpatial() {
-    return firstOf(this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(SpatialComponent))
+    return firstOf(this.lib.activeNode().iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   
   playerSpatial() {
-    return this.manager.query()
+    return this.entities.query()
         .head(StealthComponent, SpatialComponent)
         .get(SpatialComponent);
   }

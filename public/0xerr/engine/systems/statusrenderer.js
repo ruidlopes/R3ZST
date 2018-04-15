@@ -24,6 +24,7 @@ import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
 import {DeckComponent} from '../components/deck.js';
 import {Drawing} from '../common/drawing.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
 import {IpComponent} from '../components/ip.js';
@@ -55,10 +56,12 @@ const ActionChipIcon = mapOf(
 class StatusRendererSystem extends System {
   constructor(
       manager = ij(EntityManager),
+      lib = ij(EntityLib),
       actions = ijmap(Action, PLAYER),
       drawing = ij(Drawing)) {
     super();
     this.manager = manager;
+    this.lib = lib;
     this.actions = actions;
     this.drawing = drawing;
 
@@ -100,10 +103,7 @@ class StatusRendererSystem extends System {
   }
   
   activeNode() {
-    return firstOf(this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(NodeComponent, CompositeComponent));
+    return firstOf(this.lib.activeNode().iterate(NodeComponent, CompositeComponent));
   }
   
   activeChip() {

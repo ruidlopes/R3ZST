@@ -5,6 +5,8 @@ class EntityManager {
     this.components = new Map();
     this.ids = new Set();
     this.idCounter = 0;
+    
+    this.cache = new Map();
   }
   
   nextId() {
@@ -45,6 +47,17 @@ class EntityManager {
     this.components = new Map();
     this.ids = new Set();
     this.idCounter = 0;
+    this.cache.clear();
+  }
+  
+  cached(key, provider) {
+    if (this.cache.has(key)) {
+      return this.cache.get(key);
+    } else {
+      const query = provider();
+      this.cache.set(key, query);
+      return query;
+    }
   }
   
   query(ids) {

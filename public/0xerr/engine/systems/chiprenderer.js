@@ -1,9 +1,9 @@
 import {RED_MAGENTA_BRIGHT} from '../common/palette.js';
-import {ActiveComponent} from '../components/active.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
 import {ChipComponent, ChipType} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {IdentifiedComponent} from '../components/identified.js';
 import {NodeComponent} from '../components/node.js';
@@ -19,35 +19,34 @@ const CPU_SMALL_CHARS = [0x00, 0x00, 0x00, 0x00, 0x8c, 0x8e, 0x8d, 0x8f];
 
 class ChipRendererSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       drawing = ij(Drawing)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
     this.drawing = drawing;
         
     this.clipped = {x: 0, y: 0, width: 0, height: 0};
   }
   
   hardwareViewSpatial() {
-    return firstOf(this.manager.query()
+    return firstOf(this.entities.query()
         .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
         .iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   
-  activeNode() {
-    return firstOf(this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(SpatialComponent, CompositeComponent));
+  activeNodeComponent(component) {
+    return firstOf(this.lib.activeNode().iterate(component)).get(component);
   }
   
   activeNodeCompositeIds() {
-    return this.activeNode().get(CompositeComponent).ids;
+    return this.activeNodeComponent(CompositeComponent).ids;
   }
   
   chips() {
-    return this.manager.query(this.activeNodeCompositeIds())
+    return this.entities.query(this.activeNodeCompositeIds())
         .filter(ChipComponent)
         .iterate(
             ChipComponent,
@@ -58,7 +57,7 @@ class ChipRendererSystem extends System {
   }
   
   frame(delta) {
-    const nodeSpatial = this.activeNode().get(SpatialComponent);
+    const nodeSpatial = this.activeNodeComponent(SpatialComponent);
     const viewSpatial = this.hardwareViewSpatial();
     this.clipped.x = Math.floor(nodeSpatial.x);
     this.clipped.y = Math.floor(nodeSpatial.y);

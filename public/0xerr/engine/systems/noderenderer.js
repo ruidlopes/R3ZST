@@ -1,6 +1,7 @@
 import {BLUE_FADED2} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
@@ -13,22 +14,24 @@ import {ij} from '../../injection/api.js';
 
 class NodeRendererSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       drawing = ij(Drawing)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
     this.drawing = drawing;
   }
   
   activeNode() {
-    return firstOf(this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(NodeComponent, SpatialComponent, StyleComponent));
+    return firstOf(this.lib.activeNode().iterate(
+        NodeComponent,
+        SpatialComponent,
+        StyleComponent));
   }
   
   hardwareViewSpatial() {
-    return firstOf(this.manager.query()
+    return firstOf(this.entities.query()
         .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
         .iterate(SpatialComponent))
         .get(SpatialComponent);

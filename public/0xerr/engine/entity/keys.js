@@ -1,0 +1,5 @@
+const ENTITY_ACTIVE_NODE = Symbol('ENTITY_ACTIVE_NODE');
+
+export {
+  ENTITY_ACTIVE_NODE,
+};
