@@ -4,13 +4,20 @@ const SentryCapabilities = enumOf(
   'CHIPID',
 );
 
+const SentryState = enumOf(
+  'ACTIVE',
+  'DEACTIVATED',
+);
+
 class SentryComponent {
-  constructor(capabilities) {
+  constructor(capabilities, state = SentryState.ACTIVE) {
     this.capabilities = new Set(capabilities);
+    this.state = state;
   }
 }
 
 export {
   SentryComponent,
   SentryCapabilities,
+  SentryState,
 };

@@ -6,7 +6,7 @@ import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {NodeComponent} from '../../components/node.js';
-import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
+import {SentryComponent, SentryCapabilities, SentryState} from '../../components/sentry.js';
 import {StealthComponent, STEALTH_MAX} from '../../components/stealth.js';
 import {TurnActionsComponent} from '../../components/turnactions.js';
 import {firstOf} from '../../../stdlib/collections.js';
@@ -63,7 +63,9 @@ class DetectChipIdAction extends Action {
       }
       
       const sentryCount = this.manager.query(chip.get(CompositeComponent).ids)
-          .filter(SentryComponent, sentry => sentry.capabilities.has(SentryCapabilities.CHIPID))
+          .filter(SentryComponent,
+                  sentry => sentry.capabilities.has(SentryCapabilities.CHIPID) &&
+                            sentry.state == SentryState.ACTIVE)
           .count();
       if (!sentryCount) {
         continue;
