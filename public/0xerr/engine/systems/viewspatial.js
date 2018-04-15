@@ -1,4 +1,5 @@
 import {CompositeComponent} from '../components/composite.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {System} from '../system.js';
@@ -12,9 +13,11 @@ import {ij} from '../../injection/api.js';
 class ViewSpatialSystem extends System {
   constructor(
       manager = ij(EntityManager),
+      lib = ij(EntityLib),
       viewport = ij(Viewport)) {
     super();
     this.manager = manager;
+    this.lib = lib;
     this.viewport = viewport;
   }
   
@@ -25,9 +28,7 @@ class ViewSpatialSystem extends System {
   }
   
   terminalView() {
-    return firstOf(this.manager.query()
-        .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .iterate(CompositeComponent, SpatialComponent));
+    return firstOf(this.lib.terminalView().iterate(CompositeComponent, SpatialComponent));
   }
   
   resizeTerminalChildren() {

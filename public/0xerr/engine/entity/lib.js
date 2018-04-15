@@ -1,5 +1,6 @@
 import {
     ENTITY_ACTIVE_NODE,
+    ENTITY_TERMINAL_VIEW,
     ENTITY_HARDWARE_VIEW,
 } from './keys.js';
 import {ActiveComponent} from '../components/active.js';
@@ -19,6 +20,14 @@ class EntityLib {
         () => this.entities.query()
             .filter(ActiveComponent, component => component.active)
             .filter(NodeComponent)
+            .lock());
+  }
+  
+  terminalView() {
+    return this.entities.cached(
+        ENTITY_TERMINAL_VIEW,
+        () => this.entities.query()
+            .filter(ViewComponent, component => component.type == ViewType.TERMINAL)
             .lock());
   }
   

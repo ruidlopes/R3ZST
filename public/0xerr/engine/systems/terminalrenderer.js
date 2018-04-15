@@ -3,26 +3,27 @@ import {ActiveComponent} from '../components/active.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
 import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {System} from '../system.js';
 import {TextBufferComponent} from '../components/textbuffer.js';
-import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class TerminalRendererSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       drawing = ij(Drawing)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
     this.drawing = drawing;
   }
   
   terminalView() {
-    return firstOf(this.manager.query()
-        .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
+    return firstOf(this.lib.terminalView()
         .iterate(CompositeComponent, SpatialComponent, ActiveComponent));
   }
   
@@ -31,7 +32,7 @@ class TerminalRendererSystem extends System {
   }
   
   textBuffer() {
-    return firstOf(this.manager.query(this.terminalViewChildren())
+    return firstOf(this.entities.query(this.terminalViewChildren())
         .filter(TextBufferComponent)
         .iterate(TextBufferComponent, SpatialComponent));
   }

@@ -1,19 +1,21 @@
 import {CompositeComponent} from '../components/composite.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {System} from '../system.js';
 import {TextBufferComponent} from '../components/textbuffer.js';
-import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf, mapOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class TerminalBufferSystem extends System {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       events = ij(EventManager)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
     this.events = events;
         
     this.events.subscribe(
@@ -22,15 +24,13 @@ class TerminalBufferSystem extends System {
   }
   
   terminalViewChildren() {
-    return firstOf(this.manager.query()
-        .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .iterate(CompositeComponent))
+    return firstOf(this.lib.terminalView().iterate(CompositeComponent))
         .get(CompositeComponent)
         .ids;
   }
   
   textBuffer() {
-    return firstOf(this.manager.query(this.terminalViewChildren())
+    return firstOf(this.entities.query(this.terminalViewChildren())
         .filter(TextBufferComponent)
         .iterate(TextBufferComponent))
         .get(TextBufferComponent);

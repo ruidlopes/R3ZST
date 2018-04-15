@@ -1,4 +1,4 @@
-import {EntityManager} from '../entity/manager.js';
+import {EntityLib} from '../entity/lib.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {Keyboard} from '../../observers/keyboard.js';
@@ -7,7 +7,6 @@ import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {System} from '../system.js';
 import {Viewport} from '../../observers/viewport.js';
-import {ViewComponent, ViewType} from '../components/view.js';
 import {clamp} from '../../stdlib/math.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
@@ -17,12 +16,12 @@ const MIN_HEIGHT = 20;
 
 class TerminalFullScreenSystem extends System {
   constructor(
-      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       events = ij(EventManager),
       keyboard = ij(Keyboard),
       viewport = ij(Viewport)) {
     super();
-    this.entities = entities;
+    this.lib = lib;
     this.events = events;
     this.keyboard = keyboard;
     this.viewport = viewport;
@@ -37,9 +36,7 @@ class TerminalFullScreenSystem extends System {
   }
   
   terminalSpatial() {
-    return firstOf(this.entities.query()
-        .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .iterate(SpatialComponent))
+    return firstOf(this.lib.terminalView().iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   
