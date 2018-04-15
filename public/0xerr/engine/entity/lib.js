@@ -4,6 +4,7 @@ import {
     ENTITY_HARDWARE_VIEW,
 } from './keys.js';
 import {ActiveComponent} from '../components/active.js';
+import {CacheScope} from './cache.js';
 import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {ViewComponent, ViewType} from '../components/view.js';
@@ -16,6 +17,7 @@ class EntityLib {
   
   activeNode() {
     return this.entities.cached(
+        CacheScope.FRAME,
         ENTITY_ACTIVE_NODE,
         () => this.entities.query()
             .filter(ActiveComponent, component => component.active)
@@ -25,6 +27,7 @@ class EntityLib {
   
   terminalView() {
     return this.entities.cached(
+        CacheScope.SCENE,
         ENTITY_TERMINAL_VIEW,
         () => this.entities.query()
             .filter(ViewComponent, component => component.type == ViewType.TERMINAL)
@@ -33,6 +36,7 @@ class EntityLib {
   
   hardwareView() {
     return this.entities.cached(
+        CacheScope.SCENE,
         ENTITY_HARDWARE_VIEW,
         () => this.entities.query()
             .filter(ViewComponent, component => component.type == ViewType.HARDWARE)

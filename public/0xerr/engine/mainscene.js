@@ -7,7 +7,7 @@ import {
   DISCONNECTED,
   VICTORY,
 } from './systems/qualifiers.js';
-import {EntityManager} from './entity/manager.js';
+import {EntityCache, CacheScope} from './entity/cache.js';
 import {EventManager} from './event/manager.js';
 import {EventType} from './event/type.js';
 import {Scene} from './scene.js';
@@ -24,7 +24,7 @@ const States = enumOf(
 
 class MainScene extends Scene {
   constructor(
-      entities = ij(EntityManager),
+      cache = ij(EntityCache),
       events = ij(EventManager),
       bootSystems = ijset(System, BOOT),
       globalSystems = ijset(System, MAIN_SCENE_GLOBAL),
@@ -36,21 +36,21 @@ class MainScene extends Scene {
   ) {
     super();
     
-    this.entities = entities;
+    this.cache = cache;
         
     this.events = events;
     this.events.subscribe(
         EventType.BOOT,
-        () => this.sm.jump(States.BOOT));
+        () => this.jump(States.BOOT));
     this.events.subscribe(
         EventType.CONNECTED,
-        () => this.sm.jump(States.GAMELOOP));
+        () => this.jump(States.GAMELOOP));
     this.events.subscribe(
         EventType.DISCONNECTED,
-        () => this.sm.jump(States.DISCONNECTED));
+        () => this.jump(States.DISCONNECTED));
     this.events.subscribe(
         EventType.VICTORY,
-        () => this.sm.jump(States.VICTORY));
+        () => this.jump(States.VICTORY));
     
     this.bootSystems = bootSystems;
     this.globalSystems = globalSystems;
@@ -68,12 +68,17 @@ class MainScene extends Scene {
     this.events.emit(EventType.BOOT);
   }
   
+  jump(state) {
+    this.cache.reset(CacheScope.SCENE);
+    this.sm.jump(state);
+  }
+  
   boot(delta) {
     this.systemClusterFrame(this.bootSystems, delta);
   }
   
   gameLoop(delta) {
-    this.entities.cache.clear();
+    this.cache.reset(CacheScope.FRAME);
     
     this.systemClusterFrame(this.globalSystems, delta);
     this.systemClusterFrame(this.inputSystems, delta);

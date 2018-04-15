@@ -1,12 +1,14 @@
+import {EntityCache} from './cache.js';
 import {EntityQuery} from './query.js';
+import {ij} from '../../injection/api.js';
 
 class EntityManager {
-  constructor() {
+  constructor(cache = ij(EntityCache)) {
     this.components = new Map();
     this.ids = new Set();
     this.idCounter = 0;
     
-    this.cache = new Map();
+    this.cache = cache;
   }
   
   nextId() {
@@ -50,12 +52,12 @@ class EntityManager {
     this.cache.clear();
   }
   
-  cached(key, provider) {
-    if (this.cache.has(key)) {
-      return this.cache.get(key);
+  cached(scope, key, provider) {
+    if (this.cache.has(scope, key)) {
+      return this.cache.get(scope, key);
     } else {
       const query = provider();
-      this.cache.set(key, query);
+      this.cache.set(scope, key, query);
       return query;
     }
   }
