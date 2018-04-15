@@ -10,6 +10,7 @@ import {KeyShortcut} from '../../observers/keyboard/shortcut.js';
 import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
+import {ViewType} from '../components/view.js';
 import {clamp} from '../../stdlib/math.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
