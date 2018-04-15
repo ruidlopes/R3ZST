@@ -1,7 +1,7 @@
 import {RNG_FX} from '../common/randomchannels.js';
 import {CxelBuffer} from '../../renderer/cxel/buffer.js';
 import {Drawing} from '../common/drawing.js';
-import {EntityManager} from '../entity/manager.js';
+import {EntityLib} from '../entity/lib.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
 import {Random} from '../../stdlib/random.js';
@@ -16,12 +16,12 @@ const SPEED = 2.5 / 1000;
 
 class NodeTransitionSystem extends System {
   constructor(
-      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       events = ij(EventManager),
       drawing = ij(Drawing),
       random = ij(Random)) {
     super();
-    this.entities = entities;
+    this.lib = lib;
     this.events = events;
     this.drawing = drawing;
     this.random = random;
@@ -36,9 +36,7 @@ class NodeTransitionSystem extends System {
   }
   
   hardwareViewSpatial() {
-    return firstOf(this.entities.query()
-        .filter(ViewComponent, view => view.type == ViewType.HARDWARE)
-        .iterate(SpatialComponent))
+    return firstOf(this.lib.hardwareView().iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   

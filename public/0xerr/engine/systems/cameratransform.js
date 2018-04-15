@@ -1,10 +1,8 @@
 import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
-import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
-import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
@@ -29,9 +27,7 @@ class CameraTransformSystem extends System {
   }
   
   hardwareViewSpatial() {
-    return firstOf(this.entities.query()
-        .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
-        .iterate(SpatialComponent))
+    return firstOf(this.lib.hardwareView().iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   

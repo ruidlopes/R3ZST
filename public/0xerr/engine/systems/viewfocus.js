@@ -1,4 +1,5 @@
 import {ActiveComponent} from '../components/active.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
@@ -13,10 +14,12 @@ class ViewFocusSystem extends System {
   constructor(
       keyboard = ij(Keyboard),
       entities = ij(EntityManager),
+      lib = ij(EntityLib),
       events = ij(EventManager)) {
     super();
     this.keyboard = keyboard;
     this.entities = entities;
+    this.lib = lib;
     this.events = events;
     this.shortcutNext = new KeyShortcut('TAB');
   }
@@ -28,10 +31,9 @@ class ViewFocusSystem extends System {
   }
   
   isHardwareViewActive() {
-    return this.entities.query()
-        .filter(ViewComponent, view => view.type == ViewType.HARDWARE)
-        .filter(ActiveComponent, component => component.active)
-        .count() == 1;
+    return firstOf(this.lib.hardwareView().iterate(ActiveComponent))
+        .get(ActiveComponent)
+        .active;
   }
   
   frame(delta) {

@@ -1,4 +1,5 @@
 import {ActiveComponent} from '../components/active.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {Keyboard} from '../../observers/keyboard.js';
 import {KeyShortcutRE} from '../../observers/keyboard/shortcut.js';
@@ -7,7 +8,7 @@ import {VelocityComponent} from '../components/velocity.js';
 import {ViewComponent, ViewType} from '../components/view.js';
 import {System} from '../system.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
-import {firstOf, isEmpty} from '../../stdlib/collections.js';
+import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 const SPEED = 15 / 1000;
@@ -15,9 +16,11 @@ const SPEED = 15 / 1000;
 class PlayerVelocitySystem extends System {
   constructor(
       manager = ij(EntityManager),
+      lib = ij(EntityLib),
       keyboard = ij(Keyboard)) {
     super();
     this.manager = manager;
+    this.lib = lib;
     this.keyboard = keyboard;
     this.shortcutLeft = new KeyShortcutRE(/^(J|ARROWLEFT)$/);
     this.shortcutRight = new KeyShortcutRE(/^(L|ARROWRIGHT)$/);
@@ -26,10 +29,9 @@ class PlayerVelocitySystem extends System {
   }
   
   isHardwareViewActive() {
-    return this.manager.query()
-        .filter(ViewComponent, view => view.type == ViewType.HARDWARE)
-        .filter(ActiveComponent, component => component.active)
-        .count() == 1;
+    return firstOf(this.lib.hardwareView().iterate(ActiveComponent))
+        .get(ActiveComponent)
+        .active;
   }
   
   isPlayerTurn() {

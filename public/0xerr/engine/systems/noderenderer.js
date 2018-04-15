@@ -2,23 +2,19 @@ import {BLUE_FADED2} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityLib} from '../entity/lib.js';
-import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StyleComponent} from '../components/style.js';
 import {System} from '../system.js';
-import {ViewComponent, ViewType} from '../components/view.js';
 import {BoxType} from '../../renderer/primitives/boxes.js';
 import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class NodeRendererSystem extends System {
   constructor(
-      entities = ij(EntityManager),
       lib = ij(EntityLib),
       drawing = ij(Drawing)) {
     super();
-    this.entities = entities;
     this.lib = lib;
     this.drawing = drawing;
   }
@@ -31,9 +27,7 @@ class NodeRendererSystem extends System {
   }
   
   hardwareViewSpatial() {
-    return firstOf(this.entities.query()
-        .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
-        .iterate(SpatialComponent))
+    return firstOf(this.lib.hardwareView().iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   

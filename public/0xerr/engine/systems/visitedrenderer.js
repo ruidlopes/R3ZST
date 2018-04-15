@@ -2,7 +2,6 @@ import {BLACK, BLUE_FADED2, BLUE_FADED3} from '../common/palette.js';
 import {ActiveComponent} from '../components/active.js';
 import {Drawing} from '../common/drawing.js';
 import {EntityLib} from '../entity/lib.js';
-import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {System} from '../system.js';
@@ -18,19 +17,15 @@ const bb = BLACK.rgb.b;
 
 class VisitedRendererSystem extends System {
   constructor(
-      entities = ij(EntityManager),
       lib = ij(EntityLib),
       drawing = ij(Drawing)) {
     super();
-    this.entities = entities;
     this.lib = lib;
     this.buffer = drawing.buffer();
   }
   
   hardwareView() {
-    return firstOf(this.entities.query()
-        .filter(ViewComponent, view => view.type == ViewType.HARDWARE)
-        .iterate(ActiveComponent, SpatialComponent));
+    return firstOf(this.lib.hardwareView().iterate(ActiveComponent, SpatialComponent));
   }
   
   activeNode() {

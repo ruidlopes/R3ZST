@@ -31,9 +31,7 @@ class ChipRendererSystem extends System {
   }
   
   hardwareViewSpatial() {
-    return firstOf(this.entities.query()
-        .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
-        .iterate(SpatialComponent))
+    return firstOf(this.lib.hardwareView().iterate(SpatialComponent))
         .get(SpatialComponent);
   }
   
