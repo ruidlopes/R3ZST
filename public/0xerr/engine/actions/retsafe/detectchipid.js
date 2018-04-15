@@ -1,5 +1,4 @@
 import {Action} from '../../action.js';
-import {ChipComponent} from '../../components/chip.js';
 import {CompositeComponent} from '../../components/composite.js';
 import {EntityLib} from '../../entity/lib.js';
 import {EntityManager} from '../../entity/manager.js';
@@ -23,7 +22,7 @@ class DetectChipIdAction extends Action {
   }
   
   chips() {
-    return this.lib.activeNodeChips().iterate(ChipComponent, CompositeComponent);
+    return this.lib.activeNodeChips().iterate(CompositeComponent);
   }
   
   turnActionsComponent() {
