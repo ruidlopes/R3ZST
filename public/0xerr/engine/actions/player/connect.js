@@ -1,6 +1,6 @@
 import {ActiveComponent} from '../../components/active.js';
 import {ChipComponent, ChipType} from '../../components/chip.js';
-import {ChipScriptAction} from './base/chipscript.js';
+import {ChipScriptAction} from './lib/chipscript.js';
 import {CompositeComponent} from '../../components/composite.js';
 import {ConnectionComponent} from '../../components/connection.js';
 import {EntityManager} from '../../entity/manager.js';

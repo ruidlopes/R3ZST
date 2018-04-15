@@ -9,7 +9,7 @@ import {
   ChipMemVersion,
   ChipNicVersion,
 } from '../../components/chip.js';
-import {ChipScriptAction} from './base/chipscript.js';
+import {ChipScriptAction} from './lib/chipscript.js';
 import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';

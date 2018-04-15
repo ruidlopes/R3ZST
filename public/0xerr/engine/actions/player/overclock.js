@@ -1,5 +1,5 @@
 import {ActionRefreshEnum} from '../../action.js';
-import {ChipScriptAction} from './base/chipscript.js';
+import {ChipScriptAction} from './lib/chipscript.js';
 import {ChipType} from '../../components/chip.js';
 import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
