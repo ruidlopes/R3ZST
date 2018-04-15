@@ -19,7 +19,7 @@ import {
     ChipMemVersion,
     ChipNicVersion,
 } from '../components/chip.js';
-import {ChipScriptAction, ANY_CHIP} from '../actions/player/base/chipscript.js';
+import {ChipScriptAction, ANY_CHIP} from '../actions/player/lib/chipscript.js';
 import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
 import {DeckComponent} from '../components/deck.js';
