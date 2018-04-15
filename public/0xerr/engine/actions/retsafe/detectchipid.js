@@ -1,11 +1,10 @@
 import {Action} from '../../action.js';
-import {ActiveComponent} from '../../components/active.js';
 import {ChipComponent} from '../../components/chip.js';
 import {CompositeComponent} from '../../components/composite.js';
+import {EntityLib} from '../../entity/lib.js';
 import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
-import {NodeComponent} from '../../components/node.js';
 import {SentryComponent, SentryCapabilities, SentryState} from '../../components/sentry.js';
 import {StealthComponent, STEALTH_MAX} from '../../components/stealth.js';
 import {TurnActionsComponent} from '../../components/turnactions.js';
@@ -14,35 +13,27 @@ import {ij} from '../../../injection/api.js';
 
 class DetectChipIdAction extends Action {
   constructor(
-      manager = ij(EntityManager),
+      entities = ij(EntityManager),
+      lib = ij(EntityLib),
       events = ij(EventManager)) {
     super();
-    this.manager = manager;
+    this.entities = entities;
+    this.lib = lib;
     this.events = events;
   }
   
-  activeNodeCompositeIds() {
-    return firstOf(this.manager.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(CompositeComponent))
-        .get(CompositeComponent).ids;
-  }
-  
   chips() {
-    return this.manager.query(this.activeNodeCompositeIds())
-        .filter(ChipComponent)
-        .iterate(ChipComponent, CompositeComponent);
+    return this.lib.activeNodeChips().iterate(ChipComponent, CompositeComponent);
   }
   
   turnActionsComponent() {
-    return this.manager.query()
+    return this.entities.query()
         .head(TurnActionsComponent)
         .get(TurnActionsComponent);
   }
   
   stealthComponent() {
-    return this.manager.query()
+    return this.entities.query()
         .head(StealthComponent)
         .get(StealthComponent);
   }
@@ -62,7 +53,7 @@ class DetectChipIdAction extends Action {
         continue;
       }
       
-      const sentryCount = this.manager.query(chip.get(CompositeComponent).ids)
+      const sentryCount = this.entities.query(chip.get(CompositeComponent).ids)
           .filter(SentryComponent,
                   sentry => sentry.capabilities.has(SentryCapabilities.CHIPID) &&
                             sentry.state == SentryState.ACTIVE)
@@ -73,8 +64,9 @@ class DetectChipIdAction extends Action {
       
       const hitPoints = sentryCount * chipIdActionsCount;
       if (hitPoints > 0) {
+        const pluralized = chipIdActionsCount > 1 ? 'ACTIONS' : 'ACTION';
         this.events.emit(
-            EventType.LOG, `DETECTED ${chipIdActionsCount} CHIPID ACTION(S).`);
+            EventType.LOG, `DETECTED ${chipIdActionsCount} CHIPID ${pluralized}.`);
         this.events.emit(EventType.STEALTH_UPDATE, -hitPoints);
       }
     }
