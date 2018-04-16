@@ -1,6 +1,7 @@
 import {
     ENTITY_ACTIVE_NODE,
     ENTITY_ACTIVE_NODE_CHIPS,
+    ENTITY_ALL_CHIPS,
     ENTITY_TERMINAL_VIEW,
     ENTITY_HARDWARE_VIEW,
 } from './keys.js';
@@ -36,6 +37,13 @@ class EntityLib {
         CacheScope.FRAME,
         ENTITY_ACTIVE_NODE_CHIPS,
         () => this.entities.query(ids).filter(ChipComponent).lock());
+  }
+  
+  allChips() {
+    return this.entities.cached(
+        CacheScope.SCENE,
+        ENTITY_ALL_CHIPS,
+        () => this.entities.query().filter(ChipComponent).lock());
   }
   
   terminalView() {

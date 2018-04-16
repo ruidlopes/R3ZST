@@ -27,7 +27,7 @@ class DetectTurnAction extends Action {
   }
   
   chips() {
-    return this.lib.activeNodeChips().iterate(CompositeComponent);
+    return this.lib.allChips().iterate(CompositeComponent);
   }
   
   turnActionsComponent() {
