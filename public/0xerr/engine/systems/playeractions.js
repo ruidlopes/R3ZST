@@ -107,59 +107,60 @@ class PlayerActionsSystem extends System {
     
     const textInput = this.textInput(id);
     const text = textInput.text.trim();
-    this.events.emit(EventType.LOG, `>${text}`, mapOf('foregroundColor', HIGHLIGHT_FADED));
-    
-    if (text.length > 0) {
-      const tokens = textInput.text.trim().split(/\s+/);
-      const command = tokens.shift();
-      const params = tokens;
-      const cyclesComponent = this.cyclesComponent();
-      
-      if (this.actions.has(command)) {
-        const action = this.actions.get(command);
-        const deck = this.deck().items;
-        const count = deck.get(command);
-        
-        if (count == Infinity || count > 0) {
-          const mutators = this.events.emitAndEval(EventType.CYCLES, action);
-          let cycles = action.cycles;
-          for (const mutator of mutators) {
-            const value = mutator(cycles);
-            if (value !== undefined) {
-              cycles = value;
-            }
-          }
-          cycles = Math.max(0, cycles);
-          
-          if (cyclesComponent.cycles >= cycles) {
-            if (action.constraints(...params)) {
-              cyclesComponent.cycles -= cycles;
-              this.queuedActions.add(action);
-              this.recordAction(command, ...params);
-              if (count != Infinity) {
-                deck.set(command, count - 1);
-              }
-              
-              action.start(...params);
-              this.events.emit(EventType.ACTION_START);
-            }
-          } else {
-            this.events.emit(
-                EventType.LOG,
-                'INSUFFICIENT CYCLES THIS TURN.');
-          }
-        } else if (count == 0) {
-          this.events.emit(
-              EventType.LOG,
-              'SCRIPT IS EXHAUSTED.');
-        }
-      } else {
-        this.events.emit(EventType.LOG, `UNKNOWN SCRIPT: '${command}'.`);
-      }
-    }
-    
     textInput.text = '';
     textInput.cursor = 0;
+    
+    this.events.emit(EventType.LOG, `>${text}`, mapOf('foregroundColor', HIGHLIGHT_FADED));
+    
+    if (text.length == 0) {
+      return;
+    }
+    
+    const tokens = text.split(/\s+/);
+    const command = tokens.shift();
+    const params = tokens;
+    const cyclesComponent = this.cyclesComponent();
+
+    if (!this.actions.has(command)) {
+      this.events.emit(EventType.LOG, `UNKNOWN SCRIPT: '${command}'.`);
+      return;
+    }
+      
+    const action = this.actions.get(command);
+    const deck = this.deck().items;
+    const count = deck.get(command);
+
+    if (count == 0) {
+      this.events.emit(EventType.LOG, 'SCRIPT IS EXHAUSTED.');
+      return;
+    }
+    
+    const mutators = this.events.emitAndEval(EventType.CYCLES, action);
+    let cycles = action.cycles;
+    for (const mutator of mutators) {
+      const value = mutator(cycles);
+      if (value !== undefined) {
+        cycles = value;
+      }
+    }
+    cycles = Math.max(0, cycles);
+
+    if (cyclesComponent.cycles < cycles) {
+      this.events.emit(EventType.LOG, 'INSUFFICIENT CYCLES THIS TURN.');
+      return;
+    }
+    
+    if (action.constraints(...params)) {
+      cyclesComponent.cycles -= cycles;
+      this.queuedActions.add(action);
+      this.recordAction(command, ...params);
+      if (count != Infinity) {
+        deck.set(command, count - 1);
+      }
+
+      action.start(...params);
+      this.events.emit(EventType.ACTION_START);
+    }
   }
   
   refreshDeckNode() {
