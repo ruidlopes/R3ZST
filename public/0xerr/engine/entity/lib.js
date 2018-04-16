@@ -6,9 +6,9 @@ import {
     ENTITY_HARDWARE_VIEW,
 } from './keys.js';
 import {ActiveComponent} from '../components/active.js';
-import {CacheScope} from './cache.js';
 import {ChipComponent} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
+import {EntityCache, CacheScope} from './cache.js';
 import {EntityManager} from '../entity/manager.js';
 import {NodeComponent} from '../components/node.js';
 import {ViewComponent, ViewType} from '../components/view.js';
@@ -16,8 +16,11 @@ import {firstOf} from '../../stdlib/collections.js';
 import {ij} from '../../injection/api.js';
 
 class EntityLib {
-  constructor(entities = ij(EntityManager)) {
+  constructor(
+      entities = ij(EntityManager),
+      cache = ij(EntityCache)) {
     this.entities = entities;
+    this.cache = cache;
   }
   
   activeNode() {
@@ -62,6 +65,11 @@ class EntityLib {
         () => this.entities.query()
             .filter(ViewComponent, component => component.type == ViewType.HARDWARE)
             .lock());
+  }
+  
+  clearActiveNodeCache() {
+    this.cache.delete(CacheScope.FRAME, ENTITY_ACTIVE_NODE);
+    this.cache.delete(CacheScope.FRAME, ENTITY_ACTIVE_NODE_CHIPS);
   }
 }
 

@@ -3,6 +3,7 @@ import {ChipComponent, ChipType} from '../../components/chip.js';
 import {ChipScriptAction} from './lib/chipscript.js';
 import {CompositeComponent} from '../../components/composite.js';
 import {ConnectionComponent} from '../../components/connection.js';
+import {EntityLib} from '../../entity/lib.js';
 import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
@@ -17,16 +18,15 @@ import {ij} from '../../../injection/api.js';
 class ConnectAction extends ChipScriptAction {
   constructor(
       entities = ij(EntityManager),
+      lib = ij(EntityLib),
       events = ij(EventManager)) {
     super(entities, events, ChipType.NIC);
+    this.lib = lib;
     this.cycles = 4;
   }
   
   activeNode() {
-    return firstOf(this.entities.query()
-        .filter(ActiveComponent, component => component.active)
-        .filter(NodeComponent)
-        .iterate(ActiveComponent));
+    return firstOf(this.lib.activeNode().iterate(ActiveComponent));
   }
   
   activeChip() {
@@ -72,6 +72,7 @@ class ConnectAction extends ChipScriptAction {
     }
     
     this.activeNode().get(ActiveComponent).active = false;
+    
     const nic1 = this.activeChip();
     const nic1ActiveComponent = nic1.get(ActiveComponent);
     
@@ -90,6 +91,8 @@ class ConnectAction extends ChipScriptAction {
     
     nic1ActiveComponent.active = false;
     nic2ActiveComponent.active = true;
+    
+    this.lib.clearActiveNodeCache();
     
     this.events.emit(EventType.NODE);
     this.events.emit(EventType.LOG, `CONNECTED TO ${targetIp}.`);

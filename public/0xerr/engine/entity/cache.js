@@ -36,6 +36,12 @@ class EntityCache {
   get(scope, key) {
     return this.scoped.get(scope).get(key);
   }
+  
+  delete(scope, key) {
+    if (this.scoped.has(scope) && this.scoped.get(scope).has(key)) {
+      this.scoped.get(scope).delete(key);
+    }
+  }
 }
 
 export {
