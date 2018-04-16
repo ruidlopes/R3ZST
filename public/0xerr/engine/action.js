@@ -8,6 +8,7 @@ const ActionRefreshEnum = enumOf(
 
 class Action {
   constructor() {
+    this.cycles = 0;
     this.limit = Infinity;
     this.refresh = ActionRefreshEnum.TURN;
     this.hidden = false;

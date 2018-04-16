@@ -8,8 +8,6 @@ class EndTurnAction extends Action {
   constructor(events = ij(EventManager)) {
     super();
     this.events = events;
-    
-    this.cycles = 0;
   }
   
   start() {

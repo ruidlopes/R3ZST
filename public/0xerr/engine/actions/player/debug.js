@@ -45,7 +45,6 @@ class DebugAction extends Action {
     this.actions = actions;
     this.random = random;
     
-    this.cycles = 0;
     this.hidden = true;
   }
   
