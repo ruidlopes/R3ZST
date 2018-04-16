@@ -6,6 +6,7 @@ import {ChipComponent} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
 import {DeckComponent} from '../components/deck.js';
+import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
@@ -13,7 +14,6 @@ import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
 import {TurnActionsComponent} from '../components/turnactions.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
-import {ViewComponent, ViewType} from '../components/view.js';
 import {firstOf, isEmpty, mapOf} from '../../stdlib/collections.js';
 import {ij, ijmap} from '../../injection/api.js';
 
@@ -21,12 +21,15 @@ class PlayerActionsSystem extends System {
   constructor(
       actions = ijmap(Action, PLAYER),
       manager = ij(EntityManager),
+      lib = ij(EntityLib),
       events = ij(EventManager)) {
     super();
     this.actions = actions;
     this.queuedActions = new Set();
         
     this.manager = manager;
+    this.lib = lib;
+    
     this.events = events;
     this.events.subscribe(
         EventType.TEXT_INPUT,
@@ -40,9 +43,7 @@ class PlayerActionsSystem extends System {
   }
   
   terminalViewComposite() {
-    return firstOf(this.manager.query()
-        .filter(ViewComponent, view => view.type == ViewType.TERMINAL)
-        .iterate(CompositeComponent));
+    return firstOf(this.lib.terminalView().iterate(CompositeComponent));
   }
   
   textInput(id) {
@@ -52,9 +53,8 @@ class PlayerActionsSystem extends System {
   }
   
   cyclesComponent() {
-    return firstOf(this.manager.query()
-        .filter(CyclesComponent)
-        .iterate(CyclesComponent))
+    return this.manager.query()
+        .head(CyclesComponent)
         .get(CyclesComponent);
   }
   
@@ -65,37 +65,36 @@ class PlayerActionsSystem extends System {
   }
   
   turnActionsComponent() {
-    return firstOf(this.manager.query()
-        .filter(TurnActionsComponent)
-        .iterate(TurnActionsComponent))
+    return this.manager.query()
+        .head(TurnActionsComponent)
         .get(TurnActionsComponent);
   }
   
   activeChip() {
-    return this.manager.query()
-        .filter(ChipComponent)
+    return firstOf(this.manager.query()
         .filter(ActiveComponent, component => component.active)
-        .iterate(ActiveComponent);
+        .filter(ChipComponent)
+        .iterate(ActiveComponent));
   }
   
   deck() {
-    return firstOf(this.manager.query()
-        .filter(DeckComponent)
-        .iterate(DeckComponent))
+    return this.manager.query()
+        .head(DeckComponent)
         .get(DeckComponent);
   }
   
   recordAction(...params) {
     const turnActions = this.turnActionsComponent();
-    if (isEmpty(this.activeChip()) ||
-        !firstOf(this.activeChip()).get(ActiveComponent).active) {
-      turnActions.globalActions.add(params);
-    } else {
-      const chipId = firstOf(this.activeChip()).id;
+    const activeChip = this.activeChip();
+    
+    if (activeChip && activeChip.get(ActiveComponent).active) {
+      const chipId = activeChip.id;
       if (!turnActions.chipActions.has(chipId)) {
         turnActions.chipActions.set(chipId, []);
       }
       turnActions.chipActions.get(chipId).push(params);
+    } else {
+      turnActions.globalActions.add(params);
     }
   }
   
