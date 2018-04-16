@@ -2,6 +2,7 @@ import {enumOf} from '../../stdlib/collections.js';
 
 const SentryCapabilities = enumOf(
   'CHIPID',
+  'OVERCLOCK',
 );
 
 const SentryState = enumOf(

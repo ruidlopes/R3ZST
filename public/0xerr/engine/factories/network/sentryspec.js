@@ -7,7 +7,7 @@ const SentrySpec = mapOf(
   NodeType.WORKSTATION, mapOf(
     ChipType.BIOS, mapOf(
       'ratio', 0.2,
-      'capabilities', enumValues(SentryCapabilities, 'CHIPID'),
+      'capabilities', enumValues(SentryCapabilities, 'CHIPID', 'OVERCLOCK'),
     ),
     ChipType.CAM, mapOf(
       'ratio', 0.2,
@@ -34,7 +34,7 @@ const SentrySpec = mapOf(
   NodeType.RETSAFE_CAM, mapOf(
     ChipType.BIOS, mapOf(
       'ratio', 0.2,
-      'capabilities', enumValues(SentryCapabilities, 'CHIPID'),
+      'capabilities', enumValues(SentryCapabilities, 'CHIPID', 'OVERCLOCK'),
     ),
     ChipType.CAM, mapOf(
       'ratio', 0.2,
@@ -61,7 +61,7 @@ const SentrySpec = mapOf(
   NodeType.ROUTER, mapOf(
     ChipType.BIOS, mapOf(
       'ratio', 0.4,
-      'capabilities', enumValues(SentryCapabilities, 'CHIPID'),
+      'capabilities', enumValues(SentryCapabilities, 'CHIPID', 'OVERCLOCK'),
     ),
     ChipType.CAM, mapOf(
       'ratio', 0.4,
@@ -88,7 +88,7 @@ const SentrySpec = mapOf(
   NodeType.RETSAFE_CAMROUTER_L1, mapOf(
     ChipType.BIOS, mapOf(
       'ratio', 0.6,
-      'capabilities', enumValues(SentryCapabilities, 'CHIPID'),
+      'capabilities', enumValues(SentryCapabilities, 'CHIPID', 'OVERCLOCK'),
     ),
     ChipType.CAM, mapOf(
       'ratio', 0.6,
@@ -115,7 +115,7 @@ const SentrySpec = mapOf(
   NodeType.DATACENTER_UNIT, mapOf(
     ChipType.BIOS, mapOf(
       'ratio', 0.8,
-      'capabilities', enumValues(SentryCapabilities, 'CHIPID'),
+      'capabilities', enumValues(SentryCapabilities, 'CHIPID', 'OVERCLOCK'),
     ),
     ChipType.CAM, mapOf(
       'ratio', 0.8,
@@ -142,7 +142,7 @@ const SentrySpec = mapOf(
   NodeType.CORE, mapOf(
     ChipType.BIOS, mapOf(
       'ratio', 1.0,
-      'capabilities', enumValues(SentryCapabilities, 'CHIPID'),
+      'capabilities', enumValues(SentryCapabilities, 'CHIPID', 'OVERCLOCK'),
     ),
     ChipType.CAM, mapOf(
       'ratio', 1.0,
