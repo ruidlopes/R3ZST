@@ -25,6 +25,7 @@ const DebugDirectives = enumOf(
     'CHIP',
     'CONNECTIONS',
     'DECK',
+    'ID',
     'IDENTIFY',
     'NODE',
     'PLAYER',
@@ -75,6 +76,7 @@ class DebugAction extends Action {
       case DebugDirectives.DECK:
         this.debugDeck();
         break;
+      case DebugDirectives.ID:
       case DebugDirectives.IDENTIFY:
         this.debugIdentify();
         break;
@@ -184,10 +186,18 @@ class DebugAction extends Action {
     const ids = activeNode.get(CompositeComponent).ids;
     const chips = this.entities.query(ids)
         .filter(IdentifiedComponent)
-        .iterate(IdentifiedComponent);
+        .iterate(IdentifiedComponent, CompositeComponent);
     
     for (const chip of chips) {
       chip.get(IdentifiedComponent).identified = true;
+      
+      const sentryIds = chip.get(CompositeComponent).ids;
+      const sentries = this.entities.query(sentryIds)
+          .iterate(IdentifiedComponent);
+      
+      for (const sentry of sentries) {
+        sentry.get(IdentifiedComponent).identified = true;
+      }
     }
   }
   
