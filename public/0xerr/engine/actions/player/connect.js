@@ -10,6 +10,7 @@ import {EventType} from '../../event/type.js';
 import {IdentifiedComponent} from '../../components/identified.js';
 import {IpComponent} from '../../components/ip.js';
 import {NodeComponent} from '../../components/node.js';
+import {SentryComponent} from '../../components/sentry.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StealthComponent} from '../../components/stealth.js';
 import {firstOf} from '../../../stdlib/collections.js';
