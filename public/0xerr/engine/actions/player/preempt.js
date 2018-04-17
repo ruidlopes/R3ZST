@@ -7,7 +7,7 @@ import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {ij} from '../../../injection/api.js';
 
-class StealCyclesAction extends ChipScriptAction {
+class PreemptAction extends ChipScriptAction {
   constructor(
       entities = ij(EntityManager),
       events = ij(EventManager)) {
@@ -30,4 +30,4 @@ class StealCyclesAction extends ChipScriptAction {
   }
 }
 
-export {StealCyclesAction};
+export {PreemptAction};
