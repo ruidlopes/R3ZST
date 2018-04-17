@@ -10,6 +10,7 @@ import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
+import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
 import {TurnActionsComponent} from '../components/turnactions.js';
@@ -56,6 +57,12 @@ class PlayerActionsSystem extends System {
     return this.manager.query()
         .head(CyclesComponent)
         .get(CyclesComponent);
+  }
+  
+  stealthComponent() {
+    return this.manager.query()
+        .head(StealthComponent)
+        .get(StealthComponent);
   }
   
   isPlayerTurn() {
@@ -119,8 +126,7 @@ class PlayerActionsSystem extends System {
     const tokens = text.split(/\s+/);
     const command = tokens.shift();
     const params = tokens;
-    const cyclesComponent = this.cyclesComponent();
-
+    
     if (!this.actions.has(command)) {
       this.events.emit(EventType.LOG, `UNKNOWN SCRIPT: '${command}'.`);
       return;
@@ -144,14 +150,22 @@ class PlayerActionsSystem extends System {
       }
     }
     cycles = Math.max(0, cycles);
-
+    
+    const cyclesComponent = this.cyclesComponent();
     if (cyclesComponent.cycles < cycles) {
       this.events.emit(EventType.LOG, 'INSUFFICIENT CYCLES THIS TURN.');
       return;
     }
     
+    const stealthComponent = this.stealthComponent();
+    if (stealthComponent.stealth <= action.stealthCost) {
+      this.events.emit(EventType.LOG, 'INSUFFICIENT STEALTH.');
+      return;
+    }
+    
     if (action.constraints(...params)) {
       cyclesComponent.cycles -= cycles;
+      stealthComponent.stealth -= action.stealthCost;
       this.queuedActions.add(action);
       this.recordAction(command, ...params);
       if (count != Infinity) {

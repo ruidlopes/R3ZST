@@ -5,6 +5,7 @@ import {
     BLUE_FADED2,
     HIGHLIGHT_BRIGHT,
     RED_MAGENTA_BRIGHT,
+    WHITE,
 } from '../common/palette.js';
 import {PLAYER} from '../actions/qualifiers.js';
 import {Action, ActionRefreshEnum} from '../action.js';
@@ -220,11 +221,13 @@ class StatusRendererSystem extends System {
       const refresh = stats == Infinity ? '-' : ActionRefreshIcon.get(action.refresh);
       const count = stats == Infinity ? '-' : String(stats);
       const cycles = String(action.cycles);
+      const stealth = String(action.stealthCost);
       draw.sprint(chip, dx, ++dy, BLACK, BLUE_BRIGHT)
           .sprint(refresh, dx + 1, dy, BLACK, HIGHLIGHT_BRIGHT)
           .sprint(count, dx + 2, dy, BLACK, BLUE_BRIGHT)
           .sprint(cycles, dx + 3, dy, BLACK, HIGHLIGHT_BRIGHT)
-          .sprint(key, dx + 5, dy, HIGHLIGHT_BRIGHT, BLACK);
+          .sprint(stealth, dx + 4, dy, BLACK, WHITE)
+          .sprint(key, dx + 6, dy, HIGHLIGHT_BRIGHT, BLACK);
     }
   }
   
