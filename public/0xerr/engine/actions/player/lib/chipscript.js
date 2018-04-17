@@ -3,7 +3,7 @@ import {ActiveComponent} from '../../../components/active.js';
 import {ChipComponent, ChipType} from '../../../components/chip.js';
 import {EventType} from '../../../event/type.js';
 import {IdentifiedComponent} from '../../../components/identified.js';
-import {firstOf, isEmpty} from '../../../../stdlib/collections.js';
+import {firstOf} from '../../../../stdlib/collections.js';
 
 const ANY_CHIP = Symbol('ANY_CHIP');
 
