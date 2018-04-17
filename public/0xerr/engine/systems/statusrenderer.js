@@ -31,6 +31,7 @@ import {IdentifiedComponent} from '../components/identified.js';
 import {IpComponent} from '../components/ip.js';
 import {NodeComponent, NodeType} from '../components/node.js';
 import {RetCamStatusComponent, RetCamStatus} from '../components/retcamstatus.js';
+import {SentryComponent, SentryCapabilities, SentryState} from '../components/sentry.js';
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
@@ -118,6 +119,13 @@ class StatusRendererSystem extends System {
             RetCamStatusComponent));
   }
   
+  activeSentry() {
+    return firstOf(this.manager.query()
+        .filter(ActiveComponent, component => component.active)
+        .filter(SentryComponent)
+        .iterate(SentryComponent, IdentifiedComponent));
+  }
+  
   renderFrame(x, y, width, height, title) {
     this.drawing.absolute()
         .rect(x, y, width, height, 0x00, BLUE_BRIGHT, BLACK)
@@ -127,8 +135,8 @@ class StatusRendererSystem extends System {
   
   renderFrames(delta, spatial) {
     this.renderFrame(spatial.x, 0, spatial.width, 9, 'RUN');
-    this.renderFrame(spatial.x, 9, spatial.width, 8, 'NODE/CHIP');
-    this.renderFrame(spatial.x, 17, spatial.width, spatial.height - 17, 'SCRIPT DECK'); 
+    this.renderFrame(spatial.x, 9, spatial.width, 9, 'NODE/CHIP');
+    this.renderFrame(spatial.x, 18, spatial.width, spatial.height - 17, 'SCRIPT DECK'); 
   }
   
   renderRunStats(delta, spatial) {
@@ -201,11 +209,33 @@ class StatusRendererSystem extends System {
             .sprint(ip, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
         break;
     }
+    
+    const activeSentry = this.activeSentry();
+    if (!activeSentry || !activeSentry.get(IdentifiedComponent).identified) {
+      return;
+    }
+    
+    const capabilities = activeSentry.get(SentryComponent).capabilities;
+    const state = activeSentry.get(SentryComponent).state;
+    
+    let capStr = '';
+    for (const cap of capabilities) {
+      if (capStr.length) {
+        capStr += ', ';
+      }
+      capStr += enumLabel(SentryCapabilities, cap);
+    }
+    
+    dy++;
+    draw.sprint('SENTRY', dx, ++dy, BLUE_BRIGHT, BLACK)
+        .sprint(enumLabel(SentryState, state), dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK)
+        .sprint('CAPS', dx, ++dy, BLUE_BRIGHT, BLACK)
+        .sprint(capStr, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
   }
   
   renderDeckStats(delta, spatial) {
     const dx = spatial.x + 2;
-    let dy = spatial.y + 18;
+    let dy = spatial.y + 19;
     
     const draw = this.drawing.clipping(spatial);
     const deck = this.deck().items;
