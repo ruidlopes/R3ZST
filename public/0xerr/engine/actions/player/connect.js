@@ -33,6 +33,13 @@ class ConnectAction extends ChipScriptAction {
     return this.activeChipWithComponents(IpComponent);
   }
   
+  activeSentry() {
+    return firstOf(this.entities.query()
+        .filter(ActiveComponent, component => component.active)
+        .filter(SentryComponent)
+        .iterate(ActiveComponent));
+  }
+  
   connection() {
     const activeChipId = this.activeChip().id;
     return firstOf(this.entities.query()
@@ -72,6 +79,10 @@ class ConnectAction extends ChipScriptAction {
     }
     
     this.activeNode().get(ActiveComponent).active = false;
+    const activeSentry = this.activeSentry();
+    if (activeSentry) {
+      activeSentry.get(ActiveComponent).active = false;
+    }
     
     const nic1 = this.activeChip();
     const nic1ActiveComponent = nic1.get(ActiveComponent);

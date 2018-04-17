@@ -1,6 +1,8 @@
 import {BLACK, BLUE_BRIGHT} from '../../common/palette.js';
 import {RNG_NETWORK} from '../../common/randomchannels.js';
+import {ActiveComponent} from '../../components/active.js';
 import {EntityManager} from '../../entity/manager.js';
+import {IdentifiedComponent} from '../../components/identified.js';
 import {Random} from '../../../stdlib/random.js';
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
 import {SentrySpec} from './sentryspec.js';
@@ -25,7 +27,9 @@ class SentryFactory {
     this.entities.add(
         id,
         new SentryComponent(capability ? [capability] : []),
-        new StyleComponent(BLUE_BRIGHT, BLACK));
+        new StyleComponent(BLUE_BRIGHT, BLACK),
+        new IdentifiedComponent(false),
+        new ActiveComponent(false));
     
     return id;
   }

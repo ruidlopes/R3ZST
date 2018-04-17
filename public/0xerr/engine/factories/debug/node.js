@@ -52,7 +52,9 @@ class NodeFactory {
         sentry1,
         new SentryComponent([SentryCapabilities.CHIPID]),
         new SpatialComponent(6, 6, 0, 0),
-        new StyleComponent(BLUE_BRIGHT, BLACK));
+        new StyleComponent(BLUE_BRIGHT, BLACK),
+        new IdentifiedComponent(false),
+        new ActiveComponent(false));
     
     const chip1 = this.manager.nextId();
     this.manager.add(

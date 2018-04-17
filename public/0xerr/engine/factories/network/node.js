@@ -77,13 +77,12 @@ class NodeFactory {
       const cellWidth = 4;
       const cellHeight = 4;
       
+      const chipX = 1 + cellX * (cellWidth + 1);
+      const chipY = 1 + cellY * (cellHeight + 1);
+      
       this.entities.add(
           chipId,
-          new SpatialComponent(
-              1 + cellX * (cellWidth + 1),
-              1 + cellY * (cellHeight + 1),
-              cellWidth,
-              cellHeight)
+          new SpatialComponent(chipX, chipY, cellWidth, cellHeight)
       );
       
       const chipType = chipTemplates[i];
@@ -103,8 +102,8 @@ class NodeFactory {
       for (let i = 0; i < sentryCount; ++i) {
         const sentryId = this.sentryFactory.make(sentrySpec);
         const sentryIndex = sentryCells.indexOf(i);
-        const sentryY = Math.floor(sentryIndex / cellHeight);
-        const sentryX = sentryIndex % cellWidth;
+        const sentryY = chipY + Math.floor(sentryIndex / cellHeight);
+        const sentryX = chipX + sentryIndex % cellWidth;
         
         this.entities.add(
             sentryId,

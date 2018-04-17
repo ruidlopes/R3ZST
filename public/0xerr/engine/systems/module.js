@@ -22,6 +22,7 @@ import {PlayerActionsSystem} from './playeractions.js';
 import {PlayerChipBoundsSystem} from './playerchipbounds.js';
 import {PlayerPositionSystem} from './playerposition.js';
 import {PlayerRendererSystem} from './playerrenderer.js';
+import {PlayerSentryBoundsSystem} from './playersentrybounds.js';
 import {PlayerVelocitySystem} from './playervelocity.js';
 import {PlayerVisitedSystem} from './playervisited.js';
 import {RetsafeActionsSystem} from './retsafeactions.js';
@@ -62,6 +63,7 @@ class SystemsModule extends Module {
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerVisitedSystem);
     
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerChipBoundsSystem);
+    this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, PlayerSentryBoundsSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, ViewSpatialSystem);
     this.bindClassIntoSet(System, MAIN_SCENE_UPDATE, TerminalBufferSystem);
     
