@@ -5,10 +5,11 @@ import {ConnectAction} from './connect.js';
 import {DebugAction} from './debug.js';
 import {EndTurnAction} from './endturn.js';
 import {KillCamAction} from './killcam.js';
+import {Module} from '../../../injection/module.js';
 import {OverclockAction} from './overclock.js';
 import {PreemptAction} from './preempt.js';
 import {RefreshAction} from './refresh.js';
-import {Module} from '../../../injection/module.js';
+import {TraceBiosAction} from './tracebios.js';
 
 class PlayerActionsModule extends Module {
   configure() {
@@ -20,6 +21,7 @@ class PlayerActionsModule extends Module {
     this.bindClassIntoMap(Action, PLAYER, 'OVERCLOCK', OverclockAction);
     this.bindClassIntoMap(Action, PLAYER, 'PREEMPT', PreemptAction);
     this.bindClassIntoMap(Action, PLAYER, 'REFRESH', RefreshAction);
+    this.bindClassIntoMap(Action, PLAYER, 'TRACEBIOS', TraceBiosAction);
   }
 }
 
