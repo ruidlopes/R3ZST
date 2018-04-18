@@ -1,4 +1,4 @@
-import {HIGHLIGHT_BRIGHT} from '../common/palette.js';
+import {WHITE} from '../common/palette.js';
 import {ChipComponent} from '../components/chip.js';
 import {CompositeComponent} from '../components/composite.js';
 import {Drawing} from '../common/drawing.js';
@@ -55,7 +55,7 @@ class SentryRendererSystem extends System {
         const dy = Math.floor(nodeSpatial.y + spatial.y);
 
         const identified = sentry.get(IdentifiedComponent).identified;
-        const foregroundColor = identified ? HIGHLIGHT_BRIGHT : style.foregroundColor;
+        const foregroundColor = identified ? WHITE : style.foregroundColor;
         
         draw.putCxel(dx, dy, 0x73, foregroundColor, style.backgroundColor);
       }
