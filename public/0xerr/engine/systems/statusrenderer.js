@@ -136,7 +136,7 @@ class StatusRendererSystem extends System {
   renderFrames(delta, spatial) {
     this.renderFrame(spatial.x, 0, spatial.width, 9, 'RUN');
     this.renderFrame(spatial.x, 9, spatial.width, 9, 'NODE/CHIP');
-    this.renderFrame(spatial.x, 18, spatial.width, spatial.height - 17, 'SCRIPT DECK'); 
+    this.renderFrame(spatial.x, 18, spatial.width, spatial.height - 18, 'SCRIPT DECK'); 
   }
   
   renderRunStats(delta, spatial) {
