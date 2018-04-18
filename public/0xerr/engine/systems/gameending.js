@@ -46,7 +46,6 @@ class GameEndingSystem extends System {
     const verb = delta > 0 ? 'INCREASED' : 'DECREASED';
     const absolute = Math.abs(delta);
     this.events.emit(EventType.LOG, `${verb} STEALTH BY ${absolute}.`);
-    this.events.emit(EventType.LOG, `CURRENT STEALTH: ${stealthComponent.stealth}.`);
     
     if (stealthComponent.stealth == 0) {
       this.events.emit(EventType.DISCONNECTED);

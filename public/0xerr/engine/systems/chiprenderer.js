@@ -105,7 +105,9 @@ class ChipRendererSystem extends System {
         break;
               
       case ChipType.MEM:
-        draw.box(dx, dy, spatial.width, spatial.height,
+        draw.rect(dx, dy, spatial.width, spatial.height,
+                  0xfe, style.foregroundColor, style.backgroundColor)
+            .box(dx, dy, spatial.width, spatial.height,
                  BoxType.OUTER, style.foregroundColor, style.backgroundColor);
         break;
         

@@ -16,6 +16,7 @@ import {RetCamStatusComponent, RetCamStatus} from '../../components/retcamstatus
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StealthComponent} from '../../components/stealth.js';
+import {TurnActionsComponent} from '../../components/turnactions.js';
 import {VisitedComponent} from '../../components/visited.js';
 import {enumHas, enumLabel, enumOf, enumValue, firstOf} from '../../../stdlib/collections.js';
 import {ij, ijmap} from '../../../injection/api.js';
@@ -31,6 +32,7 @@ const DebugDirectives = enumOf(
     'PLAYER',
     'SEED',
     'SENTRIES',
+    'TURNACTIONS',
     'VISIT',
 );
 
@@ -91,6 +93,9 @@ class DebugAction extends Action {
         break;
       case DebugDirectives.SENTRIES:
         this.debugSentries();
+        break;
+      case DebugDirectives.TURNACTIONS:
+        this.debugTurnActions();
         break;
       case DebugDirectives.VISIT:
         this.debugVisit();
@@ -248,6 +253,26 @@ class DebugAction extends Action {
       this.events.emit(
           EventType.LOG,
           `SENTRY ${id}: ${capsStr}`);
+    }
+  }
+  
+  debugTurnActions() {
+    const turnActions = this.entities.query()
+        .head(TurnActionsComponent)
+        .get(TurnActionsComponent);
+    
+    this.events.emit(EventType.LOG, 'GLOBAL ACTIONS');
+    for (const action of turnActions.globalActions) {
+      const line = action.join(' '); 
+      this.events.emit(EventType.LOG, `>${line}`);
+    }
+    
+    this.events.emit(EventType.LOG, 'CHIP ACTIONS');
+    for (const chipActions of turnActions.chipActions.values()) {
+      for (const action of chipActions) {
+        const line = action.join(' ');
+        this.events.emit(EventType.LOG, `>${line}`);
+      }
     }
   }
   

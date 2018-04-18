@@ -1,7 +1,7 @@
 import {BLACK, BLUE_BRIGHT} from '../../common/palette.js';
 import {RNG_NETWORK} from '../../common/randomchannels.js';
 import {ActiveComponent} from '../../components/active.js';
-import {ChipComponent, ChipType, ChipVersionMap} from '../../components/chip.js';
+import {ChipComponent, ChipType} from '../../components/chip.js';
 import {EntityManager} from '../../entity/manager.js';
 import {IdentifiedComponent} from '../../components/identified.js';
 import {IpComponent, NO_IP} from '../../components/ip.js';

@@ -3,6 +3,7 @@ import {
     ChipBiosVersion,
     ChipCamVersion,
     ChipCpuVersion,
+    ChipMemVersion,
     ChipNicVersion,
 } from '../../components/chip.js';
 import {NodeType} from '../../components/node.js';
@@ -25,6 +26,11 @@ const NodeSpec = mapOf(
       'max', 1,
       'versions', enumValues(ChipBiosVersion, 'RET.BIOS EMBED', 'RET.UEFI EMBED'),
     ),
+    ChipType.MEM, mapOf(
+      'min', 1,
+      'max', 2,
+      'versions', enumValues(ChipMemVersion, 'RET.MEM 1G'),
+    ),
   ),
   
   NodeType.ROUTER, mapOf(
@@ -42,6 +48,11 @@ const NodeSpec = mapOf(
       'min', 1,
       'max', 1,
       'versions', enumValues(ChipBiosVersion, 'RET.BIOS EMBED', 'RET.UEFI EMBED'),
+    ),
+    ChipType.MEM, mapOf(
+      'min', 2,
+      'max', 4,
+      'versions', enumValues(ChipMemVersion, 'RET.MEM 1M'),
     ),
   ),
   
@@ -66,6 +77,11 @@ const NodeSpec = mapOf(
       'max', 4,
       'versions', enumValues(ChipCamVersion, 'RETINA CAM1', 'RETINA CAM2', 'RETINA PANOPTIC1'),
     ),
+    ChipType.MEM, mapOf(
+      'min', 2,
+      'max', 4,
+      'versions', enumValues(ChipMemVersion, 'RET.MEM 1M'),
+    ),
   ),
   
   NodeType.RETSAFE_CAMROUTER_L1, mapOf(
@@ -89,6 +105,11 @@ const NodeSpec = mapOf(
       'max', 20,
       'versions', enumValues(ChipCamVersion, 'RETINA PANOPTIC1', 'RETINA PANOPTIC2'),
     ),
+    ChipType.MEM, mapOf(
+      'min', 2,
+      'max', 4,
+      'versions', enumValues(ChipMemVersion, 'RET.MEM 1M'),
+    ),
   ),
   
   NodeType.DATACENTER_UNIT, mapOf(
@@ -107,6 +128,11 @@ const NodeSpec = mapOf(
       'max', 1,
       'versions', enumValues(ChipBiosVersion, 'RET.UEFI HYPER1'),
     ),
+    ChipType.MEM, mapOf(
+      'min', 4,
+      'max', 8,
+      'versions', enumValues(ChipMemVersion, 'RET.MEM 1G'),
+    ),
   ),
   
   NodeType.CORE, mapOf(
@@ -122,8 +148,13 @@ const NodeSpec = mapOf(
     ),
     ChipType.BIOS, mapOf(
       'min', 1,
-      'max', 1,
+      'max', 2,
       'versions', enumValues(ChipBiosVersion, 'RET.UEFI HYPER2'),
+    ),
+    ChipType.MEM, mapOf(
+      'min', 4,
+      'max', 8,
+      'versions', enumValues(ChipMemVersion, 'RET.MEM 1T'),
     ),
   ),
 );
