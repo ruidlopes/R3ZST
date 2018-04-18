@@ -12,6 +12,7 @@ import {OverclockAction} from './overclock.js';
 import {PreemptAction} from './preempt.js';
 import {RefreshAction} from './refresh.js';
 import {SentryIdAction} from './sentryid.js';
+import {TagAction} from './tag.js';
 import {TraceBiosAction} from './tracebios.js';
 import {TraceSentriesAction} from './tracesentries.js';
 
@@ -28,6 +29,7 @@ class PlayerActionsModule extends Module {
     this.bindClassIntoMap(Action, PLAYER, 'PREEMPT', PreemptAction);
     this.bindClassIntoMap(Action, PLAYER, 'REFRESH', RefreshAction);
     this.bindClassIntoMap(Action, PLAYER, 'SENTRYID', SentryIdAction);
+    this.bindClassIntoMap(Action, PLAYER, 'TAG', TagAction);
     this.bindClassIntoMap(Action, PLAYER, 'TRACEBIOS', TraceBiosAction);
     this.bindClassIntoMap(Action, PLAYER, 'TRACESENTRIES', TraceSentriesAction);
   }

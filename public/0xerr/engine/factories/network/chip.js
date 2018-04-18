@@ -8,6 +8,7 @@ import {IpComponent, NO_IP} from '../../components/ip.js';
 import {Random} from '../../../stdlib/random.js';
 import {RetCamStatusComponent} from '../../components/retcamstatus.js';
 import {StyleComponent} from '../../components/style.js';
+import {TagComponent} from '../../components/tag.js';
 import {enumValue} from '../../../stdlib/collections.js';
 import {ij} from '../../../injection/api.js';
 
@@ -29,7 +30,8 @@ class ChipFactory {
         new ActiveComponent(false),
         new ChipComponent(type, version),
         new StyleComponent(BLUE_BRIGHT, BLACK),
-        new IdentifiedComponent(false));
+        new IdentifiedComponent(false),
+        new TagComponent());
     
     switch (type) {
       case ChipType.CAM:

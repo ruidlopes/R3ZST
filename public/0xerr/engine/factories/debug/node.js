@@ -19,6 +19,7 @@ import {RetCamStatusComponent} from '../../components/retcamstatus.js';
 import {SentryComponent, SentryCapabilities} from '../../components/sentry.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StyleComponent} from '../../components/style.js';
+import {TagComponent} from '../../components/tag.js';
 import {VisitedComponent} from '../../components/visited.js';
 import {enumValue} from '../../../stdlib/collections.js';
 import {ij} from '../../../injection/api.js';
@@ -64,7 +65,8 @@ class NodeFactory {
         new SpatialComponent(0, 0, 12, 12),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
-        new CompositeComponent([sentry1]));
+        new CompositeComponent([sentry1]),
+        new TagComponent());
     
     const chip2 = this.manager.nextId();
     this.manager.add(
@@ -74,7 +76,8 @@ class NodeFactory {
         new SpatialComponent(18, 4, 4, 4),
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
-        new CompositeComponent([]));
+        new CompositeComponent([]),
+        new TagComponent());
     
     const chip3 = this.manager.nextId();
     this.manager.add(
@@ -85,7 +88,8 @@ class NodeFactory {
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
         new CompositeComponent([]),
-        new IpComponent([10, 10, 1, 1]));
+        new IpComponent([10, 10, 1, 1]),
+        new TagComponent());
     
     this.manager.add(
         node1,
@@ -110,7 +114,8 @@ class NodeFactory {
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
         new CompositeComponent([]),
-        new IpComponent([10, 10, 1, 2]));
+        new IpComponent([10, 10, 1, 2]),
+        new TagComponent());
     
     const chip5 = this.manager.nextId();
     this.manager.add(
@@ -121,7 +126,8 @@ class NodeFactory {
         new StyleComponent(BLUE_BRIGHT, BLACK),
         new IdentifiedComponent(false),
         new RetCamStatusComponent(),
-        new CompositeComponent([]));
+        new CompositeComponent([]),
+        new TagComponent());
     
     this.manager.add(
         node2,
