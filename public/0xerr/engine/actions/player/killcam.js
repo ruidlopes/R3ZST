@@ -1,16 +1,11 @@
 import {ChipScriptAction} from './lib/chipscript.js';
 import {ChipType} from '../../components/chip.js';
-import {EntityManager} from '../../entity/manager.js';
-import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {RetCamStatusComponent, RetCamStatus} from '../../components/retcamstatus.js';
-import {ij} from '../../../injection/api.js';
 
 class KillCamAction extends ChipScriptAction {
-  constructor(
-      entities = ij(EntityManager),
-      events = ij(EventManager)) {
-    super(entities, events, ChipType.CAM);
+  constructor() {
+    super(ChipType.CAM);
     this.cycles = 2;
   }
   

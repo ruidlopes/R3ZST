@@ -3,9 +3,6 @@ import {ChipComponent, ChipType} from '../../components/chip.js';
 import {ChipScriptAction} from './lib/chipscript.js';
 import {CompositeComponent} from '../../components/composite.js';
 import {ConnectionComponent} from '../../components/connection.js';
-import {EntityLib} from '../../entity/lib.js';
-import {EntityManager} from '../../entity/manager.js';
-import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {IdentifiedComponent} from '../../components/identified.js';
 import {IpComponent} from '../../components/ip.js';
@@ -14,15 +11,10 @@ import {SentryComponent} from '../../components/sentry.js';
 import {SpatialComponent} from '../../components/spatial.js';
 import {StealthComponent} from '../../components/stealth.js';
 import {firstOf} from '../../../stdlib/collections.js';
-import {ij} from '../../../injection/api.js';
 
 class ConnectAction extends ChipScriptAction {
-  constructor(
-      entities = ij(EntityManager),
-      lib = ij(EntityLib),
-      events = ij(EventManager)) {
-    super(entities, events, ChipType.NIC);
-    this.lib = lib;
+  constructor() {
+    super(ChipType.NIC);
     this.cycles = 4;
   }
   

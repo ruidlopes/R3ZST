@@ -10,18 +10,13 @@ import {
   ChipNicVersion,
 } from '../../components/chip.js';
 import {ChipScriptAction} from './lib/chipscript.js';
-import {EntityManager} from '../../entity/manager.js';
-import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {IdentifiedComponent} from '../../components/identified.js';
 import {enumLabel} from '../../../stdlib/collections.js';
-import {ij} from '../../../injection/api.js';
 
 class ChipIdAction extends ChipScriptAction {
-  constructor(
-      entities = ij(EntityManager),
-      events = ij(EventManager)) {
-    super(entities, events);
+  constructor() {
+    super();
     this.cycles = 1;
     this.limit = 3;
     this.refresh = ActionRefreshEnum.NODE;

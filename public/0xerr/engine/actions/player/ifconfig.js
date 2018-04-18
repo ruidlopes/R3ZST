@@ -1,23 +1,14 @@
 import {ActionRefreshEnum} from '../../action.js';
 import {ChipComponent, ChipType, ChipNicVersion} from '../../components/chip.js';
 import {ChipScriptAction} from './lib/chipscript.js';
-import {EntityLib} from '../../entity/lib.js';
-import {EntityManager} from '../../entity/manager.js';
-import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {IdentifiedComponent} from '../../components/identified.js';
 import {IpComponent} from '../../components/ip.js';
 import {enumLabel} from '../../../stdlib/collections.js';
-import {ij} from '../../../injection/api.js';
 
 class IfConfigAction extends ChipScriptAction {
-  constructor(
-      entities = ij(EntityManager),
-      lib = ij(EntityLib),
-      events = ij(EventManager)) {
-    super(entities, events, ChipType.BIOS);
-    this.lib = lib;
-    
+  constructor() {
+    super(ChipType.BIOS);
     this.cycles = 3;
     this.stealthCost = 1;
     this.limit = 1;
