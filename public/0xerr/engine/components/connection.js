@@ -1,5 +1,6 @@
 class ConnectionComponent {
-  constructor() {
+  constructor(connected = true) {
+    this.connected = connected;
   }
 }
 

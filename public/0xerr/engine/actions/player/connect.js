@@ -18,6 +18,20 @@ class ConnectAction extends ChipScriptAction {
     this.cycles = 4;
   }
   
+  constraints() {
+    if (!super.constraints()) {
+      return false;
+    }
+    
+    const connection = this.connection();
+    if (!connection.get(ConnectionComponent).connected) {
+      this.events.emit(EventType.LOG, 'DISCONNECTED.');
+      return false;
+    }
+    
+    return true;
+  }
+  
   activeNode() {
     return firstOf(this.lib.activeNode().iterate(ActiveComponent));
   }

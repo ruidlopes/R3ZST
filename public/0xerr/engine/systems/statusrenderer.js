@@ -22,6 +22,7 @@ import {
 } from '../components/chip.js';
 import {ChipScriptAction, ANY_CHIP} from '../actions/player/lib/chipscript.js';
 import {CompositeComponent} from '../components/composite.js';
+import {ConnectionComponent} from '../components/connection.js';
 import {CyclesComponent} from '../components/cycles.js';
 import {DeckComponent} from '../components/deck.js';
 import {Drawing} from '../common/drawing.js';
@@ -119,6 +120,13 @@ class StatusRendererSystem extends System {
             RetCamStatusComponent));
   }
   
+  connection(chip) {
+    return firstOf(this.manager.query()
+        .filter(ConnectionComponent)
+        .filter(CompositeComponent, composite => composite.ids.includes(chip.id))
+        .iterate(ConnectionComponent));
+  }
+  
   activeSentry() {
     return firstOf(this.manager.query()
         .filter(ActiveComponent, component => component.active)
@@ -203,10 +211,16 @@ class StatusRendererSystem extends System {
       case ChipType.NIC:
         const nicVersion = enumLabel(ChipNicVersion, component.version);
         const ip = chip.get(IpComponent).ip.join('.');
+        const connection = this.connection(chip);
+        const nicStatus = connection.get(ConnectionComponent).connected ?
+            'CONNECTED' :
+            'DISCONNECTED';
         draw.sprint('NIC', dx, ++dy, BLUE_BRIGHT, BLACK)
             .sprint(nicVersion, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK)
             .sprint('IP', dx, ++dy, BLUE_BRIGHT, BLACK)
-            .sprint(ip, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
+            .sprint(ip, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK)
+            .sprint('STATUS', dx, ++dy, BLUE_BRIGHT, BLACK)
+            .sprint(nicStatus, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
         break;
     }
     
