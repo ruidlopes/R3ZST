@@ -6,6 +6,8 @@ import {DebugAction} from './debug.js';
 import {DeleteLogAction} from './deletelog.js';
 import {EndTurnAction} from './endturn.js';
 import {IfConfigAction} from './ifconfig.js';
+import {IfDownAction} from './ifdown.js';
+import {IfUpAction} from './ifup.js';
 import {KillCamAction} from './killcam.js';
 import {Module} from '../../../injection/module.js';
 import {OverclockAction} from './overclock.js';
@@ -25,6 +27,8 @@ class PlayerActionsModule extends Module {
     this.bindClassIntoMap(Action, PLAYER, 'DELETELOG', DeleteLogAction);
     this.bindClassIntoMap(Action, PLAYER, 'ENDTURN', EndTurnAction);
     this.bindClassIntoMap(Action, PLAYER, 'IFCONFIG', IfConfigAction);
+    this.bindClassIntoMap(Action, PLAYER, 'IFDOWN', IfDownAction);
+    this.bindClassIntoMap(Action, PLAYER, 'IFUP', IfUpAction);
     this.bindClassIntoMap(Action, PLAYER, 'KILLCAM', KillCamAction);
     this.bindClassIntoMap(Action, PLAYER, 'OVERCLOCK', OverclockAction);
     this.bindClassIntoMap(Action, PLAYER, 'PREEMPT', PreemptAction);
