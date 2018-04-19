@@ -28,18 +28,12 @@ class TagAction extends ChipScriptAction {
   
   start(...tags) {
     const component = this.activeChip().get(TagComponent);
+    component.tags.clear();
     for (const tag of tags) {
-      if (!component.tags.has(tag)) {
-        component.tags.add(tag);
-      }
+      component.tags.add(tag);
     }
     
-    const allTags = [];
-    for (const tag of component.tags) {
-      allTags.push(tag);
-    }
-    const tagsStr = allTags.join(', ');
-    
+    const tagsStr = tags.join(', ');
     this.events.emit(EventType.LOG, `CHIP TAGGED WITH: ${tagsStr}.`);
   }
 }
