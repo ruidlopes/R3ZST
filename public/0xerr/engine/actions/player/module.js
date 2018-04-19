@@ -15,6 +15,7 @@ import {SentryIdAction} from './sentryid.js';
 import {TagAction} from './tag.js';
 import {TraceBiosAction} from './tracebios.js';
 import {TraceSentriesAction} from './tracesentries.js';
+import {UntagAction} from './untag.js';
 
 class PlayerActionsModule extends Module {
   configure() {
@@ -32,6 +33,7 @@ class PlayerActionsModule extends Module {
     this.bindClassIntoMap(Action, PLAYER, 'TAG', TagAction);
     this.bindClassIntoMap(Action, PLAYER, 'TRACEBIOS', TraceBiosAction);
     this.bindClassIntoMap(Action, PLAYER, 'TRACESENTRIES', TraceSentriesAction);
+    this.bindClassIntoMap(Action, PLAYER, 'UNTAG', UntagAction);
   }
 }
 
