@@ -1,4 +1,4 @@
-import {Action} from '../../../action.js';
+import {Action, ActionType} from '../../../action.js';
 import {ActiveComponent} from '../../../components/active.js';
 import {ChipComponent, ChipType} from '../../../components/chip.js';
 import {EntityLib} from '../../../entity/lib.js';
@@ -6,7 +6,7 @@ import {EntityManager} from '../../../entity/manager.js';
 import {EventManager} from '../../../event/manager.js';
 import {EventType} from '../../../event/type.js';
 import {IdentifiedComponent} from '../../../components/identified.js';
-import {firstOf} from '../../../../stdlib/collections.js';
+import {firstOf, setOf} from '../../../../stdlib/collections.js';
 import {ij} from '../../../../injection/api.js';
 
 const ANY_CHIP = Symbol('ANY_CHIP');
@@ -18,7 +18,9 @@ class ChipScriptAction extends Action {
       lib = ij(EntityLib),
       events = ij(EventManager)) {
     super();
+    this.types = setOf(ActionType.CHIP);
     this.chipType = chipType;
+
     this.entities = entities;
     this.lib = lib;
     this.events = events;

@@ -1,4 +1,4 @@
-import {Action, ActionRefreshEnum} from '../../action.js';
+import {Action, ActionType, ActionRefreshEnum} from '../../action.js';
 import {ChipComponent, ChipType} from '../../components/chip.js';
 import {EntityLib} from '../../entity/lib.js';
 import {EntityManager} from '../../entity/manager.js';
@@ -6,6 +6,7 @@ import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {IdentifiedComponent} from '../../components/identified.js';
 import {ij} from '../../../injection/api.js';
+import {setOf} from '../../../stdlib/collections.js';
 
 class TraceBiosAction extends Action {
   constructor(
@@ -22,6 +23,7 @@ class TraceBiosAction extends Action {
     this.limit = 1;
     this.refresh = ActionRefreshEnum.NODE;
         
+    this.types = setOf(ActionType.GLOBAL);
     this.man = [
       'USAGE: TRACEBIOS',
       'FINDS AND IDENTIFIES ALL BIOS CHIPS IN CURRENT NODE.',

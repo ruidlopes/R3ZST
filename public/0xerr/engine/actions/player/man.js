@@ -1,11 +1,11 @@
 import {PLAYER} from '../qualifiers.js';
-import {Action, ActionRefreshEnum} from '../../action.js';
+import {Action, ActionType, ActionRefreshEnum} from '../../action.js';
 import {ChipScriptAction, ANY_CHIP} from './lib/chipscript.js';
 import {ChipType} from '../../components/chip.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
 import {SentryScriptAction} from './lib/sentryscript.js';
-import {enumLabel} from '../../../stdlib/collections.js';
+import {enumLabel, setOf} from '../../../stdlib/collections.js';
 import {ij, ijmap} from '../../../injection/api.js';
 
 class ManAction extends Action {
@@ -16,6 +16,7 @@ class ManAction extends Action {
     this.events = events;
     this.actions = actions;
     
+    this.types = setOf(ActionType.GLOBAL, ActionType.SCRIPT);
     this.man = [
       'USAGE: MAN <SCRIPT>',
       'LOGS TARGET SCRIPT\'S USAGE.',
@@ -39,20 +40,21 @@ class ManAction extends Action {
   start(scriptName) {
     const action = this.actions.get(scriptName);
     
-    let type = '';
-    if (action instanceof ChipScriptAction) {
-      type += 'CHIP ';
-      if (action.chipType == ANY_CHIP) {
-        type += 'ANY';
-      } else {
-        type += enumLabel(ChipType, action.chipType);
+    let types = '';
+    for (const type of action.types) {
+      if (types.length) {
+        types += ' - ';
       }
-    } else if (action instanceof SentryScriptAction) {
-      type += 'SENTRY';
-    } else {
-      type += 'MISC';
+      types += enumLabel(ActionType, type);
+      if (type == ActionType.CHIP) {
+        if (action.chipType == ANY_CHIP) {
+          types += ' ANY';
+        } else {
+          types += ' ' + enumLabel(ChipType, action.chipType);
+        }
+      }
     }
-    this.events.emit(EventType.LOG, `TYPE: ${type}`);
+    this.events.emit(EventType.LOG, `TYPES: ${types}`);
     
     const refresh = action.limit == Infinity ? '-' : enumLabel(ActionRefreshEnum, action.refresh);
     this.events.emit(EventType.LOG, `REFRESH: ${refresh}`);

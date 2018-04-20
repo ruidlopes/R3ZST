@@ -1,9 +1,8 @@
 import {HIGHLIGHT_FADED} from '../common/palette.js';
 import {PLAYER} from '../actions/qualifiers.js';
-import {Action, ActionRefreshEnum} from '../action.js';
+import {Action, ActionType, ActionRefreshEnum} from '../action.js';
 import {ActiveComponent} from '../components/active.js';
 import {ChipComponent} from '../components/chip.js';
-import {ChipScriptAction} from '../actions/player/lib/chipscript.js';
 import {CompositeComponent} from '../components/composite.js';
 import {CyclesComponent} from '../components/cycles.js';
 import {DeckComponent} from '../components/deck.js';
@@ -11,7 +10,6 @@ import {EntityLib} from '../entity/lib.js';
 import {EntityManager} from '../entity/manager.js';
 import {EventManager} from '../event/manager.js';
 import {EventType} from '../event/type.js';
-import {SentryScriptAction} from '../actions/player/lib/sentryscript.js';
 import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
 import {TextInputComponent} from '../components/textinput.js';
@@ -97,8 +95,8 @@ class PlayerActionsSystem extends System {
     const activeChip = this.activeChip();
     const command = params[0];
     const action = this.actions.get(command);
-    const isChipAction = action instanceof ChipScriptAction ||
-        action instanceof SentryScriptAction;
+    const isChipAction = action.types.has(ActionType.CHIP) ||
+        action.types.has(ActionType.SENTRY);
     
     if (isChipAction && activeChip && activeChip.get(ActiveComponent).active) {
       const chipId = activeChip.id;

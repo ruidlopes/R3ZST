@@ -1,5 +1,5 @@
 import {PLAYER} from '../qualifiers.js';
-import {Action, ActionRefreshEnum} from '../../action.js';
+import {Action, ActionType, ActionRefreshEnum} from '../../action.js';
 import {ActiveComponent} from '../../components/active.js';
 import {ChipComponent, ChipType} from '../../components/chip.js';
 import {CompositeComponent} from '../../components/composite.js';
@@ -18,7 +18,7 @@ import {SpatialComponent} from '../../components/spatial.js';
 import {StealthComponent} from '../../components/stealth.js';
 import {TurnActionsComponent} from '../../components/turnactions.js';
 import {VisitedComponent} from '../../components/visited.js';
-import {enumHas, enumLabel, enumOf, enumValue, firstOf} from '../../../stdlib/collections.js';
+import {enumHas, enumLabel, enumOf, enumValue, firstOf, setOf} from '../../../stdlib/collections.js';
 import {ij, ijmap} from '../../../injection/api.js';
 
 const DebugDirectives = enumOf(
@@ -43,12 +43,13 @@ class DebugAction extends Action {
       actions = ijmap(Action, PLAYER),
       random = ij(Random)) {
     super();
+    this.types = setOf(ActionType.GLOBAL);
+    this.hidden = true;
+    
     this.entities = entities;
     this.events = events;
     this.actions = actions;
     this.random = random;
-    
-    this.hidden = true;
         
     this.man = [
       'USAGE: DEBUG <DIRECTIVE>',

@@ -1,10 +1,10 @@
 import {PLAYER} from '../qualifiers.js';
-import {Action, ActionRefreshEnum} from '../../action.js';
+import {Action, ActionType, ActionRefreshEnum} from '../../action.js';
 import {DeckComponent} from '../../components/deck.js';
 import {EntityManager} from '../../entity/manager.js';
 import {EventManager} from '../../event/manager.js';
 import {EventType} from '../../event/type.js';
-import {firstOf} from '../../../stdlib/collections.js';
+import {firstOf, setOf} from '../../../stdlib/collections.js';
 import {ij, ijmap} from '../../../injection/api.js';
 
 class RefreshAction extends Action {
@@ -21,6 +21,7 @@ class RefreshAction extends Action {
     this.limit = 4;
     this.refresh = ActionRefreshEnum.ZERO;
         
+    this.types = setOf(ActionType.GLOBAL, ActionType.SCRIPT);
     this.man = [
       'USAGE: REFRESH <SCRIPT>',
       'REFRESHES TARGET SCRIPT.',

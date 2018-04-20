@@ -1,4 +1,11 @@
-import {enumOf} from '../stdlib/collections.js';
+import {enumOf, setOf} from '../stdlib/collections.js';
+
+const ActionType = enumOf(
+  'CHIP',
+  'SENTRY',
+  'SCRIPT',
+  'GLOBAL',
+);
 
 const ActionRefreshEnum = enumOf(
   'TURN',
@@ -15,6 +22,7 @@ class Action {
     this.refresh = ActionRefreshEnum.TURN;
     this.hidden = false;
     
+    this.types = setOf();
     this.man = ['-'];
   }
   
@@ -33,5 +41,6 @@ class Action {
 
 export {
   Action,
+  ActionType,
   ActionRefreshEnum,
 };

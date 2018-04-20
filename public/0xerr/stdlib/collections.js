@@ -43,6 +43,10 @@ function mapOf(...params) {
   return new Map(pairs);
 }
 
+function setOf(...params) {
+  return new Set(params);
+}
+
 function sameElements(arr1, arr2) {
   if (arr1.length != arr2.length) {
     return false;
@@ -73,6 +77,7 @@ export {
   firstOf,
   isEmpty,
   mapOf,
+  setOf,
   sameElements,
   shuffle,
 };

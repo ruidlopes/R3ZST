@@ -1,11 +1,11 @@
-import {Action} from '../../../action.js';
+import {Action, ActionType} from '../../../action.js';
 import {ActiveComponent} from '../../../components/active.js';
 import {EntityManager} from '../../../entity/manager.js';
 import {EventManager} from '../../../event/manager.js';
 import {EventType} from '../../../event/type.js';
 import {IdentifiedComponent} from '../../../components/identified.js';
 import {SentryComponent} from '../../../components/sentry.js';
-import {firstOf} from '../../../../stdlib/collections.js';
+import {firstOf, setOf} from '../../../../stdlib/collections.js';
 import {ij} from '../../../../injection/api.js';
 
 class SentryScriptAction extends Action {
@@ -13,6 +13,8 @@ class SentryScriptAction extends Action {
       entities = ij(EntityManager),
       events = ij(EventManager)) {
     super();
+    this.types = setOf(ActionType.SENTRY);
+    
     this.entities = entities;
     this.events = events;
   }
