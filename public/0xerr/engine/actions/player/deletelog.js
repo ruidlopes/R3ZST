@@ -8,6 +8,12 @@ class DeleteLogAction extends ChipScriptAction {
     super(ChipType.MEM);
     this.cycles = 4;
     this.limit = 1;
+    
+    this.man = [
+      'USAGE: DELETELOG',
+      'DELETES ALL LOGS FROM THE CURRENT TURN.',
+      'INCREASES STEALTH BY +2.',
+    ];
   }
   
   turnActions() {

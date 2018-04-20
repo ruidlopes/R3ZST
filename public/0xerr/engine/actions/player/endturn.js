@@ -8,6 +8,11 @@ class EndTurnAction extends Action {
   constructor(events = ij(EventManager)) {
     super();
     this.events = events;
+    
+    this.man = [
+      'USAGE: ENDTURN',
+      'ENDS THE CURRENT TURN.',
+    ];
   }
   
   start() {

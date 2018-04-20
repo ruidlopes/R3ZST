@@ -21,6 +21,11 @@ class TraceBiosAction extends Action {
     this.stealthCost = 2;
     this.limit = 1;
     this.refresh = ActionRefreshEnum.NODE;
+        
+    this.man = [
+      'USAGE: TRACEBIOS',
+      'FINDS AND IDENTIFIES ALL BIOS CHIPS IN CURRENT NODE.',
+    ];
   }
   
   start() {

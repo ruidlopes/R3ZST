@@ -7,6 +7,11 @@ class KillCamAction extends ChipScriptAction {
   constructor() {
     super(ChipType.CAM);
     this.cycles = 2;
+    
+    this.man = [
+      'USAGE: KILLCAM',
+      'DISCONNECTS CURRENT CAM CHIP.',
+    ];
   }
   
   activeChip() {

@@ -49,6 +49,11 @@ class DebugAction extends Action {
     this.random = random;
     
     this.hidden = true;
+        
+    this.man = [
+      'USAGE: DEBUG <DIRECTIVE>',
+      'INTERNAL. EXECUTES MISCELLANEOUS DEBUG INFORMATION.'
+    ];
   }
   
   constraints(directive, ...params) {

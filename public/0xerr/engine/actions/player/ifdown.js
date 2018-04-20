@@ -9,6 +9,11 @@ class IfDownAction extends ChipScriptAction {
   constructor() {
     super(ChipType.NIC);
     this.cycles = 2;
+    
+    this.man = [
+      'USAGE: IFDOWN',
+      'DISCONNECTS CURRENT NIC CHIP.',
+    ];
   }
 
   connection() {

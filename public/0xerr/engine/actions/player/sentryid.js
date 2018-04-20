@@ -10,6 +10,11 @@ class SentryIdAction extends SentryScriptAction {
     super();
     this.cycles = 1;
     this.limit = 7;
+    
+    this.man = [
+      'USAGE: SENTRYID',
+      'IDENTIFIES CURRENT SENTRY.',
+    ];
   }
   
   constraints() {

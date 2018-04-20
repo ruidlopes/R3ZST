@@ -11,6 +11,13 @@ class OverclockAction extends ChipScriptAction {
     this.limit = 1;
     this.refresh = ActionRefreshEnum.NODE;
     
+    this.man = [
+      'USAGE: OVERCLOCK',
+      'ALL SCRIPTS COST HALF THE CYCLES (ROUNDED UP) UNTIL ONE OF:',
+      '- THE END OF THE PLAYER\'S TURN;',
+      '- CONNECTING TO ANOTHER NODE.',
+    ];
+    
     this.handler = undefined;
     this.events.subscribe(
         EventType.END_TURN, () => this.end());

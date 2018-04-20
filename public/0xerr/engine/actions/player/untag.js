@@ -7,6 +7,11 @@ class UntagAction extends ChipScriptAction {
     super();
     this.cycles = 1;
     this.limit = 6;
+    
+    this.man = [
+      'USAGE: UNTAG',
+      'REMOVES ALL TAGS FROM CURRENT CHIP.',
+    ];
   }
   
   activeChip() {

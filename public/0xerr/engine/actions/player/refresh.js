@@ -20,6 +20,11 @@ class RefreshAction extends Action {
     this.cycles = 5;
     this.limit = 4;
     this.refresh = ActionRefreshEnum.ZERO;
+        
+    this.man = [
+      'USAGE: REFRESH <SCRIPT>',
+      'REFRESHES TARGET SCRIPT.',
+    ];
   }
   
   constraints(target) {

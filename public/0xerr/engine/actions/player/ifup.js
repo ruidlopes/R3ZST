@@ -9,6 +9,11 @@ class IfUpAction extends ChipScriptAction {
   constructor() {
     super(ChipType.NIC);
     this.cycles = 1;
+    
+    this.man = [
+      'USAGE: IFUP',
+      'CONNECTS CURRENT NIC CHIP.',
+    ];
   }
 
   connection() {

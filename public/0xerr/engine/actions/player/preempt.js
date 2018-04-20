@@ -11,6 +11,10 @@ class PreemptAction extends ChipScriptAction {
     this.limit = 2;
     this.refresh = ActionRefreshEnum.TURN;
     
+    this.man = [
+      'USAGE: PREEMPT',
+      'REFILLS CYCLES TO THE MAX.',
+    ];
   }
   
   cyclesComponent() {

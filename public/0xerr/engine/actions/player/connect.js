@@ -16,6 +16,11 @@ class ConnectAction extends ChipScriptAction {
   constructor() {
     super(ChipType.NIC);
     this.cycles = 4;
+    
+    this.man = [
+      'USAGE: CONNECT',
+      'CONNECTS TO THE NODE THE CURRENT NIC CHIP IS CONNECTED TO.',
+    ];
   }
   
   constraints() {

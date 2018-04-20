@@ -13,6 +13,11 @@ class IfConfigAction extends ChipScriptAction {
     this.stealthCost = 1;
     this.limit = 1;
     this.refresh = ActionRefreshEnum.NODE;
+    
+    this.man = [
+      'USAGE: IFCONFIG',
+      'FINDS AND IDENTIFIES ALL NIC CHIPS IN THE CURRENT NODE.',
+    ];
   }
   
   activeNodeChips() {

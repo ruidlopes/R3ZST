@@ -20,6 +20,11 @@ class ChipIdAction extends ChipScriptAction {
     this.cycles = 1;
     this.limit = 3;
     this.refresh = ActionRefreshEnum.NODE;
+    
+    this.man = [
+      'USAGE: CHIPID',
+      'IDENTIFIES THE CURRENT CHIP.',
+    ];
   }
   
   constraints() {

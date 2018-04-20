@@ -7,6 +7,12 @@ class TagAction extends ChipScriptAction {
     super();
     this.cycles = 1;
     this.limit = 6;
+    
+    this.man = [
+      'USAGE: TAG <TAG1> <TAG2> ... <TAGN>',
+      'TAGS CURRENT CHIP.',
+      'EXISTING TAGS ARE OVERWRITTEN.',
+    ];
   }
   
   activeChip() {

@@ -13,6 +13,11 @@ class MemInfoAction extends ChipScriptAction {
     this.stealthCost = 1;
     this.limit = 1;
     this.refresh = ActionRefreshEnum.NODE;
+    
+    this.man = [
+      'USAGE: MEMINFO',
+      'FINDS AND IDENTIFIES ALL MEM CHIPS IN THE CURRENT NODE.',
+    ];
   }
   
   activeNodeChips() {

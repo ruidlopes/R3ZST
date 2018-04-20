@@ -8,6 +8,11 @@ import {enumLabel} from '../../../stdlib/collections.js';
 class ChipStatsAction extends ChipScriptAction {
   constructor() {
     super();
+    
+    this.man = [
+      'USAGE: CHIPSTATS',
+      'LOGS STATS OF THE CURRENT CHIP.'
+    ];
   }
   
   activeChip() {

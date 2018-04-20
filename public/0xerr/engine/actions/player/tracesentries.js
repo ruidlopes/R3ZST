@@ -12,6 +12,11 @@ class TraceSentriesAction extends ChipScriptAction {
     this.stealthCost = 1;
     this.limit = 3;
     this.refresh = ActionRefreshEnum.NODE;
+    
+    this.man = [
+      'USAGE: TRACESENTRIES',
+      'FINDS AND IDENTIFIES ALL SENTRIES IN CURRENT CHIP.',
+    ];
   }
   
   activeChip() {
