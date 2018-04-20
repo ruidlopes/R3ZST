@@ -54,7 +54,7 @@ class Renderer {
   
   async init() {
     const [fontBuffer, vs, ps] = await Promise.all([
-      loadFontRaw('/0xerr/assets/fonts/12x12.json'),
+      loadFontRaw('/0xerr/assets/fonts/12x12-2.json'),
       this.program.loadVertexShader('/0xerr/renderer/shaders/vertex.glsl'),
       this.program.loadFragmentShader('/0xerr/renderer/shaders/pixel.glsl'),
     ]);
