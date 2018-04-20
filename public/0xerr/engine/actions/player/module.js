@@ -9,6 +9,7 @@ import {IfConfigAction} from './ifconfig.js';
 import {IfDownAction} from './ifdown.js';
 import {IfUpAction} from './ifup.js';
 import {KillCamAction} from './killcam.js';
+import {MemInfoAction} from './meminfo.js';
 import {Module} from '../../../injection/module.js';
 import {OverclockAction} from './overclock.js';
 import {PreemptAction} from './preempt.js';
@@ -30,6 +31,7 @@ class PlayerActionsModule extends Module {
     this.bindClassIntoMap(Action, PLAYER, 'IFDOWN', IfDownAction);
     this.bindClassIntoMap(Action, PLAYER, 'IFUP', IfUpAction);
     this.bindClassIntoMap(Action, PLAYER, 'KILLCAM', KillCamAction);
+    this.bindClassIntoMap(Action, PLAYER, 'MEMINFO', MemInfoAction);
     this.bindClassIntoMap(Action, PLAYER, 'OVERCLOCK', OverclockAction);
     this.bindClassIntoMap(Action, PLAYER, 'PREEMPT', PreemptAction);
     this.bindClassIntoMap(Action, PLAYER, 'REFRESH', RefreshAction);

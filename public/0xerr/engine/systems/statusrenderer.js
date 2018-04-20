@@ -36,6 +36,7 @@ import {SentryComponent, SentryCapabilities, SentryState} from '../components/se
 import {SpatialComponent} from '../components/spatial.js';
 import {StealthComponent} from '../components/stealth.js';
 import {System} from '../system.js';
+import {TagComponent} from '../components/tag.js';
 import {TurnComponent, TurnEnum} from '../components/turn.js';
 import {ViewComponent, ViewType} from '../components/view.js';
 import {enumLabel, firstOf, mapOf} from '../../stdlib/collections.js';
@@ -116,6 +117,7 @@ class StatusRendererSystem extends System {
         .iterate(
             ChipComponent,
             IdentifiedComponent,
+            TagComponent,
             IpComponent,
             RetCamStatusComponent));
   }
@@ -172,8 +174,10 @@ class StatusRendererSystem extends System {
     if (!chip || !chip.get(IdentifiedComponent).identified) {
       return;
     }
-      
+    
+    const tags = chip.get(TagComponent).tags;
     const component = chip.get(ChipComponent);
+    
     switch (component.type) {
       case ChipType.BIOS:
         const biosVersion = enumLabel(ChipBiosVersion, component.version);
@@ -222,6 +226,19 @@ class StatusRendererSystem extends System {
             .sprint('STATUS', dx, ++dy, BLUE_BRIGHT, BLACK)
             .sprint(nicStatus, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
         break;
+    }
+    
+    let tagsStr = '';
+    for (const tag of tags) {
+      if (tagsStr.length) {
+        tagsStr += ', ';
+      }
+      tagsStr += tag;
+    }
+    
+    if (tagsStr.length) {
+      draw.sprint('TAGS', dx, ++dy, BLUE_BRIGHT, BLACK)
+          .sprint(tagsStr, dx + 8, dy, HIGHLIGHT_BRIGHT, BLACK);
     }
     
     const activeSentry = this.activeSentry();
