@@ -12,7 +12,6 @@ class UntagAction extends ChipScriptAction {
   activeChip() {
     return this.activeChipWithComponents(TagComponent);
   }
-
   
   start(...tags) {
     this.activeChip().get(TagComponent).tags.clear();

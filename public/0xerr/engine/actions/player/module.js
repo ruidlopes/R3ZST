@@ -1,6 +1,7 @@
 import {PLAYER} from '../qualifiers.js';
 import {Action} from '../../action.js';
 import {ChipIdAction} from './chipid.js';
+import {ChipStatsAction} from './chipstats.js';
 import {ConnectAction} from './connect.js';
 import {DebugAction} from './debug.js';
 import {DeleteLogAction} from './deletelog.js';
@@ -23,6 +24,7 @@ import {UntagAction} from './untag.js';
 class PlayerActionsModule extends Module {
   configure() {
     this.bindClassIntoMap(Action, PLAYER, 'CHIPID', ChipIdAction);
+    this.bindClassIntoMap(Action, PLAYER, 'CHIPSTATS', ChipStatsAction);
     this.bindClassIntoMap(Action, PLAYER, 'CONNECT', ConnectAction);
     this.bindClassIntoMap(Action, PLAYER, 'DEBUG', DebugAction);
     this.bindClassIntoMap(Action, PLAYER, 'DELETELOG', DeleteLogAction);
