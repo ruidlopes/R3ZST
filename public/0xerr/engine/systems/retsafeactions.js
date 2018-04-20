@@ -58,7 +58,9 @@ class RetsafeActionsSystem extends System {
       }
     }
     
-    if (!this.currentAction.done()) {
+    if (this.currentAction.done()) {
+      this.currentAction = undefined;
+    } else {
       this.currentAction.frame(delta);
     }
   }
