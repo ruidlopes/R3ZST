@@ -19,6 +19,10 @@ class SentryScriptAction extends Action {
     this.events = events;
   }
   
+  context() {
+    return this.activeSentry();
+  }
+  
   activeSentry() {
     return firstOf(this.entities.query()
         .filter(ActiveComponent, component => component.active)
@@ -27,7 +31,7 @@ class SentryScriptAction extends Action {
   }
   
   constraints() {
-    const activeSentry = this.activeSentry();
+    const activeSentry = this.context();
     if (!activeSentry) {
       this.events.emit(EventType.LOG, 'NO SENTRY IN RANGE.');
       return false;

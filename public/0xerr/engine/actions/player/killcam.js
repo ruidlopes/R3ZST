@@ -19,7 +19,7 @@ class KillCamAction extends ChipScriptAction {
   }
   
   start() {
-    this.activeChip().get(RetCamStatusComponent).status = RetCamStatus.DISCONNECTED;
+    this.context().get(RetCamStatusComponent).status = RetCamStatus.DISCONNECTED;
     this.events.emit(EventType.LOG, 'RETCAM DISCONNECTED.');
   }
 }

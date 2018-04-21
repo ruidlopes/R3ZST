@@ -19,7 +19,7 @@ class UntagAction extends ChipScriptAction {
   }
   
   start(...tags) {
-    this.activeChip().get(TagComponent).tags.clear();
+    this.context().get(TagComponent).tags.clear();
     this.events.emit(EventType.LOG, `CHIP UNTAGGED.`);
   }
 }

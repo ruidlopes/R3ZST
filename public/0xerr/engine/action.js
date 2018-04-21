@@ -30,6 +30,10 @@ class Action {
     return true;
   }
   
+  context() {
+    throw new Error('Missing implementation');
+  }
+
   start() {}
   
   done() {

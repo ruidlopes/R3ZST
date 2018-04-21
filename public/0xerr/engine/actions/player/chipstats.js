@@ -23,7 +23,7 @@ class ChipStatsAction extends ChipScriptAction {
   }
   
   start() {
-    const chip = this.activeChip();
+    const chip = this.context();
     const tags = chip.get(TagComponent).tags;
     
     const type = enumLabel(ChipType, chip.get(ChipComponent).type);

@@ -26,6 +26,10 @@ class ChipScriptAction extends Action {
     this.events = events;
   }
   
+  context() {
+    return this.activeChip();
+  }
+  
   activeChip() {
     return this.activeChipWithComponents();
   }
@@ -38,7 +42,7 @@ class ChipScriptAction extends Action {
   }
   
   constraints() {
-    const activeChip = this.activeChip();
+    const activeChip = this.context();
     if (!activeChip) {
       this.events.emit(EventType.LOG, 'NO CHIP IN RANGE.');
       return false;

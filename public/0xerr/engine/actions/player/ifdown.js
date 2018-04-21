@@ -17,7 +17,7 @@ class IfDownAction extends ChipScriptAction {
   }
 
   connection() {
-    const activeChipId = this.activeChip().id;
+    const activeChipId = this.context().id;
     return firstOf(this.entities.query()
         .filter(ConnectionComponent)
         .filter(CompositeComponent, composite => composite.ids.includes(activeChipId))

@@ -28,7 +28,7 @@ class ChipIdAction extends ChipScriptAction {
   }
   
   constraints() {
-    const activeChip = this.activeChip();
+    const activeChip = this.context();
     if (!activeChip || !activeChip.get(ActiveComponent).active) {
       this.events.emit(EventType.LOG, 'NO CHIP IN RANGE.');
       return false;
@@ -37,7 +37,7 @@ class ChipIdAction extends ChipScriptAction {
   }
   
   start() {
-    const chip = this.activeChip();
+    const chip = this.context();
     chip.get(IdentifiedComponent).identified = true;
     
     const type = chip.get(ChipComponent).type;

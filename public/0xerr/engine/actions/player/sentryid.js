@@ -18,7 +18,7 @@ class SentryIdAction extends SentryScriptAction {
   }
   
   constraints() {
-    const activeSentry = this.activeSentry();
+    const activeSentry = this.context();
     if (!activeSentry || !activeSentry.get(ActiveComponent).active) {
       this.events.emit(EventType.LOG, 'NO SENTRY IN RANGE.');
       return false;
@@ -27,7 +27,7 @@ class SentryIdAction extends SentryScriptAction {
   }
   
   start() {
-    const activeSentry = this.activeSentry();
+    const activeSentry = this.context();
     activeSentry.get(IdentifiedComponent).identified = true;
     
     const caps = activeSentry.get(SentryComponent).capabilities;

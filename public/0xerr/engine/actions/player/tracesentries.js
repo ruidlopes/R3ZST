@@ -24,7 +24,7 @@ class TraceSentriesAction extends ChipScriptAction {
   }
   
   start() {
-    const activeChip = this.activeChip();
+    const activeChip = this.context();
     const sentryIds = activeChip.get(CompositeComponent).ids;
     const sentries = this.entities.query(sentryIds)
         .iterate(IdentifiedComponent);

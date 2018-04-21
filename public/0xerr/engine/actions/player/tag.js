@@ -33,7 +33,7 @@ class TagAction extends ChipScriptAction {
   }
   
   start(...tags) {
-    const component = this.activeChip().get(TagComponent);
+    const component = this.context().get(TagComponent);
     component.tags.clear();
     for (const tag of tags) {
       component.tags.add(tag);

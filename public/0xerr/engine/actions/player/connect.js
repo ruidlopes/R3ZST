@@ -53,7 +53,7 @@ class ConnectAction extends ChipScriptAction {
   }
   
   connection() {
-    const activeChipId = this.activeChip().id;
+    const activeChipId = this.context().id;
     return firstOf(this.entities.query()
         .filter(ConnectionComponent)
         .filter(CompositeComponent, composite => composite.ids.includes(activeChipId))
@@ -63,7 +63,7 @@ class ConnectAction extends ChipScriptAction {
   destinationNic() {
     const connection = this.connection();
     const composite = connection.get(CompositeComponent);
-    const position = composite.ids.indexOf(this.activeChip().id);
+    const position = composite.ids.indexOf(this.context().id);
     const destination = composite.ids[1 - position];
     return firstOf(this.entities.query([destination])
         .iterate(ActiveComponent, IdentifiedComponent, SpatialComponent, IpComponent));
@@ -96,7 +96,7 @@ class ConnectAction extends ChipScriptAction {
       activeSentry.get(ActiveComponent).active = false;
     }
     
-    const nic1 = this.activeChip();
+    const nic1 = this.context();
     const nic1ActiveComponent = nic1.get(ActiveComponent);
     
     const nic2 = this.destinationNic();
