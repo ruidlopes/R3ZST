@@ -144,9 +144,9 @@ class StatusRendererSystem extends System {
   }
   
   renderFrames(delta, spatial) {
-    this.renderFrame(spatial.x, 0, spatial.width, 9, 'RUN');
-    this.renderFrame(spatial.x, 9, spatial.width, 9, 'NODE/CHIP');
-    this.renderFrame(spatial.x, 18, spatial.width, spatial.height - 18, 'SCRIPT DECK'); 
+    this.renderFrame(spatial.x, 0, spatial.width, 8, 'RUN');
+    this.renderFrame(spatial.x, 8, spatial.width, 9, 'NODE/CHIP');
+    this.renderFrame(spatial.x, 17, spatial.width, spatial.height - 17, 'SCRIPT DECK'); 
   }
   
   renderRunStats(delta, spatial) {
@@ -159,13 +159,13 @@ class StatusRendererSystem extends System {
         .sprint(turn, dx + 9, dy, HIGHLIGHT_BRIGHT, BLACK)
         .sprint('STEALTH  [          ]', dx, dy + 2, BLUE_BRIGHT, BLACK)
         .sprint('\xfe'.repeat(this.stealth()), dx + 10, dy + 2, HIGHLIGHT_BRIGHT, BLACK)
-        .sprint('CYCLES   [          ]', dx, dy + 4, BLUE_BRIGHT, BLACK)
-        .sprint('\xfe'.repeat(this.cycles()), dx + 10, dy + 4, HIGHLIGHT_BRIGHT, BLACK);
+        .sprint('CYCLES   [          ]', dx, dy + 3, BLUE_BRIGHT, BLACK)
+        .sprint('\xfe'.repeat(this.cycles()), dx + 10, dy + 3, HIGHLIGHT_BRIGHT, BLACK);
   }
   
   renderNodeStats(delta, spatial) {
     const dx = spatial.x + 2;
-    let dy = spatial.y + 10;
+    let dy = spatial.y + 9;
     
     const draw = this.drawing.clipping(spatial);
     const type = this.activeNode().get(NodeComponent).type;
@@ -266,7 +266,7 @@ class StatusRendererSystem extends System {
   
   renderDeckStats(delta, spatial) {
     const dx = spatial.x + 2;
-    let dy = spatial.y + 19;
+    let dy = spatial.y + 18;
     
     const draw = this.drawing.clipping(spatial);
     const deck = this.deck().items;
