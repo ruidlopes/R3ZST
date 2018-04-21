@@ -144,9 +144,9 @@ class StatusRendererSystem extends System {
   }
   
   renderFrames(delta, spatial) {
-    this.renderFrame(spatial.x, 0, spatial.width, 8, 'RUN');
-    this.renderFrame(spatial.x, 8, spatial.width, 9, 'NODE/CHIP');
-    this.renderFrame(spatial.x, 17, spatial.width, spatial.height - 17, 'SCRIPT DECK'); 
+    this.renderFrame(spatial.x, 0, spatial.width, 8, '\xb4RUN\xc3');
+    this.renderFrame(spatial.x, 8, spatial.width, 11, '\xb4NODE/CHIP\xc3');
+    this.renderFrame(spatial.x, 19, spatial.width, spatial.height - 19, '\xb4SCRIPT DECK\xc3'); 
   }
   
   renderRunStats(delta, spatial) {
@@ -266,7 +266,7 @@ class StatusRendererSystem extends System {
   
   renderDeckStats(delta, spatial) {
     const dx = spatial.x + 2;
-    let dy = spatial.y + 18;
+    let dy = spatial.y + 20;
     
     const draw = this.drawing.clipping(spatial);
     const deck = this.deck().items;

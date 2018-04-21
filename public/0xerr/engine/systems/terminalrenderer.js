@@ -52,7 +52,7 @@ class TerminalRendererSystem extends System {
     this.drawing.absolute()
         .box(x, y, width, height, BoxType.SINGLE, foreground, BLACK)
         .rect(x + 1, y + 1, width - 2, height - 2, 0x00, foreground, BLACK)
-        .sprint('TERMINAL', x + 2, y, foreground, BLACK);
+        .sprint('\xb4TERMINAL\xc3', x + 2, y, foreground, BLACK);
   }
   
   renderTextBuffer(delta) {
